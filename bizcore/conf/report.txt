@@ -1,0 +1,830 @@
+@warning object definition: registeration: word 'registeration' seems not found in library
+@warning registeration.avarta: word 'avarta' seems not found in library
+
+
+
+=================Execute Report (Model Time 191107T1634) @Thu Nov 07 16:35:11 CST 2019, 30 objects and 213 fields===========================
+
+
+
+ processing: platform
+
+
+ processing: change_request_type
+
+
+ processing: change_request_type.platform.platform
+
+Info: Add virtual field [change_request_types(es)] to <platform>
+	change_request_type.platform
+
+
+ processing: change_request
+
+
+ processing: change_request.change_request_type.request_type
+
+Info: Add virtual field [change_requests(es)] to <change_request_type>
+	change_request.request_type
+
+
+ processing: change_request.platform.platform
+
+Info: Add virtual field [change_requests(es)] to <platform>
+	change_request.platform
+
+
+ processing: registeration
+
+
+ processing: registeration.change_request.change_request
+
+Info: Add virtual field [registerations(es)] to <change_request>
+	registeration.change_request
+
+
+ processing: start_exam
+
+
+ processing: start_exam.change_request.change_request
+
+Info: Add virtual field [start_exams(es)] to <change_request>
+	start_exam.change_request
+
+
+ processing: answer_question
+
+
+ processing: answer_question.wechat_user.user
+
+Info: Add virtual field [answer_questions(es)] to <wechat_user>
+	answer_question.user
+
+
+ processing: answer_question.question.question
+
+Info: Add virtual field [answer_questions(es)] to <question>
+	answer_question.question
+
+
+ processing: answer_question.change_request.change_request
+
+Info: Add virtual field [answer_questions(es)] to <change_request>
+	answer_question.change_request
+
+
+ processing: exam_status
+
+
+ processing: exam_status.platform.platform
+
+Info: Add virtual field [exam_statuss(es)] to <platform>
+	exam_status.platform
+
+
+ processing: question
+
+
+ processing: question.platform.platform
+
+Info: Add virtual field [questions(es)] to <platform>
+	question.platform
+
+
+ processing: exam_ranking
+
+
+ processing: exam_ranking.platform.platform
+
+Info: Add virtual field [exam_rankings(es)] to <platform>
+	exam_ranking.platform
+
+
+ processing: answer
+
+
+ processing: answer.question.question
+
+Info: Add virtual field [answers(es)] to <question>
+	answer.question
+
+
+ processing: wechat_user
+
+
+ processing: wechat_user.platform.platform
+
+Info: Add virtual field [wechat_users(es)] to <platform>
+	wechat_user.platform
+
+
+ processing: exam
+
+
+ processing: exam.exam_status.status
+
+Info: Add virtual field [exams(es)] to <exam_status>
+	exam.status
+
+
+ processing: exam.wechat_user.user
+
+Info: Add virtual field [exams(es)] to <wechat_user>
+	exam.user
+
+
+ processing: user_answer
+
+
+ processing: user_answer.question.question
+
+Info: Add virtual field [user_answers(es)] to <question>
+	user_answer.question
+
+
+ processing: user_answer.exam.exam
+
+Info: Add virtual field [user_answers(es)] to <exam>
+	user_answer.exam
+
+
+ processing: fault_answer
+
+
+ processing: fault_answer.wechat_user.user
+
+Info: Add virtual field [fault_answers(es)] to <wechat_user>
+	fault_answer.user
+
+
+ processing: fault_answer.exam.exam
+
+Info: Add virtual field [fault_answers(es)] to <exam>
+	fault_answer.exam
+
+
+**************************************************
+
+platform{
+	fields(4){
+		string	id('ABCD'), verb: false, required: true;
+		string	name('链问链答考试中台'), verb: false, required: true;
+		string_longtext	description('text()'), verb: false, required: true;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(6){
+		changeRequestTypeList	platform(__no_group)--platform;
+		changeRequestList	platform(变更)--platform;
+		examStatusList	platform(__no_group)--platform;
+		questionList	platform(__no_group)--platform;
+		examRankingList	platform(__no_group)--platform;
+		wechatUserList	platform(__no_group)--platform;
+	}
+} depth=0; isRoot = true
+
+change_request_type{
+	fields(7){
+		string	id('ABCD'), verb: false, required: true;
+		string	name('注册|开始考试|答题'), verb: false, required: true;
+		string	code('REGISTER|START_EXAM|ANSWER'), verb: false, required: true;
+		string	icon('download|swap|upload|account-book|edit'), verb: false, required: true;
+		int	display_order('1|2|3|4|5|6'), verb: false, required: true;
+		platform	platform('$(object)'), verb: false, required: true, referenceBy: changeRequestTypeList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(1){
+		changeRequestList	request_type(__no_group)--request_type;
+	}
+} depth=1; isRoot = false
+
+change_request{
+	fields(7){
+		string	id('ABCD'), verb: false, required: true;
+		string	name('注册|开始考试|答题'), verb: false, required: true;
+		date_time_create	create_time('createTime()'), verb: false, required: true;
+		string_client_ip	remote_ip('remoteIp()'), verb: false, required: true;
+		change_request_type	request_type('$(object)'), verb: false, required: true, referenceBy: changeRequestList;
+		platform	platform('$(object)'), verb: false, required: true, referenceBy: changeRequestList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(3){
+		registerationList	change_request(__no_group)--change_request;
+		startExamList	change_request(__no_group)--change_request;
+		answerQuestionList	change_request(__no_group)--change_request;
+	}
+} depth=2; isRoot = false
+
+registeration{
+	fields(5){
+		string	id('ABCD'), verb: false, required: true;
+		string	nick_name('豆豆鬼'), verb: false, required: true;
+		string_image	avarta('share.jpg'), verb: false, required: true;
+		change_request	change_request('$(object)'), verb: false, required: true, referenceBy: registerationList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(0){
+	}
+} depth=3; isRoot = false
+
+start_exam{
+	fields(4){
+		string	id('ABCD'), verb: false, required: true;
+		string	nick_name('豆豆鬼参与考试'), verb: false, required: true;
+		change_request	change_request('$(object)'), verb: false, required: true, referenceBy: startExamList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(0){
+	}
+} depth=3; isRoot = false
+
+answer_question{
+	fields(7){
+		string	id('ABCD'), verb: false, required: true;
+		string	nick_name('豆豆鬼参与考试'), verb: false, required: true;
+		wechat_user	user('$(object)'), verb: false, required: true, referenceBy: answerQuestionList;
+		question	question('$(object)'), verb: false, required: true, referenceBy: answerQuestionList;
+		string	answer('A|B|C'), verb: false, required: true;
+		change_request	change_request('$(object)'), verb: false, required: true, referenceBy: answerQuestionList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(0){
+	}
+} depth=3; isRoot = false
+
+exam_status{
+	fields(5){
+		string	id('ABCD'), verb: false, required: true;
+		string	name('考试中|考试完成'), verb: false, required: true;
+		string	code('STARTED|COMPLETED'), verb: false, required: true;
+		platform	platform('$(object)'), verb: false, required: true, referenceBy: examStatusList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(1){
+		examList	status(__no_group)--status;
+	}
+} depth=1; isRoot = false
+
+question{
+	fields(11){
+		string	id('ABCD'), verb: false, required: true;
+		string	topic('区块链是什么技术，下面最接近的回答是什么'), verb: false, required: true;
+		string	level('低|中|高'), verb: false, required: true;
+		string	option_a('网络技术'), verb: false, required: true;
+		string	option_b('电子技术'), verb: false, required: true;
+		string	option_c('机械技术'), verb: false, required: true;
+		string	option_d('太空技术'), verb: false, required: true;
+		string	option_e('建筑技术'), verb: false, required: true;
+		string	right_answer('A|B|C|D|E'), verb: false, required: true;
+		platform	platform('$(object)'), verb: false, required: true, referenceBy: questionList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(3){
+		answerQuestionList	question(__no_group)--question;
+		answerList	question(__no_group)--question;
+		userAnswerList	question(__no_group)--question;
+	}
+} depth=1; isRoot = false
+
+exam_ranking{
+	fields(5){
+		string	id('ABCD'), verb: false, required: true;
+		string	name('张喜来**'), verb: false, required: true;
+		string_image	avarta('wechat.jpg'), verb: false, required: true;
+		platform	platform('$(object)'), verb: false, required: true, referenceBy: examRankingList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(0){
+	}
+} depth=1; isRoot = false
+
+answer{
+	fields(5){
+		string	id('ABCD'), verb: false, required: true;
+		string	title('网络技术'), verb: false, required: true;
+		string	comment('区块链是基于现有互联网的技术'), verb: false, required: true;
+		question	question('$(object)'), verb: false, required: true, referenceBy: answerList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(0){
+	}
+} depth=2; isRoot = false
+
+wechat_user{
+	fields(6){
+		string	id('ABCD'), verb: false, required: true;
+		string	name('张三|李四|王五'), verb: false, required: true;
+		string_image	avarta('wechat.jpg'), verb: false, required: true;
+		date_time_create	create_time('createTime()'), verb: false, required: true;
+		platform	platform('$(object)'), verb: false, required: true, referenceBy: wechatUserList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(3){
+		answerQuestionList	user(__no_group)--user;
+		examList	user(__no_group)--user;
+		faultAnswerList	user(__no_group)--user;
+	}
+} depth=1; isRoot = false
+
+exam{
+	fields(7){
+		string	id('ABCD'), verb: false, required: true;
+		string	name('区块链技术考试'), verb: false, required: true;
+		date_time_create	create_time('createTime()'), verb: false, required: true;
+		exam_status	status('$(object)'), verb: false, required: true, referenceBy: examList;
+		wechat_user	user('$(object)'), verb: false, required: true, referenceBy: examList;
+		int	score('100'), verb: false, required: true;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(2){
+		userAnswerList	exam(__no_group)--exam;
+		faultAnswerList	exam(__no_group)--exam;
+	}
+} depth=2; isRoot = false
+
+user_answer{
+	fields(6){
+		string	id('ABCD'), verb: false, required: true;
+		string	topic('区块链是什么技术，下面最接近的回答是什么'), verb: false, required: true;
+		string	user_select('A'), verb: false, required: true;
+		question	question('$(object)'), verb: false, required: true, referenceBy: userAnswerList;
+		exam	exam('$(object)'), verb: false, required: true, referenceBy: userAnswerList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(0){
+	}
+} depth=3; isRoot = false
+
+fault_answer{
+	fields(8){
+		string	id('ABCD'), verb: false, required: true;
+		string	topic('区块链是什么技术，下面最接近的回答是什么'), verb: false, required: true;
+		string	your_answer('网络技术'), verb: false, required: true;
+		string	right_answer('电子技术'), verb: false, required: true;
+		date_time_create	create_time('createTime()'), verb: false, required: true;
+		wechat_user	user('$(object)'), verb: false, required: true, referenceBy: faultAnswerList;
+		exam	exam('$(object)'), verb: false, required: true, referenceBy: faultAnswerList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(0){
+	}
+} depth=3; isRoot = false
+
+platform{
+	fields(4){
+		string	id('ABCD'), verb: false, required: true;
+		string	name('链问链答考试中台'), verb: false, required: true;
+		string_longtext	description('text()'), verb: false, required: true;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(6){
+		changeRequestTypeList	platform(__no_group)--platform;
+		changeRequestList	platform(变更)--platform;
+		examStatusList	platform(__no_group)--platform;
+		questionList	platform(__no_group)--platform;
+		examRankingList	platform(__no_group)--platform;
+		wechatUserList	platform(__no_group)--platform;
+	}
+} depth=0; isRoot = true
+
+change_request_type{
+	fields(7){
+		string	id('ABCD'), verb: false, required: true;
+		string	name('注册|开始考试|答题'), verb: false, required: true;
+		string	code('REGISTER|START_EXAM|ANSWER'), verb: false, required: true;
+		string	icon('download|swap|upload|account-book|edit'), verb: false, required: true;
+		int	display_order('1|2|3|4|5|6'), verb: false, required: true;
+		platform	platform('$(object)'), verb: false, required: true, referenceBy: changeRequestTypeList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(1){
+		changeRequestList	request_type(__no_group)--request_type;
+	}
+} depth=1; isRoot = false
+
+change_request{
+	fields(7){
+		string	id('ABCD'), verb: false, required: true;
+		string	name('注册|开始考试|答题'), verb: false, required: true;
+		date_time_create	create_time('createTime()'), verb: false, required: true;
+		string_client_ip	remote_ip('remoteIp()'), verb: false, required: true;
+		change_request_type	request_type('$(object)'), verb: false, required: true, referenceBy: changeRequestList;
+		platform	platform('$(object)'), verb: false, required: true, referenceBy: changeRequestList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(3){
+		registerationList	change_request(__no_group)--change_request;
+		startExamList	change_request(__no_group)--change_request;
+		answerQuestionList	change_request(__no_group)--change_request;
+	}
+} depth=2; isRoot = false
+
+registeration{
+	fields(5){
+		string	id('ABCD'), verb: false, required: true;
+		string	nick_name('豆豆鬼'), verb: false, required: true;
+		string_image	avarta('share.jpg'), verb: false, required: true;
+		change_request	change_request('$(object)'), verb: false, required: true, referenceBy: registerationList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(0){
+	}
+} depth=3; isRoot = false
+
+start_exam{
+	fields(4){
+		string	id('ABCD'), verb: false, required: true;
+		string	nick_name('豆豆鬼参与考试'), verb: false, required: true;
+		change_request	change_request('$(object)'), verb: false, required: true, referenceBy: startExamList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(0){
+	}
+} depth=3; isRoot = false
+
+answer_question{
+	fields(7){
+		string	id('ABCD'), verb: false, required: true;
+		string	nick_name('豆豆鬼参与考试'), verb: false, required: true;
+		wechat_user	user('$(object)'), verb: false, required: true, referenceBy: answerQuestionList;
+		question	question('$(object)'), verb: false, required: true, referenceBy: answerQuestionList;
+		string	answer('A|B|C'), verb: false, required: true;
+		change_request	change_request('$(object)'), verb: false, required: true, referenceBy: answerQuestionList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(0){
+	}
+} depth=3; isRoot = false
+
+exam_status{
+	fields(5){
+		string	id('ABCD'), verb: false, required: true;
+		string	name('考试中|考试完成'), verb: false, required: true;
+		string	code('STARTED|COMPLETED'), verb: false, required: true;
+		platform	platform('$(object)'), verb: false, required: true, referenceBy: examStatusList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(1){
+		examList	status(__no_group)--status;
+	}
+} depth=1; isRoot = false
+
+question{
+	fields(11){
+		string	id('ABCD'), verb: false, required: true;
+		string	topic('区块链是什么技术，下面最接近的回答是什么'), verb: false, required: true;
+		string	level('低|中|高'), verb: false, required: true;
+		string	option_a('网络技术'), verb: false, required: true;
+		string	option_b('电子技术'), verb: false, required: true;
+		string	option_c('机械技术'), verb: false, required: true;
+		string	option_d('太空技术'), verb: false, required: true;
+		string	option_e('建筑技术'), verb: false, required: true;
+		string	right_answer('A|B|C|D|E'), verb: false, required: true;
+		platform	platform('$(object)'), verb: false, required: true, referenceBy: questionList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(3){
+		answerQuestionList	question(__no_group)--question;
+		answerList	question(__no_group)--question;
+		userAnswerList	question(__no_group)--question;
+	}
+} depth=1; isRoot = false
+
+exam_ranking{
+	fields(5){
+		string	id('ABCD'), verb: false, required: true;
+		string	name('张喜来**'), verb: false, required: true;
+		string_image	avarta('wechat.jpg'), verb: false, required: true;
+		platform	platform('$(object)'), verb: false, required: true, referenceBy: examRankingList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(0){
+	}
+} depth=1; isRoot = false
+
+answer{
+	fields(5){
+		string	id('ABCD'), verb: false, required: true;
+		string	title('网络技术'), verb: false, required: true;
+		string	comment('区块链是基于现有互联网的技术'), verb: false, required: true;
+		question	question('$(object)'), verb: false, required: true, referenceBy: answerList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(0){
+	}
+} depth=2; isRoot = false
+
+wechat_user{
+	fields(6){
+		string	id('ABCD'), verb: false, required: true;
+		string	name('张三|李四|王五'), verb: false, required: true;
+		string_image	avarta('wechat.jpg'), verb: false, required: true;
+		date_time_create	create_time('createTime()'), verb: false, required: true;
+		platform	platform('$(object)'), verb: false, required: true, referenceBy: wechatUserList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(3){
+		answerQuestionList	user(__no_group)--user;
+		examList	user(__no_group)--user;
+		faultAnswerList	user(__no_group)--user;
+	}
+} depth=1; isRoot = false
+
+exam{
+	fields(7){
+		string	id('ABCD'), verb: false, required: true;
+		string	name('区块链技术考试'), verb: false, required: true;
+		date_time_create	create_time('createTime()'), verb: false, required: true;
+		exam_status	status('$(object)'), verb: false, required: true, referenceBy: examList;
+		wechat_user	user('$(object)'), verb: false, required: true, referenceBy: examList;
+		int	score('100'), verb: false, required: true;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(2){
+		userAnswerList	exam(__no_group)--exam;
+		faultAnswerList	exam(__no_group)--exam;
+	}
+} depth=2; isRoot = false
+
+user_answer{
+	fields(6){
+		string	id('ABCD'), verb: false, required: true;
+		string	topic('区块链是什么技术，下面最接近的回答是什么'), verb: false, required: true;
+		string	user_select('A'), verb: false, required: true;
+		question	question('$(object)'), verb: false, required: true, referenceBy: userAnswerList;
+		exam	exam('$(object)'), verb: false, required: true, referenceBy: userAnswerList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(0){
+	}
+} depth=3; isRoot = false
+
+fault_answer{
+	fields(8){
+		string	id('ABCD'), verb: false, required: true;
+		string	topic('区块链是什么技术，下面最接近的回答是什么'), verb: false, required: true;
+		string	your_answer('网络技术'), verb: false, required: true;
+		string	right_answer('电子技术'), verb: false, required: true;
+		date_time_create	create_time('createTime()'), verb: false, required: true;
+		wechat_user	user('$(object)'), verb: false, required: true, referenceBy: faultAnswerList;
+		exam	exam('$(object)'), verb: false, required: true, referenceBy: faultAnswerList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(0){
+	}
+} depth=3; isRoot = false
+
+user_domain{
+	fields(3){
+		string	id('ABCD'), verb: false, required: true;
+		string	name('用户区域'), verb: false, required: true;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(2){
+		userWhiteListList	domain(__no_group)--domain;
+		secUserList	domain(__no_group)--domain;
+	}
+} depth=0; isRoot = true
+
+user_white_list{
+	fields(5){
+		string	id('ABCD'), verb: false, required: true;
+		string	user_identity('clariones|13808188512'), verb: false, required: true;
+		string	user_special_functions('tester;ios-spokesperson'), verb: false, required: true;
+		user_domain	domain('$(object)'), verb: false, required: true, referenceBy: userWhiteListList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(0){
+	}
+} depth=1; isRoot = false
+
+sec_user{
+	fields(15){
+		string	id('ABCD'), verb: false, required: true;
+		string	login('login'), verb: false, required: true;
+		string_china_mobile_phone	mobile('13900000001'), verb: false, required: true;
+		string_email	email('suddy_chang@163.com'), verb: false, required: true;
+		string_password	pwd('*******'), verb: false, required: true;
+		string	weixin_openid('wx123456789abcdefghijklmn'), verb: false, required: true;
+		string	weixin_appid('wxapp12098410239840'), verb: false, required: true;
+		string	access_token('jwt_token_12345678'), verb: false, required: true;
+		int	verification_code('0|9999999'), verb: false, required: true;
+		date_time	verification_code_expire('2099-12-31T09:09:09'), verb: false, required: true;
+		date_time	last_login_time('2099-12-31T09:09:09'), verb: false, required: true;
+		user_domain	domain('$(object)'), verb: false, required: true, referenceBy: secUserList;
+		sec_user_blocking	blocking('$(object)'), verb: true, required: true, referenceBy: secUserList;
+		string	current_status('BLOCKED'), verb: false, required: true;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(2){
+		userAppList	sec_user(__no_group)--sec_user;
+		loginHistoryList	sec_user(__no_group)--sec_user;
+	}
+} depth=1; isRoot = false
+
+sec_user_blocking{
+	fields(5){
+		string	id('ABCD'), verb: false, required: true;
+		string	who('currentUser()'), verb: false, required: true;
+		date_time_create	block_time('createTime()'), verb: false, required: true;
+		string	comments('这个用户多次发送违反社区的帖子，现在把他给屏蔽了'), verb: false, required: true;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(1){
+		secUserList	blocking(__no_group)--blocking;
+	}
+} depth=0; isRoot = true
+
+user_app{
+	fields(10){
+		string	id('ABCD'), verb: false, required: true;
+		string	title('审车平台|账户管理|接车公司|审车公司|维修公司|顾客'), verb: false, required: true;
+		sec_user	sec_user('$(object)'), verb: false, required: true, referenceBy: userAppList;
+		string	app_icon('users|bank|wechat|bar-chart|user|users'), verb: false, required: true;
+		bool	full_access('true'), verb: false, required: true;
+		string	permission('MXWR|MXWR'), verb: false, required: true;
+		string	object_type('CarInspectionPlatform|UserDomain|CarReceivingServiceCompany|CarInspectionServiceCompany|CarRepairingServiceCompany|CustomerInfo'), verb: false, required: true;
+		string	object_id('CIP000001|UD000001|CRSC000001|CISC000001|CRSC000001|CI000001'), verb: false, required: true;
+		string	location('/link/to/app'), verb: false, required: true;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(3){
+		quickLinkList	app(__no_group)--app;
+		listAccessList	app(__no_group)--app;
+		objectAccessList	app(__no_group)--app;
+	}
+} depth=2; isRoot = false
+
+quick_link{
+	fields(8){
+		string	id('ABCD'), verb: false, required: true;
+		string	name('列表'), verb: false, required: true;
+		string	icon('facebook|google'), verb: false, required: true;
+		string_image	image_path('y-200-200-red.jpg'), verb: false, required: true;
+		string	link_target('列表'), verb: false, required: true;
+		date_time_create	create_time('createTime()'), verb: false, required: true;
+		user_app	app('$(object)'), verb: false, required: true, referenceBy: quickLinkList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(0){
+	}
+} depth=3; isRoot = false
+
+list_access{
+	fields(10){
+		string	id('ABCD'), verb: false, required: true;
+		string	name('列表'), verb: false, required: true;
+		string	internal_name('levelOneCategoryList'), verb: false, required: true;
+		bool	read_permission('true'), verb: false, required: true;
+		bool	create_permission('true'), verb: false, required: true;
+		bool	delete_permission('true'), verb: false, required: true;
+		bool	update_permission('true'), verb: false, required: true;
+		bool	execution_permission('true'), verb: false, required: true;
+		user_app	app('$(object)'), verb: false, required: true, referenceBy: listAccessList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(0){
+	}
+} depth=3; isRoot = false
+
+object_access{
+	fields(14){
+		string	id('ABCD'), verb: false, required: true;
+		string	name('控制访问列表1'), verb: false, required: true;
+		string	object_type('FranchiseeStoreCountryCenter|AccountSet'), verb: false, required: true;
+		string	list1('catalogList|levelOneCategoryList'), verb: false, required: true;
+		string	list2('catalogList|levelOneCategoryList'), verb: false, required: true;
+		string	list3('catalogList|levelOneCategoryList'), verb: false, required: true;
+		string	list4('catalogList|levelOneCategoryList'), verb: false, required: true;
+		string	list5('catalogList|levelOneCategoryList'), verb: false, required: true;
+		string	list6('catalogList|levelOneCategoryList'), verb: false, required: true;
+		string	list7('catalogList|levelOneCategoryList'), verb: false, required: true;
+		string	list8('catalogList|levelOneCategoryList'), verb: false, required: true;
+		string	list9('catalogList|levelOneCategoryList'), verb: false, required: true;
+		user_app	app('$(object)'), verb: false, required: true, referenceBy: objectAccessList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(0){
+	}
+} depth=3; isRoot = false
+
+login_history{
+	fields(6){
+		string	id('ABCD'), verb: false, required: true;
+		date_time_create	login_time('createTime()'), verb: false, required: true;
+		string	from_ip('192.168.1.1|192.168.1.2'), verb: false, required: true;
+		string	description('登陆成功'), verb: false, required: true;
+		sec_user	sec_user('$(object)'), verb: false, required: true, referenceBy: loginHistoryList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(0){
+	}
+} depth=2; isRoot = false
+
+generic_form{
+	fields(4){
+		string	id('ABCD'), verb: false, required: true;
+		string	title('登记输入单'), verb: false, required: true;
+		string	description('姓名就是你身份证上的名字'), verb: false, required: true;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(4){
+		formMessageList	form(__no_group)--form;
+		formFieldMessageList	form(__no_group)--form;
+		formFieldList	form(__no_group)--form;
+		formActionList	form(__no_group)--form;
+	}
+} depth=0; isRoot = true
+
+form_message{
+	fields(5){
+		string	id('ABCD'), verb: false, required: true;
+		string	title('字段组合错误'), verb: false, required: true;
+		generic_form	form('$(object)'), verb: false, required: true, referenceBy: formMessageList;
+		string	level('success|info|warning|danger'), verb: false, required: true;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(0){
+	}
+} depth=1; isRoot = false
+
+form_field_message{
+	fields(6){
+		string	id('ABCD'), verb: false, required: true;
+		string	title('输入错误'), verb: false, required: true;
+		string	parameter_name('name'), verb: false, required: true;
+		generic_form	form('$(object)'), verb: false, required: true, referenceBy: formFieldMessageList;
+		string	level('success|info|warning|danger'), verb: false, required: true;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(0){
+	}
+} depth=1; isRoot = false
+
+form_field{
+	fields(18){
+		string	id('ABCD'), verb: false, required: true;
+		string	label('姓名|年龄|出生地|国籍'), verb: false, required: true;
+		string	locale_key('name|age|birth_place|country'), verb: false, required: true;
+		string	parameter_name('name'), verb: false, required: true;
+		string	type('text|longtext|date|date_time|money|url|image|password|number|switch|vcode'), verb: false, required: true;
+		generic_form	form('$(object)'), verb: false, required: true, referenceBy: formFieldList;
+		string	placeholder('姓名就是你身份证上的名字'), verb: false, required: true;
+		string	default_value('李一一'), verb: false, required: true;
+		string	description('姓名就是你身份证上的名字'), verb: false, required: true;
+		string	field_group('基础信息|扩展信息'), verb: false, required: true;
+		string	minimum_value('maybe any value'), verb: false, required: true;
+		string	maximum_value('a value expression'), verb: false, required: true;
+		bool	required('true|false'), verb: false, required: true;
+		bool	disabled('true|false'), verb: false, required: true;
+		bool	custom_rendering('false'), verb: false, required: true;
+		string	candidate_values('|||男,女|高,矮'), verb: false, required: false;
+		string	suggest_values('|||男,女|高,矮'), verb: false, required: false;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(0){
+	}
+} depth=1; isRoot = false
+
+form_action{
+	fields(8){
+		string	id('ABCD'), verb: false, required: true;
+		string	label('功能'), verb: false, required: true;
+		string	locale_key('name'), verb: false, required: true;
+		string	action_key('save|update|remove'), verb: false, required: true;
+		string	level('default|warning|danger|primary'), verb: false, required: true;
+		string	url('genericFormManager/name/name0002/name0003/'), verb: false, required: true;
+		generic_form	form('$(object)'), verb: false, required: true, referenceBy: formActionList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(0){
+	}
+} depth=1; isRoot = false
+
+candidate_container{
+	fields(3){
+		string	id('ABCD'), verb: false, required: true;
+		string	name('我只是一个容器'), verb: false, required: true;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(1){
+		candidateElementList	container(__no_group)--container;
+	}
+} depth=0; isRoot = true
+
+candidate_element{
+	fields(6){
+		string	id('ABCD'), verb: false, required: true;
+		string	name('搜索到的匹配字段'), verb: false, required: true;
+		string	type('类型描述'), verb: false, required: true;
+		string_image	image('1.jpg'), verb: false, required: true;
+		candidate_container	container('$(object)'), verb: false, required: true, referenceBy: candidateElementList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(0){
+	}
+} depth=1; isRoot = false
+
+
+
+
+=================================End Report=================================

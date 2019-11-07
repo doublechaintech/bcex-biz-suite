@@ -1,0 +1,278 @@
+Summary|概览
+Platform|平台
+Id|ID
+Name|名称
+Description|描述
+Version|版本
+Change Request Type|变更请求类型
+Id|ID
+Name|名称
+Code|代码
+Icon|图标
+Display Order|显示顺序
+Platform|平台
+Version|版本
+Change Request|变更请求
+Id|ID
+Name|名称
+Create Time|创建时间
+Remote Ip|远程Ip
+Request Type|请求类型
+Platform|平台
+Version|版本
+Registeration|在注册
+Id|ID
+Nick Name|昵称
+Avarta|Avarta
+Change Request|变更请求
+Version|版本
+Start Exam|开始考试
+Id|ID
+Nick Name|昵称
+Change Request|变更请求
+Version|版本
+Answer Question|回答问题
+Id|ID
+Nick Name|昵称
+User|用户
+Question|检查问题
+Answer|回答
+Change Request|变更请求
+Version|版本
+Exam Status|考试状态
+Id|ID
+Name|名称
+Code|代码
+Platform|平台
+Version|版本
+Question|检查问题
+Id|ID
+Topic|主题
+Level|水平
+Option A|A选项
+Option B|B选项
+Option C|C选项
+Option D|D选项
+Option E|E选项
+Right Answer|正确的答案
+Platform|平台
+Version|版本
+Exam Ranking|考试排名
+Id|ID
+Name|名称
+Avarta|Avarta
+Platform|平台
+Version|版本
+Answer|回答
+Id|ID
+Title|标题
+Comment|评论
+Question|检查问题
+Version|版本
+Wechat User|微信用户
+Id|ID
+Name|名称
+Avarta|Avarta
+Create Time|创建时间
+Platform|平台
+Version|版本
+Exam|考试
+Id|ID
+Name|名称
+Create Time|创建时间
+Status|状态
+User|用户
+Score|分数
+Version|版本
+User Answer|用户的答案
+Id|ID
+Topic|主题
+User Select|用户选择
+Question|检查问题
+Exam|考试
+Version|版本
+Fault Answer|错误的答案
+Id|ID
+Topic|主题
+Your Answer|你的答案
+Right Answer|正确的答案
+Create Time|创建时间
+User|用户
+Exam|考试
+Version|版本
+User Domain|用户域
+Id|ID
+Name|名称
+Version|版本
+User White List|用户白名单
+Id|ID
+User Identity|用户身份
+User Special Functions|用户特殊功能
+Domain|域
+Version|版本
+Sec User|安全用户
+Id|ID
+Login|登录
+Mobile|手机号码
+Email|电子邮件
+Pwd|密码
+Weixin Openid|微信openid
+Weixin Appid|微信Appid
+Access Token|访问令牌
+Verification Code|验证码
+Verification Code Expire|验证码过期
+Last Login Time|最后登录时间
+Domain|域
+Block|屏蔽
+Block|屏蔽
+Current Status|当前状态
+Version|版本
+Sec User Blocking|用户屏蔽
+Id|ID
+Who|谁
+Block Time|块时间
+Comments|评论
+Version|版本
+User App|用户应用程序
+Id|ID
+Title|标题
+Sec User|安全用户
+App Icon|应用程序图标
+Full Access|完全访问
+Permission|许可
+Object Type|访问对象类型
+Object Id|对象ID
+Location|位置
+Version|版本
+Quick Link|快速链接
+Id|ID
+Name|名称
+Icon|图标
+Image Path|图片路径
+Link Target|链接的目标
+Create Time|创建时间
+App|应用程序
+Version|版本
+List Access|访问列表
+Id|ID
+Name|名称
+Internal Name|内部名称
+Read Permission|读权限
+Create Permission|创建权限
+Delete Permission|删除权限
+Update Permission|更新权限
+Execution Permission|执行权限
+App|应用程序
+Version|版本
+Object Access|对象访问
+Id|ID
+Name|名称
+Object Type|访问对象类型
+List1|列表1
+List2|列表2
+List3|列表3
+List4|列表4
+List5|列表5
+List6|列表6
+List7|列表7
+List8|列表8
+List9|列表9
+App|应用程序
+Version|版本
+Login History|登录历史
+Id|ID
+Login Time|登录时间
+From Ip|来自IP
+Description|描述
+Sec User|安全用户
+Version|版本
+Generic Form|通用的形式
+Id|ID
+Title|标题
+Description|描述
+Version|版本
+Form Message|表单信息
+Id|ID
+Title|标题
+Form|形式
+Level|水平
+Version|版本
+Form Field Message|表单字段的信息
+Id|ID
+Title|标题
+Parameter Name|参数名称
+Form|形式
+Level|水平
+Version|版本
+Form Field|表单字段
+Id|ID
+Label|标签
+Locale Key|语言环境的关键
+Parameter Name|参数名称
+Type|类型
+Form|形式
+Placeholder|占位符
+Default Value|默认值
+Description|描述
+Field Group|字段组
+Minimum Value|最小值
+Maximum Value|最大值
+Required|要求
+Disabled|禁用
+Custom Rendering|自定义渲染
+Candidate Values|候选人的价值观
+Suggest Values|建议值
+Version|版本
+Form Action|表单动作
+Id|ID
+Label|标签
+Locale Key|语言环境的关键
+Action Key|行动的关键
+Level|水平
+Url|url
+Form|形式
+Version|版本
+Candidate Container|候选人容器
+Id|ID
+Name|名称
+Version|版本
+Candidate Element|候选人元素
+Id|ID
+Name|名称
+Type|类型
+Image|图片
+Container|容器
+Version|版本
+Transfer to Another Platform|转到平台
+Transfer to Another Request Type|转换为请求类型
+Transfer to Another Platform|转到平台
+Transfer to Another Change Request|转换到更改请求
+Transfer to Another Change Request|转换到更改请求
+Transfer to Another User|转移到用户
+Transfer to Another Question|转移到问题
+Transfer to Another Change Request|转换到更改请求
+Transfer to Another Platform|转到平台
+Transfer to Another Platform|转到平台
+Transfer to Another Platform|转到平台
+Transfer to Another Question|转移到问题
+Transfer to Another Platform|转到平台
+Transfer to Another Status|转移到状态
+Transfer to Another User|转移到用户
+Transfer to Another Question|转移到问题
+Transfer to Another Exam|转移到考试
+Transfer to Another User|转移到用户
+Transfer to Another Exam|转移到考试
+Transfer to Another Domain|转移到域
+Transfer to Another Domain|转移到域
+Transfer to Another Block|转移到阻塞
+Transfer to Another Sec User|传输给Sec用户
+Transfer to Another App|转移到应用程序
+Transfer to Another App|转移到应用程序
+Transfer to Another App|转移到应用程序
+Transfer to Another Sec User|传输给Sec用户
+Transfer to Another Form|转移到形式
+Transfer to Another Form|转移到形式
+Transfer to Another Form|转移到形式
+Transfer to Another Form|转移到形式
+Transfer to Another Container|转移到容器
+

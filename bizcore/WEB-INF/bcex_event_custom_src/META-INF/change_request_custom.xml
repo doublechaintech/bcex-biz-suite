@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+	<import resource="classpath*:/META-INF/change_request_core.xml" />
+	<bean id="changeRequestService" class="com.doublechaintech.bcex.changerequest.ChangeRequestCustomService" >
+		<property name="defaultHandler" ref="changeRequestBaseHandler"/>
+	</bean>
+	<bean id="registerHandler" class="com.doublechaintech.bcex.changerequest.RegisterCustomHandler" ></bean>
+	<bean id="startExamHandler" class="com.doublechaintech.bcex.changerequest.StartExamCustomHandler" ></bean>
+	<bean id="answerHandler" class="com.doublechaintech.bcex.changerequest.AnswerCustomHandler" ></bean>
+	<bean id="registerationProcessor" class="com.doublechaintech.bcex.changerequest.RegisterationCustomProcessor" ></bean>
+	<bean id="startExamProcessor" class="com.doublechaintech.bcex.changerequest.StartExamCustomProcessor" ></bean>
+	<bean id="answerQuestionProcessor" class="com.doublechaintech.bcex.changerequest.AnswerQuestionCustomProcessor" ></bean>
+
+</beans>
+

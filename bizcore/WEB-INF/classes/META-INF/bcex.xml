@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+	<!-- Enable Annotation based Declarative Transaction Management -->
+
+
+	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+  	  <property name="poolName" value="bcex_connection_pool" />
+  	  <property name="dataSourceClassName" value="${app.database.dataSourceClassName}"/>
+  	  <property name="maximumPoolSize" value="10" />
+  	  <property name="maxLifetime" value="60000" />
+  	  <property name="idleTimeout" value="30000" />
+  	  <property name="dataSourceProperties">
+  	   <props>
+  	     <prop key="url">${app.database.jdbcURL}</prop>
+  	     <prop key="user">${app.database.username}</prop>
+  	     <prop key="password">${app.database.password}</prop>
+  	   </props>
+  	  </property>
+  	</bean>
+
+
+	<!-- dbcp 2.6 https://commons.apache.org/proper/commons-dbcp/configuration.html
+	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+	  <property name="poolName" value="bcex_connection_pool" />
+	  <property name="dataSourceClassName" value="${app.database.dataSourceClassName}"/>
+	  <property name="maximumPoolSize" value="10" />
+	  <property name="maxLifetime" value="60000" />
+	  <property name="idleTimeout" value="30000" />
+	  <property name="dataSourceProperties">
+	   <props>
+	     <prop key="url">${app.database.jdbcURL}</prop>
+	     <prop key="user">${app.database.username}</prop>
+	     <prop key="password">${app.database.password}</prop>
+	     <prop key="prepStmtCacheSize">250</prop>
+	     <prop key="prepStmtCacheSqlLimit">2048</prop>
+	     <prop key="cachePrepStmts">true</prop>
+	     <prop key="useServerPrepStmts">true</prop>
+	   </props>
+	  </property>
+	</bean>
+	-->
+
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+	  <constructor-arg ref="hikariConfig" />
+	</bean>
+
+
+	<bean id="platformDAOBase" class="com.doublechaintech.bcex.platform.PlatformJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" />
+		<property name="changeRequestTypeDAO" ref="changeRequestTypeDAO" />
+		
+		<property name="changeRequestDAO" ref="changeRequestDAO" />
+		
+		<property name="examStatusDAO" ref="examStatusDAO" />
+		
+		<property name="questionDAO" ref="questionDAO" />
+		
+		<property name="examRankingDAO" ref="examRankingDAO" />
+		
+		<property name="wechatUserDAO" ref="wechatUserDAO" />
+		
+	</bean>
+	<bean id="platformDAO" parent="platformDAOBase"></bean>
+	
+
+	<bean id="changeRequestTypeDAOBase" class="com.doublechaintech.bcex.changerequesttype.ChangeRequestTypeJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" /><property name="platformDAO" ref="platformDAO" />
+		<property name="changeRequestDAO" ref="changeRequestDAO" />
+		
+	</bean>
+	<bean id="changeRequestTypeDAO" parent="changeRequestTypeDAOBase"></bean>
+	
+
+	<bean id="changeRequestDAOBase" class="com.doublechaintech.bcex.changerequest.ChangeRequestJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" /><property name="changeRequestTypeDAO" ref="changeRequestTypeDAO" /><property name="platformDAO" ref="platformDAO" />
+		<property name="registerationDAO" ref="registerationDAO" />
+		
+		<property name="startExamDAO" ref="startExamDAO" />
+		
+		<property name="answerQuestionDAO" ref="answerQuestionDAO" />
+		
+	</bean>
+	<bean id="changeRequestDAO" parent="changeRequestDAOBase"></bean>
+	
+
+	<bean id="registerationDAOBase" class="com.doublechaintech.bcex.registeration.RegisterationJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" /><property name="changeRequestDAO" ref="changeRequestDAO" />
+	</bean>
+	<bean id="registerationDAO" parent="registerationDAOBase"></bean>
+	
+
+	<bean id="startExamDAOBase" class="com.doublechaintech.bcex.startexam.StartExamJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" /><property name="changeRequestDAO" ref="changeRequestDAO" />
+	</bean>
+	<bean id="startExamDAO" parent="startExamDAOBase"></bean>
+	
+
+	<bean id="answerQuestionDAOBase" class="com.doublechaintech.bcex.answerquestion.AnswerQuestionJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" /><property name="changeRequestDAO" ref="changeRequestDAO" /><property name="wechatUserDAO" ref="wechatUserDAO" /><property name="questionDAO" ref="questionDAO" />
+	</bean>
+	<bean id="answerQuestionDAO" parent="answerQuestionDAOBase"></bean>
+	
+
+	<bean id="examStatusDAOBase" class="com.doublechaintech.bcex.examstatus.ExamStatusJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" /><property name="platformDAO" ref="platformDAO" />
+		<property name="examDAO" ref="examDAO" />
+		
+	</bean>
+	<bean id="examStatusDAO" parent="examStatusDAOBase"></bean>
+	
+
+	<bean id="questionDAOBase" class="com.doublechaintech.bcex.question.QuestionJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" /><property name="platformDAO" ref="platformDAO" />
+		<property name="answerQuestionDAO" ref="answerQuestionDAO" />
+		
+		<property name="answerDAO" ref="answerDAO" />
+		
+		<property name="userAnswerDAO" ref="userAnswerDAO" />
+		
+	</bean>
+	<bean id="questionDAO" parent="questionDAOBase"></bean>
+	
+
+	<bean id="examRankingDAOBase" class="com.doublechaintech.bcex.examranking.ExamRankingJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" /><property name="platformDAO" ref="platformDAO" />
+	</bean>
+	<bean id="examRankingDAO" parent="examRankingDAOBase"></bean>
+	
+
+	<bean id="answerDAOBase" class="com.doublechaintech.bcex.answer.AnswerJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" /><property name="questionDAO" ref="questionDAO" />
+	</bean>
+	<bean id="answerDAO" parent="answerDAOBase"></bean>
+	
+
+	<bean id="wechatUserDAOBase" class="com.doublechaintech.bcex.wechatuser.WechatUserJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" /><property name="platformDAO" ref="platformDAO" />
+		<property name="answerQuestionDAO" ref="answerQuestionDAO" />
+		
+		<property name="examDAO" ref="examDAO" />
+		
+		<property name="faultAnswerDAO" ref="faultAnswerDAO" />
+		
+	</bean>
+	<bean id="wechatUserDAO" parent="wechatUserDAOBase"></bean>
+	
+
+	<bean id="examDAOBase" class="com.doublechaintech.bcex.exam.ExamJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" /><property name="wechatUserDAO" ref="wechatUserDAO" /><property name="examStatusDAO" ref="examStatusDAO" />
+		<property name="userAnswerDAO" ref="userAnswerDAO" />
+		
+		<property name="faultAnswerDAO" ref="faultAnswerDAO" />
+		
+	</bean>
+	<bean id="examDAO" parent="examDAOBase"></bean>
+	
+
+	<bean id="userAnswerDAOBase" class="com.doublechaintech.bcex.useranswer.UserAnswerJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" /><property name="questionDAO" ref="questionDAO" /><property name="examDAO" ref="examDAO" />
+	</bean>
+	<bean id="userAnswerDAO" parent="userAnswerDAOBase"></bean>
+	
+
+	<bean id="faultAnswerDAOBase" class="com.doublechaintech.bcex.faultanswer.FaultAnswerJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" /><property name="wechatUserDAO" ref="wechatUserDAO" /><property name="examDAO" ref="examDAO" />
+	</bean>
+	<bean id="faultAnswerDAO" parent="faultAnswerDAOBase"></bean>
+	
+
+	<bean id="userDomainDAOBase" class="com.doublechaintech.bcex.userdomain.UserDomainJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" />
+		<property name="userWhiteListDAO" ref="userWhiteListDAO" />
+		
+		<property name="secUserDAO" ref="secUserDAO" />
+		
+	</bean>
+	<bean id="userDomainDAO" parent="userDomainDAOBase"></bean>
+	
+
+	<bean id="userWhiteListDAOBase" class="com.doublechaintech.bcex.userwhitelist.UserWhiteListJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" /><property name="userDomainDAO" ref="userDomainDAO" />
+	</bean>
+	<bean id="userWhiteListDAO" parent="userWhiteListDAOBase"></bean>
+	
+
+	<bean id="secUserDAOBase" class="com.doublechaintech.bcex.secuser.SecUserJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" /><property name="userDomainDAO" ref="userDomainDAO" /><property name="secUserBlockingDAO" ref="secUserBlockingDAO" />
+		<property name="userAppDAO" ref="userAppDAO" />
+		
+		<property name="loginHistoryDAO" ref="loginHistoryDAO" />
+		
+	</bean>
+	<bean id="secUserDAO" parent="secUserDAOBase"></bean>
+	
+
+	<bean id="secUserBlockingDAOBase" class="com.doublechaintech.bcex.secuserblocking.SecUserBlockingJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" />
+		<property name="secUserDAO" ref="secUserDAO" />
+		
+	</bean>
+	<bean id="secUserBlockingDAO" parent="secUserBlockingDAOBase"></bean>
+	
+
+	<bean id="userAppDAOBase" class="com.doublechaintech.bcex.userapp.UserAppJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" /><property name="secUserDAO" ref="secUserDAO" />
+		<property name="quickLinkDAO" ref="quickLinkDAO" />
+		
+		<property name="listAccessDAO" ref="listAccessDAO" />
+		
+		<property name="objectAccessDAO" ref="objectAccessDAO" />
+		
+	</bean>
+	<bean id="userAppDAO" parent="userAppDAOBase"></bean>
+	
+
+	<bean id="quickLinkDAOBase" class="com.doublechaintech.bcex.quicklink.QuickLinkJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" /><property name="userAppDAO" ref="userAppDAO" />
+	</bean>
+	<bean id="quickLinkDAO" parent="quickLinkDAOBase"></bean>
+	
+
+	<bean id="listAccessDAOBase" class="com.doublechaintech.bcex.listaccess.ListAccessJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" /><property name="userAppDAO" ref="userAppDAO" />
+	</bean>
+	<bean id="listAccessDAO" parent="listAccessDAOBase"></bean>
+	
+
+	<bean id="objectAccessDAOBase" class="com.doublechaintech.bcex.objectaccess.ObjectAccessJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" /><property name="userAppDAO" ref="userAppDAO" />
+	</bean>
+	<bean id="objectAccessDAO" parent="objectAccessDAOBase"></bean>
+	
+
+	<bean id="loginHistoryDAOBase" class="com.doublechaintech.bcex.loginhistory.LoginHistoryJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" /><property name="secUserDAO" ref="secUserDAO" />
+	</bean>
+	<bean id="loginHistoryDAO" parent="loginHistoryDAOBase"></bean>
+	
+
+	<bean id="genericFormDAOBase" class="com.doublechaintech.bcex.genericform.GenericFormJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" />
+		<property name="formMessageDAO" ref="formMessageDAO" />
+		
+		<property name="formFieldMessageDAO" ref="formFieldMessageDAO" />
+		
+		<property name="formFieldDAO" ref="formFieldDAO" />
+		
+		<property name="formActionDAO" ref="formActionDAO" />
+		
+	</bean>
+	<bean id="genericFormDAO" parent="genericFormDAOBase"></bean>
+	
+
+	<bean id="formMessageDAOBase" class="com.doublechaintech.bcex.formmessage.FormMessageJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" /><property name="genericFormDAO" ref="genericFormDAO" />
+	</bean>
+	<bean id="formMessageDAO" parent="formMessageDAOBase"></bean>
+	
+
+	<bean id="formFieldMessageDAOBase" class="com.doublechaintech.bcex.formfieldmessage.FormFieldMessageJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" /><property name="genericFormDAO" ref="genericFormDAO" />
+	</bean>
+	<bean id="formFieldMessageDAO" parent="formFieldMessageDAOBase"></bean>
+	
+
+	<bean id="formFieldDAOBase" class="com.doublechaintech.bcex.formfield.FormFieldJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" /><property name="genericFormDAO" ref="genericFormDAO" />
+	</bean>
+	<bean id="formFieldDAO" parent="formFieldDAOBase"></bean>
+	
+
+	<bean id="formActionDAOBase" class="com.doublechaintech.bcex.formaction.FormActionJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" /><property name="genericFormDAO" ref="genericFormDAO" />
+	</bean>
+	<bean id="formActionDAO" parent="formActionDAOBase"></bean>
+	
+
+	<bean id="candidateContainerDAOBase" class="com.doublechaintech.bcex.candidatecontainer.CandidateContainerJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" />
+		<property name="candidateElementDAO" ref="candidateElementDAO" />
+		
+	</bean>
+	<bean id="candidateContainerDAO" parent="candidateContainerDAOBase"></bean>
+	
+
+	<bean id="candidateElementDAOBase" class="com.doublechaintech.bcex.candidateelement.CandidateElementJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" /><property name="candidateContainerDAO" ref="candidateContainerDAO" />
+	</bean>
+	<bean id="candidateElementDAO" parent="candidateElementDAOBase"></bean>
+	
+
+
+	<bean id="DAOGroupBase" class="com.doublechaintech.bcex.DAOGroup">
+		<property name="platformDAO" ref="platformDAO"/>
+		<property name="changeRequestTypeDAO" ref="changeRequestTypeDAO"/>
+		<property name="changeRequestDAO" ref="changeRequestDAO"/>
+		<property name="registerationDAO" ref="registerationDAO"/>
+		<property name="startExamDAO" ref="startExamDAO"/>
+		<property name="answerQuestionDAO" ref="answerQuestionDAO"/>
+		<property name="examStatusDAO" ref="examStatusDAO"/>
+		<property name="questionDAO" ref="questionDAO"/>
+		<property name="examRankingDAO" ref="examRankingDAO"/>
+		<property name="answerDAO" ref="answerDAO"/>
+		<property name="wechatUserDAO" ref="wechatUserDAO"/>
+		<property name="examDAO" ref="examDAO"/>
+		<property name="userAnswerDAO" ref="userAnswerDAO"/>
+		<property name="faultAnswerDAO" ref="faultAnswerDAO"/>
+		<property name="userDomainDAO" ref="userDomainDAO"/>
+		<property name="userWhiteListDAO" ref="userWhiteListDAO"/>
+		<property name="secUserDAO" ref="secUserDAO"/>
+		<property name="secUserBlockingDAO" ref="secUserBlockingDAO"/>
+		<property name="userAppDAO" ref="userAppDAO"/>
+		<property name="quickLinkDAO" ref="quickLinkDAO"/>
+		<property name="listAccessDAO" ref="listAccessDAO"/>
+		<property name="objectAccessDAO" ref="objectAccessDAO"/>
+		<property name="loginHistoryDAO" ref="loginHistoryDAO"/>
+		<property name="genericFormDAO" ref="genericFormDAO"/>
+		<property name="formMessageDAO" ref="formMessageDAO"/>
+		<property name="formFieldMessageDAO" ref="formFieldMessageDAO"/>
+		<property name="formFieldDAO" ref="formFieldDAO"/>
+		<property name="formActionDAO" ref="formActionDAO"/>
+		<property name="candidateContainerDAO" ref="candidateContainerDAO"/>
+		<property name="candidateElementDAO" ref="candidateElementDAO"/>
+	</bean>
+	<bean id="DAOGroup" parent="DAOGroupBase"></bean>
+</beans>
+
+
+
+
+<!--
+
+	各种候选配置，可以选择你更为熟悉的类型
+	Creating TransactionManager Bean, since JDBC we are creating of type
+		DataSourceTransactionManager
+
+		<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+	  <property name="poolName" value="mercatus_connection_pool" />
+	  <property name="dataSourceClassName" value="com.mysql.cj.jdbc.MysqlDataSource"/>
+	  <property name="maximumPoolSize" value="50" />
+	  <property name="maxLifetime" value="60000" />
+	  <property name="idleTimeout" value="30000" />
+	  <property name="dataSourceProperties">
+	   <props>
+	     <prop key="url">${app.database.jdbcURL}</prop>
+	     <prop key="user">${app.database.username}</prop>
+	     <prop key="password">${app.database.password}</prop>
+	     <prop key="prepStmtCacheSize">250</prop>
+	     <prop key="prepStmtCacheSqlLimit">2048</prop>
+	     <prop key="cachePrepStmts">true</prop>
+	     <prop key="useServerPrepStmts">true</prop>
+	   </props>
+	  </property>
+	</bean>
+
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close" >
+
+		<property name="url" value="${app.database.jdbcURL}" />
+		<property name="username" value="${app.database.username}" />
+		<property name="password" value="${app.database.password}" />
+		<property name="driverClassName" value="${app.database.driverClass}" />
+		<property name="initialSize" value="${app.database.pool.initialSize}" />
+		<property name="maxTotal" value="${app.database.pool.maxActive}" />
+
+		<property name="testOnBorrow" value="true" />
+		<property name="testWhileIdle" value="true" />
+		<property name="validationQuery" value="SELECT 1 from sec_user_data" />
+		<property name="removeAbandonedTimeout" value="55" />
+		<property name="removeAbandonedOnBorrow" value="true"/>
+
+	</bean>
+
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close" >
+
+		<property name="jdbcUrl" value="${app.database.jdbcURL}" />
+		<property name="user" value="${app.database.username}" />
+		<property name="password" value="${app.database.password}" />
+		<property name="driverClass" value="${app.database.driverClass}" />
+
+  		<property name="minPoolSize" value="10"/>
+  		<property name="maxPoolSize" value="50"/>
+  		<property name="acquireIncrement" value="1"/>
+  		<property name="idleConnectionTestPeriod" value="1000"/>
+  		<property name="maxStatements" value="250"/>
+  		<property name="checkoutTimeout" value="60000"/>
+  		<property name="initialPoolSize" value="10" />
+
+	</bean>
+
+
+	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+	  <property name="poolName" value="mercatus_connection_pool" />
+	  <property name="dataSourceClassName" value="${app.database.dataSourceClassName}"/>
+	  <property name="maximumPoolSize" value="50" />
+	  <property name="maxLifetime" value="60000" />
+	  <property name="idleTimeout" value="30000" />
+	  <property name="dataSourceProperties">
+	   <props>
+	     <prop key="url">${app.database.jdbcURL}</prop>
+	     <prop key="user">${app.database.username}</prop>
+	     <prop key="password">${app.database.password}</prop>
+	     <prop key="prepStmtCacheSize">250</prop>
+	     <prop key="prepStmtCacheSqlLimit">2048</prop>
+	     <prop key="cachePrepStmts">true</prop>
+	     <prop key="useServerPrepStmts">true</prop>
+	   </props>
+	  </property>
+	</bean>
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+	  <constructor-arg ref="hikariConfig" />
+	</bean>
+
+
+-->
+
+
+
+
+
+
+
+

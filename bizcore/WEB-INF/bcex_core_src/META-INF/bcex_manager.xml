@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+	<bean id="checker" class="com.doublechaintech.bcex.BcexObjectChecker" scope="prototype"></bean>
+
+	<bean id="platformManagerBase" class="com.doublechaintech.bcex.platform.PlatformManagerImpl"/>
+	<bean id="platformManager" class="com.doublechaintech.bcex.platform.PlatformCustomManagerImpl" parent="platformManagerBase" ></bean>
+	
+	<bean id="changeRequestTypeManagerBase" class="com.doublechaintech.bcex.changerequesttype.ChangeRequestTypeManagerImpl"/>
+	<bean id="changeRequestTypeManager" class="com.doublechaintech.bcex.changerequesttype.ChangeRequestTypeManagerImpl" parent="changeRequestTypeManagerBase" ></bean>
+	
+	<bean id="changeRequestManagerBase" class="com.doublechaintech.bcex.changerequest.ChangeRequestManagerImpl"/>
+	<bean id="changeRequestManager" class="com.doublechaintech.bcex.changerequest.ChangeRequestCustomManagerImpl" parent="changeRequestManagerBase" ></bean>
+	
+	<bean id="registerationManagerBase" class="com.doublechaintech.bcex.registeration.RegisterationManagerImpl"/>
+	<bean id="registerationManager" class="com.doublechaintech.bcex.registeration.RegisterationManagerImpl" parent="registerationManagerBase" ></bean>
+	
+	<bean id="startExamManagerBase" class="com.doublechaintech.bcex.startexam.StartExamManagerImpl"/>
+	<bean id="startExamManager" class="com.doublechaintech.bcex.startexam.StartExamManagerImpl" parent="startExamManagerBase" ></bean>
+	
+	<bean id="answerQuestionManagerBase" class="com.doublechaintech.bcex.answerquestion.AnswerQuestionManagerImpl"/>
+	<bean id="answerQuestionManager" class="com.doublechaintech.bcex.answerquestion.AnswerQuestionManagerImpl" parent="answerQuestionManagerBase" ></bean>
+	
+	<bean id="examStatusManagerBase" class="com.doublechaintech.bcex.examstatus.ExamStatusManagerImpl"/>
+	<bean id="examStatusManager" class="com.doublechaintech.bcex.examstatus.ExamStatusManagerImpl" parent="examStatusManagerBase" ></bean>
+	
+	<bean id="questionManagerBase" class="com.doublechaintech.bcex.question.QuestionManagerImpl"/>
+	<bean id="questionManager" class="com.doublechaintech.bcex.question.QuestionCustomManagerImpl" parent="questionManagerBase" ></bean>
+	
+	<bean id="examRankingManagerBase" class="com.doublechaintech.bcex.examranking.ExamRankingManagerImpl"/>
+	<bean id="examRankingManager" class="com.doublechaintech.bcex.examranking.ExamRankingManagerImpl" parent="examRankingManagerBase" ></bean>
+	
+	<bean id="answerManagerBase" class="com.doublechaintech.bcex.answer.AnswerManagerImpl"/>
+	<bean id="answerManager" class="com.doublechaintech.bcex.answer.AnswerManagerImpl" parent="answerManagerBase" ></bean>
+	
+	<bean id="wechatUserManagerBase" class="com.doublechaintech.bcex.wechatuser.WechatUserManagerImpl"/>
+	<bean id="wechatUserManager" class="com.doublechaintech.bcex.wechatuser.WechatUserCustomManagerImpl" parent="wechatUserManagerBase" ></bean>
+	
+	<bean id="examManagerBase" class="com.doublechaintech.bcex.exam.ExamManagerImpl"/>
+	<bean id="examManager" class="com.doublechaintech.bcex.exam.ExamCustomManagerImpl" parent="examManagerBase" ></bean>
+	
+	<bean id="userAnswerManagerBase" class="com.doublechaintech.bcex.useranswer.UserAnswerManagerImpl"/>
+	<bean id="userAnswerManager" class="com.doublechaintech.bcex.useranswer.UserAnswerManagerImpl" parent="userAnswerManagerBase" ></bean>
+	
+	<bean id="faultAnswerManagerBase" class="com.doublechaintech.bcex.faultanswer.FaultAnswerManagerImpl"/>
+	<bean id="faultAnswerManager" class="com.doublechaintech.bcex.faultanswer.FaultAnswerManagerImpl" parent="faultAnswerManagerBase" ></bean>
+	
+	<bean id="userDomainManagerBase" class="com.doublechaintech.bcex.userdomain.UserDomainManagerImpl"/>
+	<bean id="userDomainManager" class="com.doublechaintech.bcex.userdomain.UserDomainCustomManagerImpl" parent="userDomainManagerBase" ></bean>
+	
+	<bean id="userWhiteListManagerBase" class="com.doublechaintech.bcex.userwhitelist.UserWhiteListManagerImpl"/>
+	<bean id="userWhiteListManager" class="com.doublechaintech.bcex.userwhitelist.UserWhiteListManagerImpl" parent="userWhiteListManagerBase" ></bean>
+	
+	<bean id="secUserManagerBase" class="com.doublechaintech.bcex.secuser.SecUserManagerImpl"/>
+	<bean id="secUserManager" class="com.doublechaintech.bcex.secuser.SecUserCustomManagerImpl" parent="secUserManagerBase" ></bean>
+	
+	<bean id="secUserBlockingManagerBase" class="com.doublechaintech.bcex.secuserblocking.SecUserBlockingManagerImpl"/>
+	<bean id="secUserBlockingManager" class="com.doublechaintech.bcex.secuserblocking.SecUserBlockingManagerImpl" parent="secUserBlockingManagerBase" ></bean>
+	
+	<bean id="userAppManagerBase" class="com.doublechaintech.bcex.userapp.UserAppManagerImpl"/>
+	<bean id="userAppManager" class="com.doublechaintech.bcex.userapp.UserAppCustomManagerImpl" parent="userAppManagerBase" ></bean>
+	
+	<bean id="quickLinkManagerBase" class="com.doublechaintech.bcex.quicklink.QuickLinkManagerImpl"/>
+	<bean id="quickLinkManager" class="com.doublechaintech.bcex.quicklink.QuickLinkManagerImpl" parent="quickLinkManagerBase" ></bean>
+	
+	<bean id="listAccessManagerBase" class="com.doublechaintech.bcex.listaccess.ListAccessManagerImpl"/>
+	<bean id="listAccessManager" class="com.doublechaintech.bcex.listaccess.ListAccessManagerImpl" parent="listAccessManagerBase" ></bean>
+	
+	<bean id="objectAccessManagerBase" class="com.doublechaintech.bcex.objectaccess.ObjectAccessManagerImpl"/>
+	<bean id="objectAccessManager" class="com.doublechaintech.bcex.objectaccess.ObjectAccessManagerImpl" parent="objectAccessManagerBase" ></bean>
+	
+	<bean id="loginHistoryManagerBase" class="com.doublechaintech.bcex.loginhistory.LoginHistoryManagerImpl"/>
+	<bean id="loginHistoryManager" class="com.doublechaintech.bcex.loginhistory.LoginHistoryManagerImpl" parent="loginHistoryManagerBase" ></bean>
+	
+	<bean id="genericFormManagerBase" class="com.doublechaintech.bcex.genericform.GenericFormManagerImpl"/>
+	<bean id="genericFormManager" class="com.doublechaintech.bcex.genericform.GenericFormCustomManagerImpl" parent="genericFormManagerBase" ></bean>
+	
+	<bean id="formMessageManagerBase" class="com.doublechaintech.bcex.formmessage.FormMessageManagerImpl"/>
+	<bean id="formMessageManager" class="com.doublechaintech.bcex.formmessage.FormMessageManagerImpl" parent="formMessageManagerBase" ></bean>
+	
+	<bean id="formFieldMessageManagerBase" class="com.doublechaintech.bcex.formfieldmessage.FormFieldMessageManagerImpl"/>
+	<bean id="formFieldMessageManager" class="com.doublechaintech.bcex.formfieldmessage.FormFieldMessageManagerImpl" parent="formFieldMessageManagerBase" ></bean>
+	
+	<bean id="formFieldManagerBase" class="com.doublechaintech.bcex.formfield.FormFieldManagerImpl"/>
+	<bean id="formFieldManager" class="com.doublechaintech.bcex.formfield.FormFieldManagerImpl" parent="formFieldManagerBase" ></bean>
+	
+	<bean id="formActionManagerBase" class="com.doublechaintech.bcex.formaction.FormActionManagerImpl"/>
+	<bean id="formActionManager" class="com.doublechaintech.bcex.formaction.FormActionManagerImpl" parent="formActionManagerBase" ></bean>
+	
+	<bean id="candidateContainerManagerBase" class="com.doublechaintech.bcex.candidatecontainer.CandidateContainerManagerImpl"/>
+	<bean id="candidateContainerManager" class="com.doublechaintech.bcex.candidatecontainer.CandidateContainerManagerImpl" parent="candidateContainerManagerBase" ></bean>
+	
+	<bean id="candidateElementManagerBase" class="com.doublechaintech.bcex.candidateelement.CandidateElementManagerImpl"/>
+	<bean id="candidateElementManager" class="com.doublechaintech.bcex.candidateelement.CandidateElementManagerImpl" parent="candidateElementManagerBase" ></bean>
+	
+
+	<bean id="managerGroupBase" class="com.doublechaintech.bcex.ManagerGroup">
+		<property name="platformManager" ref="platformManager"/>
+		<property name="changeRequestTypeManager" ref="changeRequestTypeManager"/>
+		<property name="changeRequestManager" ref="changeRequestManager"/>
+		<property name="registerationManager" ref="registerationManager"/>
+		<property name="startExamManager" ref="startExamManager"/>
+		<property name="answerQuestionManager" ref="answerQuestionManager"/>
+		<property name="examStatusManager" ref="examStatusManager"/>
+		<property name="questionManager" ref="questionManager"/>
+		<property name="examRankingManager" ref="examRankingManager"/>
+		<property name="answerManager" ref="answerManager"/>
+		<property name="wechatUserManager" ref="wechatUserManager"/>
+		<property name="examManager" ref="examManager"/>
+		<property name="userAnswerManager" ref="userAnswerManager"/>
+		<property name="faultAnswerManager" ref="faultAnswerManager"/>
+		<property name="userDomainManager" ref="userDomainManager"/>
+		<property name="userWhiteListManager" ref="userWhiteListManager"/>
+		<property name="secUserManager" ref="secUserManager"/>
+		<property name="secUserBlockingManager" ref="secUserBlockingManager"/>
+		<property name="userAppManager" ref="userAppManager"/>
+		<property name="quickLinkManager" ref="quickLinkManager"/>
+		<property name="listAccessManager" ref="listAccessManager"/>
+		<property name="objectAccessManager" ref="objectAccessManager"/>
+		<property name="loginHistoryManager" ref="loginHistoryManager"/>
+		<property name="genericFormManager" ref="genericFormManager"/>
+		<property name="formMessageManager" ref="formMessageManager"/>
+		<property name="formFieldMessageManager" ref="formFieldMessageManager"/>
+		<property name="formFieldManager" ref="formFieldManager"/>
+		<property name="formActionManager" ref="formActionManager"/>
+		<property name="candidateContainerManager" ref="candidateContainerManager"/>
+		<property name="candidateElementManager" ref="candidateElementManager"/>
+	</bean>
+	<bean id="managerGroup" parent="managerGroupBase"></bean>
+	
+
+
+</beans>
+
+
+
+
+

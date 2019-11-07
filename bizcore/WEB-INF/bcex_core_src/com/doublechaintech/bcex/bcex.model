@@ -1,0 +1,143 @@
+<root org="doublechaintech"
+
+	chinese_name="链问链答考试中台" 
+	english_name="链问链答考试中台"
+
+>
+	
+	
+	<platform
+		name='链问链答考试中台|[1,200]' 
+		description="text()"
+	/>
+	
+	
+	<change_request_type
+		name="注册|开始考试|答题"
+		code="REGISTER|START_EXAM|ANSWER"
+		icon="download|swap|upload|account-book|edit"
+		display_order="1|2|3|4|5|6"
+		platform="$(platform)"
+		_features="cr_type"
+		_identified_by="code"
+	/>
+	
+	<change_request
+		name="注册|开始考试|答题|[1,50]"
+		create_time="createTime()"
+		remote_ip="remoteIp()"
+		request_type="$(change_request_type)"
+		platform="$(platform)"
+		_vg4platform="变更"
+		_features="change_request"
+	/>
+	
+	<registeration
+		nick_name="豆豆鬼|[1,200]"
+		avarta="share.jpg"
+		change_request="$(change_request)"
+		_features="event"
+	/>
+	
+	<start_exam
+		nick_name="豆豆鬼参与考试|[1,200]"
+		
+		change_request="$(change_request)"
+		_features="event"
+	/>
+	
+	<answer_question
+		nick_name="豆豆鬼参与考试|[1,200]"
+		user="$(wechat_user)"
+		question="$(question)"
+		answer="A|B|C|[1,20]"
+		change_request="$(change_request)"
+		_features="event"
+	/>
+	
+	
+	<exam_status
+		name="考试中|考试完成|[1,200]"
+		code="STARTED|COMPLETED"
+		platform="$(platform)"
+		_features="status"
+		_identified_by="code"
+		
+		
+	/>
+	
+	
+	
+	
+	<question
+		topic="区块链是什么技术，下面最接近的回答是什么"
+		level="低|中|高"
+		option_a="网络技术"
+		option_b="电子技术"
+		option_c="机械技术"
+		option_d="太空技术"
+		option_e="建筑技术"
+		right_answer="A|B|C|D|E"
+		platform="$(platform)"
+	/>
+	
+	
+	
+	<exam_ranking
+		name="张喜来**"
+		avarta="wechat.jpg"
+		platform="$(platform)"
+	/>
+	
+	<answer
+		title="网络技术"
+		comment="区块链是基于现有互联网的技术"
+		question="$(question)"
+		
+	/>
+	
+	<wechat_user
+		name="张三|李四|王五|[1,200]"
+		avarta="wechat.jpg"
+		create_time="createTime()"
+		platform="$(platform)"
+		_features="merchant"
+	/>
+	
+	<exam
+		name="区块链技术考试|[1,200]"
+		create_time="createTime()"
+		status="$(exam_status)"
+		user="$(wechat_user)"
+		score="100"
+	/>
+	
+	<user_answer
+		topic="区块链是什么技术，下面最接近的回答是什么"
+		
+		user_select="A"
+		question="$(question)"
+		
+		exam="$(exam)"
+	/>
+	
+	<fault_answer
+		topic="区块链是什么技术，下面最接近的回答是什么"
+		your_answer="网络技术"
+		right_answer="电子技术"
+		create_time="createTime()"
+		user="$(wechat_user)"
+		exam="$(exam)"
+	/>
+	
+	
+	
+</root>
+
+
+
+
+
+
+
+

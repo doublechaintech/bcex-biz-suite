@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+	
+	
+	<!-- changeRequestService is the entry point for processing the request -->
+	<bean id="changeRequestBaseHandler" class="com.doublechaintech.bcex.changerequest.ChangeRequestBaseHandler" ></bean>
+	
+	<bean id="changeRequestService" class="com.doublechaintech.bcex.changerequest.ChangeRequestService" >
+		<property name="defaultHandler" ref="changeRequestBaseHandler"/>
+	</bean>
+	
+	<!-- Start handle for different change request per type -->
+	<bean id="registerHandler" class="com.doublechaintech.bcex.changerequest.RegisterHandler" ></bean>
+	<bean id="startExamHandler" class="com.doublechaintech.bcex.changerequest.StartExamHandler" ></bean>
+	<bean id="answerHandler" class="com.doublechaintech.bcex.changerequest.AnswerHandler" ></bean>
+
+	<!-- Detail Handler per event -->
+	<bean id="registerationProcessor" class="com.doublechaintech.bcex.changerequestProcessor" ></bean>
+	<bean id="startExamProcessor" class="com.doublechaintech.bcex.changerequestProcessor" ></bean>
+	<bean id="answerQuestionProcessor" class="com.doublechaintech.bcex.changerequestProcessor" ></bean>
+
+</beans>
+
+
