@@ -17,8 +17,8 @@
 	<bean id="changeRequestManagerBase" class="com.doublechaintech.bcex.changerequest.ChangeRequestManagerImpl"/>
 	<bean id="changeRequestManager" class="com.doublechaintech.bcex.changerequest.ChangeRequestCustomManagerImpl" parent="changeRequestManagerBase" ></bean>
 	
-	<bean id="registerationManagerBase" class="com.doublechaintech.bcex.registeration.RegisterationManagerImpl"/>
-	<bean id="registerationManager" class="com.doublechaintech.bcex.registeration.RegisterationManagerImpl" parent="registerationManagerBase" ></bean>
+	<bean id="registrationManagerBase" class="com.doublechaintech.bcex.registration.RegistrationManagerImpl"/>
+	<bean id="registrationManager" class="com.doublechaintech.bcex.registration.RegistrationManagerImpl" parent="registrationManagerBase" ></bean>
 	
 	<bean id="startExamManagerBase" class="com.doublechaintech.bcex.startexam.StartExamManagerImpl"/>
 	<bean id="startExamManager" class="com.doublechaintech.bcex.startexam.StartExamManagerImpl" parent="startExamManagerBase" ></bean>
@@ -40,6 +40,9 @@
 	
 	<bean id="wechatUserManagerBase" class="com.doublechaintech.bcex.wechatuser.WechatUserManagerImpl"/>
 	<bean id="wechatUserManager" class="com.doublechaintech.bcex.wechatuser.WechatUserCustomManagerImpl" parent="wechatUserManagerBase" ></bean>
+	
+	<bean id="wechatLoginInfoManagerBase" class="com.doublechaintech.bcex.wechatlogininfo.WechatLoginInfoManagerImpl"/>
+	<bean id="wechatLoginInfoManager" class="com.doublechaintech.bcex.wechatlogininfo.WechatLoginInfoManagerImpl" parent="wechatLoginInfoManagerBase" ></bean>
 	
 	<bean id="examManagerBase" class="com.doublechaintech.bcex.exam.ExamManagerImpl"/>
 	<bean id="examManager" class="com.doublechaintech.bcex.exam.ExamCustomManagerImpl" parent="examManagerBase" ></bean>
@@ -103,7 +106,7 @@
 		<property name="platformManager" ref="platformManager"/>
 		<property name="changeRequestTypeManager" ref="changeRequestTypeManager"/>
 		<property name="changeRequestManager" ref="changeRequestManager"/>
-		<property name="registerationManager" ref="registerationManager"/>
+		<property name="registrationManager" ref="registrationManager"/>
 		<property name="startExamManager" ref="startExamManager"/>
 		<property name="answerQuestionManager" ref="answerQuestionManager"/>
 		<property name="examStatusManager" ref="examStatusManager"/>
@@ -111,6 +114,7 @@
 		<property name="examRankingManager" ref="examRankingManager"/>
 		<property name="answerManager" ref="answerManager"/>
 		<property name="wechatUserManager" ref="wechatUserManager"/>
+		<property name="wechatLoginInfoManager" ref="wechatLoginInfoManager"/>
 		<property name="examManager" ref="examManager"/>
 		<property name="userAnswerManager" ref="userAnswerManager"/>
 		<property name="faultAnswerManager" ref="faultAnswerManager"/>

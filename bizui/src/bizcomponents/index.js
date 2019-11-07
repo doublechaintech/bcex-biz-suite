@@ -45,21 +45,21 @@ import ChangeRequestProfile from './changerequest/ChangeRequest.profile';
 import ChangeRequestCreateFormBody from './changerequest/ChangeRequest.createformbody';
 import ChangeRequestService from './changerequest/ChangeRequest.service';
 import ChangeRequestUpdateForm from './changerequest/ChangeRequest.updateform';
-import RegisterationBase from './registeration/Registeration.base';
-import RegisterationBizApp from './registeration/Registeration.app';
-import RegisterationModel from './registeration/Registeration.model';
-import RegisterationDashboard from './registeration/Registeration.dashboard';
-import RegisterationModalTable from './registeration/Registeration.modaltable';
-import RegisterationSearch from './registeration/Registeration.search';
-import RegisterationSearchForm from './registeration/Registeration.searchform';
-import RegisterationCreateForm from './registeration/Registeration.createform';
-import RegisterationAssociateForm from './registeration/Registeration.associateform';
-import RegisterationTable from './registeration/Registeration.table';
-import RegisterationPermission from './registeration/Registeration.permission';
-import RegisterationProfile from './registeration/Registeration.profile';
-import RegisterationCreateFormBody from './registeration/Registeration.createformbody';
-import RegisterationService from './registeration/Registeration.service';
-import RegisterationUpdateForm from './registeration/Registeration.updateform';
+import RegistrationBase from './registration/Registration.base';
+import RegistrationBizApp from './registration/Registration.app';
+import RegistrationModel from './registration/Registration.model';
+import RegistrationDashboard from './registration/Registration.dashboard';
+import RegistrationModalTable from './registration/Registration.modaltable';
+import RegistrationSearch from './registration/Registration.search';
+import RegistrationSearchForm from './registration/Registration.searchform';
+import RegistrationCreateForm from './registration/Registration.createform';
+import RegistrationAssociateForm from './registration/Registration.associateform';
+import RegistrationTable from './registration/Registration.table';
+import RegistrationPermission from './registration/Registration.permission';
+import RegistrationProfile from './registration/Registration.profile';
+import RegistrationCreateFormBody from './registration/Registration.createformbody';
+import RegistrationService from './registration/Registration.service';
+import RegistrationUpdateForm from './registration/Registration.updateform';
 import StartExamBase from './startexam/StartExam.base';
 import StartExamBizApp from './startexam/StartExam.app';
 import StartExamModel from './startexam/StartExam.model';
@@ -165,6 +165,21 @@ import WechatUserProfile from './wechatuser/WechatUser.profile';
 import WechatUserCreateFormBody from './wechatuser/WechatUser.createformbody';
 import WechatUserService from './wechatuser/WechatUser.service';
 import WechatUserUpdateForm from './wechatuser/WechatUser.updateform';
+import WechatLoginInfoBase from './wechatlogininfo/WechatLoginInfo.base';
+import WechatLoginInfoBizApp from './wechatlogininfo/WechatLoginInfo.app';
+import WechatLoginInfoModel from './wechatlogininfo/WechatLoginInfo.model';
+import WechatLoginInfoDashboard from './wechatlogininfo/WechatLoginInfo.dashboard';
+import WechatLoginInfoModalTable from './wechatlogininfo/WechatLoginInfo.modaltable';
+import WechatLoginInfoSearch from './wechatlogininfo/WechatLoginInfo.search';
+import WechatLoginInfoSearchForm from './wechatlogininfo/WechatLoginInfo.searchform';
+import WechatLoginInfoCreateForm from './wechatlogininfo/WechatLoginInfo.createform';
+import WechatLoginInfoAssociateForm from './wechatlogininfo/WechatLoginInfo.associateform';
+import WechatLoginInfoTable from './wechatlogininfo/WechatLoginInfo.table';
+import WechatLoginInfoPermission from './wechatlogininfo/WechatLoginInfo.permission';
+import WechatLoginInfoProfile from './wechatlogininfo/WechatLoginInfo.profile';
+import WechatLoginInfoCreateFormBody from './wechatlogininfo/WechatLoginInfo.createformbody';
+import WechatLoginInfoService from './wechatlogininfo/WechatLoginInfo.service';
+import WechatLoginInfoUpdateForm from './wechatlogininfo/WechatLoginInfo.updateform';
 import ExamBase from './exam/Exam.base';
 import ExamBizApp from './exam/Exam.app';
 import ExamModel from './exam/Exam.model';
@@ -457,7 +472,7 @@ const BizModels = [
 	PlatformModel,
 	ChangeRequestTypeModel,
 	ChangeRequestModel,
-	RegisterationModel,
+	RegistrationModel,
 	StartExamModel,
 	AnswerQuestionModel,
 	ExamStatusModel,
@@ -465,6 +480,7 @@ const BizModels = [
 	ExamRankingModel,
 	AnswerModel,
 	WechatUserModel,
+	WechatLoginInfoModel,
 	ExamModel,
 	UserAnswerModel,
 	FaultAnswerModel,
@@ -504,7 +520,7 @@ const menuLibrary = []
 menuLibrary.platform = PlatformBase.menuData
 menuLibrary.changeRequestType = ChangeRequestTypeBase.menuData
 menuLibrary.changeRequest = ChangeRequestBase.menuData
-menuLibrary.registeration = RegisterationBase.menuData
+menuLibrary.registration = RegistrationBase.menuData
 menuLibrary.startExam = StartExamBase.menuData
 menuLibrary.answerQuestion = AnswerQuestionBase.menuData
 menuLibrary.examStatus = ExamStatusBase.menuData
@@ -512,6 +528,7 @@ menuLibrary.question = QuestionBase.menuData
 menuLibrary.examRanking = ExamRankingBase.menuData
 menuLibrary.answer = AnswerBase.menuData
 menuLibrary.wechatUser = WechatUserBase.menuData
+menuLibrary.wechatLoginInfo = WechatLoginInfoBase.menuData
 menuLibrary.exam = ExamBase.menuData
 menuLibrary.userAnswer = UserAnswerBase.menuData
 menuLibrary.faultAnswer = FaultAnswerBase.menuData
@@ -554,7 +571,7 @@ const ViewMapping = {
   'com.doublechaintech.bcex.platform.Platform': {name:'platform'},
   'com.doublechaintech.bcex.changerequesttype.ChangeRequestType': {name:'changeRequestType'},
   'com.doublechaintech.bcex.changerequest.ChangeRequest': {name:'changeRequest'},
-  'com.doublechaintech.bcex.registeration.Registeration': {name:'registeration'},
+  'com.doublechaintech.bcex.registration.Registration': {name:'registration'},
   'com.doublechaintech.bcex.startexam.StartExam': {name:'startExam'},
   'com.doublechaintech.bcex.answerquestion.AnswerQuestion': {name:'answerQuestion'},
   'com.doublechaintech.bcex.examstatus.ExamStatus': {name:'examStatus'},
@@ -562,6 +579,7 @@ const ViewMapping = {
   'com.doublechaintech.bcex.examranking.ExamRanking': {name:'examRanking'},
   'com.doublechaintech.bcex.answer.Answer': {name:'answer'},
   'com.doublechaintech.bcex.wechatuser.WechatUser': {name:'wechatUser'},
+  'com.doublechaintech.bcex.wechatlogininfo.WechatLoginInfo': {name:'wechatLoginInfo'},
   'com.doublechaintech.bcex.exam.Exam': {name:'exam'},
   'com.doublechaintech.bcex.useranswer.UserAnswer': {name:'userAnswer'},
   'com.doublechaintech.bcex.faultanswer.FaultAnswer': {name:'faultAnswer'},
@@ -671,21 +689,21 @@ const OOTBComponents={
     ChangeRequestCreateFormBody,
     ChangeRequestService,
     ChangeRequestUpdateForm,
-    RegisterationBase,
-    RegisterationBizApp,
-    RegisterationModel,
-    RegisterationDashboard,
-    RegisterationModalTable,
-    RegisterationSearch,
-    RegisterationSearchForm,
-    RegisterationCreateForm,
-    RegisterationAssociateForm,
-    RegisterationTable,
-    RegisterationPermission,
-    RegisterationProfile,
-    RegisterationCreateFormBody,
-    RegisterationService,
-    RegisterationUpdateForm,
+    RegistrationBase,
+    RegistrationBizApp,
+    RegistrationModel,
+    RegistrationDashboard,
+    RegistrationModalTable,
+    RegistrationSearch,
+    RegistrationSearchForm,
+    RegistrationCreateForm,
+    RegistrationAssociateForm,
+    RegistrationTable,
+    RegistrationPermission,
+    RegistrationProfile,
+    RegistrationCreateFormBody,
+    RegistrationService,
+    RegistrationUpdateForm,
     StartExamBase,
     StartExamBizApp,
     StartExamModel,
@@ -791,6 +809,21 @@ const OOTBComponents={
     WechatUserCreateFormBody,
     WechatUserService,
     WechatUserUpdateForm,
+    WechatLoginInfoBase,
+    WechatLoginInfoBizApp,
+    WechatLoginInfoModel,
+    WechatLoginInfoDashboard,
+    WechatLoginInfoModalTable,
+    WechatLoginInfoSearch,
+    WechatLoginInfoSearchForm,
+    WechatLoginInfoCreateForm,
+    WechatLoginInfoAssociateForm,
+    WechatLoginInfoTable,
+    WechatLoginInfoPermission,
+    WechatLoginInfoProfile,
+    WechatLoginInfoCreateFormBody,
+    WechatLoginInfoService,
+    WechatLoginInfoUpdateForm,
     ExamBase,
     ExamBizApp,
     ExamModel,

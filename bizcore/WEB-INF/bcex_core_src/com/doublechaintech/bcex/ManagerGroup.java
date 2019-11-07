@@ -7,7 +7,7 @@ import com.doublechaintech.bcex.changerequesttype.ChangeRequestTypeManager;
 
 import com.doublechaintech.bcex.changerequest.ChangeRequestManager;
 
-import com.doublechaintech.bcex.registeration.RegisterationManager;
+import com.doublechaintech.bcex.registration.RegistrationManager;
 
 import com.doublechaintech.bcex.startexam.StartExamManager;
 
@@ -22,6 +22,8 @@ import com.doublechaintech.bcex.examranking.ExamRankingManager;
 import com.doublechaintech.bcex.answer.AnswerManager;
 
 import com.doublechaintech.bcex.wechatuser.WechatUserManager;
+
+import com.doublechaintech.bcex.wechatlogininfo.WechatLoginInfoManager;
 
 import com.doublechaintech.bcex.exam.ExamManager;
 
@@ -70,7 +72,7 @@ public class ManagerGroup {
 
 	protected ChangeRequestManager changeRequestManager;
 
-	protected RegisterationManager registerationManager;
+	protected RegistrationManager registrationManager;
 
 	protected StartExamManager startExamManager;
 
@@ -85,6 +87,8 @@ public class ManagerGroup {
 	protected AnswerManager answerManager;
 
 	protected WechatUserManager wechatUserManager;
+
+	protected WechatLoginInfoManager wechatLoginInfoManager;
 
 	protected ExamManager examManager;
 
@@ -150,11 +154,11 @@ public class ManagerGroup {
 	}
 
 
-	public RegisterationManager getRegisterationManager(){
-		return this.registerationManager;
+	public RegistrationManager getRegistrationManager(){
+		return this.registrationManager;
 	}
-	public void setRegisterationManager(RegisterationManager manager){
-		this.registerationManager = manager;
+	public void setRegistrationManager(RegistrationManager manager){
+		this.registrationManager = manager;
 	}
 
 
@@ -211,6 +215,14 @@ public class ManagerGroup {
 	}
 	public void setWechatUserManager(WechatUserManager manager){
 		this.wechatUserManager = manager;
+	}
+
+
+	public WechatLoginInfoManager getWechatLoginInfoManager(){
+		return this.wechatLoginInfoManager;
+	}
+	public void setWechatLoginInfoManager(WechatLoginInfoManager manager){
+		this.wechatLoginInfoManager = manager;
 	}
 
 

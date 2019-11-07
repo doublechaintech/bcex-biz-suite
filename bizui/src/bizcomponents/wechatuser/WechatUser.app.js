@@ -233,6 +233,57 @@ class WechatUserBizApp extends React.PureComponent {
     }))(AnswerQuestionUpdateForm)
   }
 
+  getWechatLoginInfoSearch = () => {
+    const {WechatLoginInfoSearch} = GlobalComponents;
+    const userContext = null
+    return connect(state => ({
+      rule: state.rule,
+      name: "微信登录信息",
+      role: "wechatLoginInfo",
+      data: state._wechatUser.wechatLoginInfoList,
+      metaInfo: state._wechatUser.wechatLoginInfoListMetaInfo,
+      count: state._wechatUser.wechatLoginInfoCount,
+      returnURL: `/wechatUser/${state._wechatUser.id}/dashboard`,
+      currentPage: state._wechatUser.wechatLoginInfoCurrentPageNumber,
+      searchFormParameters: state._wechatUser.wechatLoginInfoSearchFormParameters,
+      searchParameters: {...state._wechatUser.searchParameters},
+      expandForm: state._wechatUser.expandForm,
+      loading: state._wechatUser.loading,
+      partialList: state._wechatUser.partialList,
+      owner: { type: '_wechatUser', id: state._wechatUser.id, 
+      referenceName: 'wechatUser', 
+      listName: 'wechatLoginInfoList', ref:state._wechatUser, 
+      listDisplayName: appLocaleName(userContext,"List") }, // this is for model namespace and
+    }))(WechatLoginInfoSearch)
+  }
+  getWechatLoginInfoCreateForm = () => {
+   	const {WechatLoginInfoCreateForm} = GlobalComponents;
+   	const userContext = null
+    return connect(state => ({
+      rule: state.rule,
+      role: "wechatLoginInfo",
+      data: state._wechatUser.wechatLoginInfoList,
+      metaInfo: state._wechatUser.wechatLoginInfoListMetaInfo,
+      count: state._wechatUser.wechatLoginInfoCount,
+      returnURL: `/wechatUser/${state._wechatUser.id}/list`,
+      currentPage: state._wechatUser.wechatLoginInfoCurrentPageNumber,
+      searchFormParameters: state._wechatUser.wechatLoginInfoSearchFormParameters,
+      loading: state._wechatUser.loading,
+      owner: { type: '_wechatUser', id: state._wechatUser.id, referenceName: 'wechatUser', listName: 'wechatLoginInfoList', ref:state._wechatUser, listDisplayName: appLocaleName(userContext,"List")}, // this is for model namespace and
+    }))(WechatLoginInfoCreateForm)
+  }
+  
+  getWechatLoginInfoUpdateForm = () => {
+    const userContext = null
+  	const {WechatLoginInfoUpdateForm} = GlobalComponents;
+    return connect(state => ({
+      selectedRows: state._wechatUser.selectedRows,
+      role: "wechatLoginInfo",
+      currentUpdateIndex: state._wechatUser.currentUpdateIndex,
+      owner: { type: '_wechatUser', id: state._wechatUser.id, listName: 'wechatLoginInfoList', ref:state._wechatUser, listDisplayName: appLocaleName(userContext,"List") }, // this is for model namespace and
+    }))(WechatLoginInfoUpdateForm)
+  }
+
   getExamSearch = () => {
     const {ExamSearch} = GlobalComponents;
     const userContext = null
@@ -353,6 +404,10 @@ class WechatUserBizApp extends React.PureComponent {
   	{path:"/wechatUser/:id/list/answerQuestionList", component: this.getAnswerQuestionSearch()},
   	{path:"/wechatUser/:id/list/answerQuestionCreateForm", component: this.getAnswerQuestionCreateForm()},
   	{path:"/wechatUser/:id/list/answerQuestionUpdateForm", component: this.getAnswerQuestionUpdateForm()},
+   	
+  	{path:"/wechatUser/:id/list/wechatLoginInfoList", component: this.getWechatLoginInfoSearch()},
+  	{path:"/wechatUser/:id/list/wechatLoginInfoCreateForm", component: this.getWechatLoginInfoCreateForm()},
+  	{path:"/wechatUser/:id/list/wechatLoginInfoUpdateForm", component: this.getWechatLoginInfoUpdateForm()},
    	
   	{path:"/wechatUser/:id/list/examList", component: this.getExamSearch()},
   	{path:"/wechatUser/:id/list/examCreateForm", component: this.getExamCreateForm()},

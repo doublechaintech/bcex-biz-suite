@@ -20,7 +20,7 @@ public class ExamRanking extends BaseEntity implements  java.io.Serializable{
 	
 	public static final String ID_PROPERTY                    = "id"                ;
 	public static final String NAME_PROPERTY                  = "name"              ;
-	public static final String AVARTA_PROPERTY                = "avarta"            ;
+	public static final String AVATAR_PROPERTY                = "avatar"            ;
 	public static final String PLATFORM_PROPERTY              = "platform"          ;
 	public static final String VERSION_PROPERTY               = "version"           ;
 
@@ -46,7 +46,7 @@ public class ExamRanking extends BaseEntity implements  java.io.Serializable{
 
 	protected		String              	mId                 ;
 	protected		String              	mName               ;
-	protected		String              	mAvarta             ;
+	protected		String              	mAvatar             ;
 	protected		Platform            	mPlatform           ;
 	protected		int                 	mVersion            ;
 	
@@ -73,10 +73,10 @@ public class ExamRanking extends BaseEntity implements  java.io.Serializable{
 		this.changed = true;
 	}
 	
-	public 	ExamRanking(String name, String avarta, Platform platform)
+	public 	ExamRanking(String name, String avatar, Platform platform)
 	{
 		setName(name);
-		setAvarta(avarta);
+		setAvatar(avatar);
 		setPlatform(platform);
 	
 	}
@@ -88,8 +88,8 @@ public class ExamRanking extends BaseEntity implements  java.io.Serializable{
 		if(NAME_PROPERTY.equals(property)){
 			changeNameProperty(newValueExpr);
 		}
-		if(AVARTA_PROPERTY.equals(property)){
-			changeAvartaProperty(newValueExpr);
+		if(AVATAR_PROPERTY.equals(property)){
+			changeAvatarProperty(newValueExpr);
 		}
 
       
@@ -111,15 +111,15 @@ public class ExamRanking extends BaseEntity implements  java.io.Serializable{
 			
 			
 			
-	protected void changeAvartaProperty(String newValueExpr){
-		String oldValue = getAvarta();
+	protected void changeAvatarProperty(String newValueExpr){
+		String oldValue = getAvatar();
 		String newValue = parseString(newValueExpr);
 		if(equalsString(oldValue , newValue)){
 			return;//they can be both null, or exact the same object, this is much faster than equals function
 		}
 		//they are surely different each other
-		updateAvarta(newValue);
-		this.onChangeProperty(AVARTA_PROPERTY, oldValue, newValue);
+		updateAvatar(newValue);
+		this.onChangeProperty(AVATAR_PROPERTY, oldValue, newValue);
 		return;
   
 	}
@@ -134,8 +134,8 @@ public class ExamRanking extends BaseEntity implements  java.io.Serializable{
 		if(NAME_PROPERTY.equals(property)){
 			return getName();
 		}
-		if(AVARTA_PROPERTY.equals(property)){
-			return getAvarta();
+		if(AVATAR_PROPERTY.equals(property)){
+			return getAvatar();
 		}
 		if(PLATFORM_PROPERTY.equals(property)){
 			return getPlatform();
@@ -183,19 +183,19 @@ public class ExamRanking extends BaseEntity implements  java.io.Serializable{
 	}
 	
 	
-	public void setAvarta(String avarta){
-		this.mAvarta = trimString(encodeUrl(avarta));;
+	public void setAvatar(String avatar){
+		this.mAvatar = trimString(encodeUrl(avatar));;
 	}
-	public String getAvarta(){
-		return this.mAvarta;
+	public String getAvatar(){
+		return this.mAvatar;
 	}
-	public ExamRanking updateAvarta(String avarta){
-		this.mAvarta = trimString(encodeUrl(avarta));;
+	public ExamRanking updateAvatar(String avatar){
+		this.mAvatar = trimString(encodeUrl(avatar));;
 		this.changed = true;
 		return this;
 	}
-	public void mergeAvarta(String avarta){
-		if(avarta != null) { setAvarta(avarta);}
+	public void mergeAvatar(String avatar){
+		if(avatar != null) { setAvatar(avatar);}
 	}
 	
 	
@@ -265,7 +265,7 @@ public class ExamRanking extends BaseEntity implements  java.io.Serializable{
 
 		appendKeyValuePair(result, ID_PROPERTY, getId());
 		appendKeyValuePair(result, NAME_PROPERTY, getName());
-		appendKeyValuePair(result, AVARTA_PROPERTY, getAvarta());
+		appendKeyValuePair(result, AVATAR_PROPERTY, getAvatar());
 		appendKeyValuePair(result, PLATFORM_PROPERTY, getPlatform());
 		appendKeyValuePair(result, VERSION_PROPERTY, getVersion());
 
@@ -284,7 +284,7 @@ public class ExamRanking extends BaseEntity implements  java.io.Serializable{
 		
 			dest.setId(getId());
 			dest.setName(getName());
-			dest.setAvarta(getAvarta());
+			dest.setAvatar(getAvatar());
 			dest.setPlatform(getPlatform());
 			dest.setVersion(getVersion());
 
@@ -302,7 +302,7 @@ public class ExamRanking extends BaseEntity implements  java.io.Serializable{
 		
 			dest.mergeId(getId());
 			dest.mergeName(getName());
-			dest.mergeAvarta(getAvarta());
+			dest.mergeAvatar(getAvatar());
 			dest.mergePlatform(getPlatform());
 			dest.mergeVersion(getVersion());
 
@@ -321,7 +321,7 @@ public class ExamRanking extends BaseEntity implements  java.io.Serializable{
 		
 			dest.mergeId(getId());
 			dest.mergeName(getName());
-			dest.mergeAvarta(getAvarta());
+			dest.mergeAvatar(getAvatar());
 			dest.mergeVersion(getVersion());
 
 		}
@@ -334,7 +334,7 @@ public class ExamRanking extends BaseEntity implements  java.io.Serializable{
 		stringBuilder.append("ExamRanking{");
 		stringBuilder.append("\tid='"+getId()+"';");
 		stringBuilder.append("\tname='"+getName()+"';");
-		stringBuilder.append("\tavarta='"+getAvarta()+"';");
+		stringBuilder.append("\tavatar='"+getAvatar()+"';");
 		if(getPlatform() != null ){
  			stringBuilder.append("\tplatform='Platform("+getPlatform().getId()+")';");
  		}

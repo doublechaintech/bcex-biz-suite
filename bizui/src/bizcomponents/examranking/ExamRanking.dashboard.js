@@ -39,7 +39,7 @@ const { Option } = Select
 
 
 const imageList =(examRanking)=>{return [
-	   {"title":'Avarta',"imageLocation":examRanking.avarta},
+	   {"title":'头像',"imageLocation":examRanking.avatar},
 ]}
 
 const internalImageListOf = (examRanking) =>defaultImageListOf(examRanking,imageList)

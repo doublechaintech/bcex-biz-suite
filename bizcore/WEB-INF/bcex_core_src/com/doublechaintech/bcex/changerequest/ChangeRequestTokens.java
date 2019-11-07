@@ -74,7 +74,7 @@ public class ChangeRequestTokens extends CommonTokens{
 		return start()
 			.withRequestType()
 			.withPlatform()
-			.withRegisterationList()
+			.withRegistrationList()
 			.withStartExamList()
 			.withAnswerQuestionList();
 	
@@ -122,67 +122,67 @@ public class ChangeRequestTokens extends CommonTokens{
 	}
 	
 	
-	protected static final String REGISTERATION_LIST = "registerationList";
-	public String getRegisterationList(){
-		return REGISTERATION_LIST;
+	protected static final String REGISTRATION_LIST = "registrationList";
+	public String getRegistrationList(){
+		return REGISTRATION_LIST;
 	}
-	public ChangeRequestTokens withRegisterationList(){		
-		addSimpleOptions(REGISTERATION_LIST);
+	public ChangeRequestTokens withRegistrationList(){		
+		addSimpleOptions(REGISTRATION_LIST);
 		return this;
 	}
-	public ChangeRequestTokens analyzeRegisterationList(){		
-		addSimpleOptions(REGISTERATION_LIST+".anaylze");
+	public ChangeRequestTokens analyzeRegistrationList(){		
+		addSimpleOptions(REGISTRATION_LIST+".anaylze");
 		return this;
 	}
-	public boolean analyzeRegisterationListEnabled(){		
+	public boolean analyzeRegistrationListEnabled(){		
 		
-		if(checkOptions(this.options(), REGISTERATION_LIST+".anaylze")){
+		if(checkOptions(this.options(), REGISTRATION_LIST+".anaylze")){
 			return true; //most of the case, should call here
 		}
 		//if not true, then query for global setting
 		return checkOptions(this.options(), ALL_LISTS_ANALYZE);
 	}
-	public ChangeRequestTokens extractMoreFromRegisterationList(String idsSeperatedWithComma){		
-		addSimpleOptions(REGISTERATION_LIST+".extractIds", idsSeperatedWithComma);
+	public ChangeRequestTokens extractMoreFromRegistrationList(String idsSeperatedWithComma){		
+		addSimpleOptions(REGISTRATION_LIST+".extractIds", idsSeperatedWithComma);
 		return this;
 	}
 	
 	
 	
 	
-	private int registerationListSortCounter = 0;
-	public ChangeRequestTokens sortRegisterationListWith(String field, String descOrAsc){		
-		addSortMoreOptions(REGISTERATION_LIST,registerationListSortCounter++, field, descOrAsc);
+	private int registrationListSortCounter = 0;
+	public ChangeRequestTokens sortRegistrationListWith(String field, String descOrAsc){		
+		addSortMoreOptions(REGISTRATION_LIST,registrationListSortCounter++, field, descOrAsc);
 		return this;
 	}
-	private int registerationListSearchCounter = 0;
-	public ChangeRequestTokens searchRegisterationListWith(String field, String verb, String value){		
-		addSearchMoreOptions(REGISTERATION_LIST,registerationListSearchCounter++, field, verb, value);
+	private int registrationListSearchCounter = 0;
+	public ChangeRequestTokens searchRegistrationListWith(String field, String verb, String value){		
+		addSearchMoreOptions(REGISTRATION_LIST,registrationListSearchCounter++, field, verb, value);
 		return this;
 	}
 	
-	public ChangeRequestTokens searchAllTextOfRegisterationList(String verb, String value){	
+	public ChangeRequestTokens searchAllTextOfRegistrationList(String verb, String value){	
 		String field = "id|nickName";
-		addSearchMoreOptions(REGISTERATION_LIST,registerationListSearchCounter++, field, verb, value);
+		addSearchMoreOptions(REGISTRATION_LIST,registrationListSearchCounter++, field, verb, value);
 		return this;
 	}
 	
 	
 	
-	public ChangeRequestTokens rowsPerPageOfRegisterationList(int rowsPerPage){		
-		addSimpleOptions(REGISTERATION_LIST+"RowsPerPage",rowsPerPage);
+	public ChangeRequestTokens rowsPerPageOfRegistrationList(int rowsPerPage){		
+		addSimpleOptions(REGISTRATION_LIST+"RowsPerPage",rowsPerPage);
 		return this;
 	}
-	public ChangeRequestTokens currentPageNumberOfRegisterationList(int currentPageNumber){		
-		addSimpleOptions(REGISTERATION_LIST+"CurrentPage",currentPageNumber);
+	public ChangeRequestTokens currentPageNumberOfRegistrationList(int currentPageNumber){		
+		addSimpleOptions(REGISTRATION_LIST+"CurrentPage",currentPageNumber);
 		return this;
 	}
-	public ChangeRequestTokens retainColumnsOfRegisterationList(String[] columns){		
-		addSimpleOptions(REGISTERATION_LIST+"RetainColumns",columns);
+	public ChangeRequestTokens retainColumnsOfRegistrationList(String[] columns){		
+		addSimpleOptions(REGISTRATION_LIST+"RetainColumns",columns);
 		return this;
 	}
-	public ChangeRequestTokens excludeColumnsOfRegisterationList(String[] columns){		
-		addSimpleOptions(REGISTERATION_LIST+"ExcludeColumns",columns);
+	public ChangeRequestTokens excludeColumnsOfRegistrationList(String[] columns){		
+		addSimpleOptions(REGISTRATION_LIST+"ExcludeColumns",columns);
 		return this;
 	}
 	
@@ -323,7 +323,7 @@ public class ChangeRequestTokens extends CommonTokens{
 	
 	public  ChangeRequestTokens searchEntireObjectText(String verb, String value){
 		
-		searchAllTextOfRegisterationList(verb, value);	
+		searchAllTextOfRegistrationList(verb, value);	
 		searchAllTextOfStartExamList(verb, value);	
 		searchAllTextOfAnswerQuestionList(verb, value);	
 		return this;

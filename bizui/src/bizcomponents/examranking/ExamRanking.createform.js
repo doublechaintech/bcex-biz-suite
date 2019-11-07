@@ -24,7 +24,7 @@ const testValues = {
 */
 
 const imageKeys = [
-  'avarta',
+  'avatar',
 ]
 
 

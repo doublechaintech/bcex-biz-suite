@@ -236,59 +236,59 @@ public class ChangeRequestForm extends BaseForm {
 
 
 
-	public ChangeRequestForm registerationIdFieldForRegisteration(String parameterName, String initValue){
-		FormField field =  idFromRegisteration(parameterName, initValue);		
+	public ChangeRequestForm registrationIdFieldForRegistration(String parameterName, String initValue){
+		FormField field =  idFromRegistration(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public ChangeRequestForm registerationIdFieldForRegisteration(String initValue){
-		return registerationIdFieldForRegisteration("registerationId",initValue);
+	public ChangeRequestForm registrationIdFieldForRegistration(String initValue){
+		return registrationIdFieldForRegistration("registrationId",initValue);
 	}
-	public ChangeRequestForm registerationIdFieldForRegisteration(){
-		return registerationIdFieldForRegisteration("registerationId","");
+	public ChangeRequestForm registrationIdFieldForRegistration(){
+		return registrationIdFieldForRegistration("registrationId","");
 	}
 
 
-	public ChangeRequestForm nickNameFieldForRegisteration(String parameterName, String initValue){
-		FormField field =  nickNameFromRegisteration(parameterName, initValue);		
+	public ChangeRequestForm nickNameFieldForRegistration(String parameterName, String initValue){
+		FormField field =  nickNameFromRegistration(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public ChangeRequestForm nickNameFieldForRegisteration(String initValue){
-		return nickNameFieldForRegisteration("nickName",initValue);
+	public ChangeRequestForm nickNameFieldForRegistration(String initValue){
+		return nickNameFieldForRegistration("nickName",initValue);
 	}
-	public ChangeRequestForm nickNameFieldForRegisteration(){
-		return nickNameFieldForRegisteration("nickName","");
+	public ChangeRequestForm nickNameFieldForRegistration(){
+		return nickNameFieldForRegistration("nickName","");
 	}
 
 
-	public ChangeRequestForm avartaFieldForRegisteration(String parameterName, String initValue){
-		FormField field =  avartaFromRegisteration(parameterName, initValue);		
+	public ChangeRequestForm avatarFieldForRegistration(String parameterName, String initValue){
+		FormField field =  avatarFromRegistration(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public ChangeRequestForm avartaFieldForRegisteration(String initValue){
-		return avartaFieldForRegisteration("avarta",initValue);
+	public ChangeRequestForm avatarFieldForRegistration(String initValue){
+		return avatarFieldForRegistration("avatar",initValue);
 	}
-	public ChangeRequestForm avartaFieldForRegisteration(){
-		return avartaFieldForRegisteration("avarta","");
+	public ChangeRequestForm avatarFieldForRegistration(){
+		return avatarFieldForRegistration("avatar","");
 	}
 
 
-	public ChangeRequestForm changeRequestIdFieldForRegisteration(String parameterName, String initValue){
-		FormField field =  changeRequestIdFromRegisteration(parameterName, initValue);		
+	public ChangeRequestForm changeRequestIdFieldForRegistration(String parameterName, String initValue){
+		FormField field =  changeRequestIdFromRegistration(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public ChangeRequestForm changeRequestIdFieldForRegisteration(String initValue){
-		return changeRequestIdFieldForRegisteration("changeRequestId",initValue);
+	public ChangeRequestForm changeRequestIdFieldForRegistration(String initValue){
+		return changeRequestIdFieldForRegistration("changeRequestId",initValue);
 	}
-	public ChangeRequestForm changeRequestIdFieldForRegisteration(){
-		return changeRequestIdFieldForRegisteration("changeRequestId","");
+	public ChangeRequestForm changeRequestIdFieldForRegistration(){
+		return changeRequestIdFieldForRegistration("changeRequestId","");
 	}
 
 

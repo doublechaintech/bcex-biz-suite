@@ -51,12 +51,12 @@ const completeStep = ()=>{
 const buildSteps=(targetComponent)=>{
 
 	const changeRequestStepOf = GlobalComponents.ChangeRequestBase.stepOf
-	const registerationStepOf = GlobalComponents.RegisterationBase.stepOf
+	const registrationStepOf = GlobalComponents.RegistrationBase.stepOf
 	const startExamStepOf = GlobalComponents.StartExamBase.stepOf
 	const answerQuestionStepOf = GlobalComponents.AnswerQuestionBase.stepOf
 
 	const ChangeRequestCreateFormBody = GlobalComponents.ChangeRequestCreateFormBody
-	const RegisterationCreateFormBody = GlobalComponents.RegisterationCreateFormBody
+	const RegistrationCreateFormBody = GlobalComponents.RegistrationCreateFormBody
 	const StartExamCreateFormBody = GlobalComponents.StartExamCreateFormBody
 	const AnswerQuestionCreateFormBody = GlobalComponents.AnswerQuestionCreateFormBody
 
@@ -64,7 +64,7 @@ const buildSteps=(targetComponent)=>{
   const steps = [
 
 	changeRequestStepOf(targetComponent, '创建变更请求', <ChangeRequestCreateFormBody {...targetComponent.props} hideTitle />, "", 0),
-	registerationStepOf(targetComponent, '创建在注册', <RegisterationCreateFormBody {...targetComponent.props} hideTitle />, "registerationList", 0),
+	registrationStepOf(targetComponent, '创建登记', <RegistrationCreateFormBody {...targetComponent.props} hideTitle />, "registrationList", 0),
 	startExamStepOf(targetComponent, '创建开始考试', <StartExamCreateFormBody {...targetComponent.props} hideTitle />, "startExamList", 0),
 	answerQuestionStepOf(targetComponent, '创建回答问题', <AnswerQuestionCreateFormBody {...targetComponent.props} hideTitle />, "answerQuestionList", 0),
 

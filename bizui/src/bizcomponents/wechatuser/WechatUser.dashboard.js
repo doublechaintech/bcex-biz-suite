@@ -151,7 +151,7 @@ class WechatUserDashboard extends Component {
 
   render() {
     // eslint-disable-next-line max-len
-    const { id,displayName, answerQuestionListMetaInfo, examListMetaInfo, faultAnswerListMetaInfo, answerQuestionCount, examCount, faultAnswerCount } = this.props.wechatUser
+    const { id,displayName, answerQuestionListMetaInfo, wechatLoginInfoListMetaInfo, examListMetaInfo, faultAnswerListMetaInfo, answerQuestionCount, wechatLoginInfoCount, examCount, faultAnswerCount } = this.props.wechatUser
     if(!this.props.wechatUser.class){
       return null
     }
@@ -161,6 +161,7 @@ class WechatUserDashboard extends Component {
     	cardsSource: this.props.wechatUser,returnURL,displayName,
   		subItems: [
 {name: 'answerQuestionList', displayName:'回答问题',type:'answerQuestion',count:answerQuestionCount,addFunction: true, role: 'answerQuestion', metaInfo: answerQuestionListMetaInfo, renderItem: GlobalComponents.AnswerQuestionBase.renderItemOfList},
+{name: 'wechatLoginInfoList', displayName:'微信登录信息',type:'wechatLoginInfo',count:wechatLoginInfoCount,addFunction: true, role: 'wechatLoginInfo', metaInfo: wechatLoginInfoListMetaInfo, renderItem: GlobalComponents.WechatLoginInfoBase.renderItemOfList},
 {name: 'examList', displayName:'考试',type:'exam',count:examCount,addFunction: true, role: 'exam', metaInfo: examListMetaInfo, renderItem: GlobalComponents.ExamBase.renderItemOfList},
 {name: 'faultAnswerList', displayName:'错误的答案',type:'faultAnswer',count:faultAnswerCount,addFunction: true, role: 'faultAnswer', metaInfo: faultAnswerListMetaInfo, renderItem: GlobalComponents.FaultAnswerBase.renderItemOfList},
     

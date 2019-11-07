@@ -117,13 +117,13 @@ export default {
 
 
 
-    *addRegisteration({ payload }, { call, put }) {
+    *addRegistration({ payload }, { call, put }) {
       const userContext = null
       const {ChangeRequestService} = GlobalComponents;
 
       const { id, role, parameters, continueNext } = payload
       console.log('get form parameters', parameters)
-      const data = yield call(ChangeRequestService.addRegisteration, id, parameters)
+      const data = yield call(ChangeRequestService.addRegistration, id, parameters)
       if (hasError(data)) {
         handleServerError(data)
         return
@@ -137,15 +137,15 @@ export default {
       }
       const partialList = true
       const newState = {...data, partialList}
-      const location = { pathname: `/changeRequest/${id}/list/RegisterationList/在注册+${appLocaleName(userContext,'List')}`, state: newState }
+      const location = { pathname: `/changeRequest/${id}/list/RegistrationList/登记+${appLocaleName(userContext,'List')}`, state: newState }
       yield put(routerRedux.push(location))
     },
-    *updateRegisteration({ payload }, { call, put }) {
+    *updateRegistration({ payload }, { call, put }) {
       const userContext = null
       const {ChangeRequestService} = GlobalComponents;      
       const { id, type, parameters, continueNext, selectedRows, currentUpdateIndex } = payload
       console.log('get form parameters', parameters)
-      const data = yield call(ChangeRequestService.updateRegisteration, id, parameters)
+      const data = yield call(ChangeRequestService.updateRegistration, id, parameters)
       if (hasError(data)) {
         handleServerError(data)
         return
@@ -159,20 +159,20 @@ export default {
       if (continueNext) {
         return
       }
-      const location = { pathname: `/changeRequest/${id}/list/RegisterationList/在注册列表`, state: newPlayload }
+      const location = { pathname: `/changeRequest/${id}/list/RegistrationList/登记列表`, state: newPlayload }
       yield put(routerRedux.push(location))
     },
-    *gotoNextRegisterationUpdateRow({ payload }, { call, put }) {
+    *gotoNextRegistrationUpdateRow({ payload }, { call, put }) {
       const { id, type, parameters, continueNext, selectedRows, currentUpdateIndex } = payload
       const newPlayload = { ...payload, selectedRows, currentUpdateIndex }
       yield put({ type: 'updateState', payload: newPlayload })
     },
-    *removeRegisterationList({ payload }, { call, put }) {
+    *removeRegistrationList({ payload }, { call, put }) {
      const userContext = null
       const {ChangeRequestService} = GlobalComponents; 
       const { id, role, parameters, continueNext } = payload
       console.log('get form parameters', parameters)
-      const data = yield call(ChangeRequestService.removeRegisterationList, id, parameters)
+      const data = yield call(ChangeRequestService.removeRegistrationList, id, parameters)
       if (hasError(data)) {
         handleServerError(data)
         return

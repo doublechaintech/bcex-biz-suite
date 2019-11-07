@@ -182,55 +182,55 @@ class ChangeRequestBizApp extends React.PureComponent {
 
 
 
-  getRegisterationSearch = () => {
-    const {RegisterationSearch} = GlobalComponents;
+  getRegistrationSearch = () => {
+    const {RegistrationSearch} = GlobalComponents;
     const userContext = null
     return connect(state => ({
       rule: state.rule,
-      name: "在注册",
-      role: "registeration",
-      data: state._changeRequest.registerationList,
-      metaInfo: state._changeRequest.registerationListMetaInfo,
-      count: state._changeRequest.registerationCount,
+      name: "登记",
+      role: "registration",
+      data: state._changeRequest.registrationList,
+      metaInfo: state._changeRequest.registrationListMetaInfo,
+      count: state._changeRequest.registrationCount,
       returnURL: `/changeRequest/${state._changeRequest.id}/dashboard`,
-      currentPage: state._changeRequest.registerationCurrentPageNumber,
-      searchFormParameters: state._changeRequest.registerationSearchFormParameters,
+      currentPage: state._changeRequest.registrationCurrentPageNumber,
+      searchFormParameters: state._changeRequest.registrationSearchFormParameters,
       searchParameters: {...state._changeRequest.searchParameters},
       expandForm: state._changeRequest.expandForm,
       loading: state._changeRequest.loading,
       partialList: state._changeRequest.partialList,
       owner: { type: '_changeRequest', id: state._changeRequest.id, 
       referenceName: 'changeRequest', 
-      listName: 'registerationList', ref:state._changeRequest, 
+      listName: 'registrationList', ref:state._changeRequest, 
       listDisplayName: appLocaleName(userContext,"List") }, // this is for model namespace and
-    }))(RegisterationSearch)
+    }))(RegistrationSearch)
   }
-  getRegisterationCreateForm = () => {
-   	const {RegisterationCreateForm} = GlobalComponents;
+  getRegistrationCreateForm = () => {
+   	const {RegistrationCreateForm} = GlobalComponents;
    	const userContext = null
     return connect(state => ({
       rule: state.rule,
-      role: "registeration",
-      data: state._changeRequest.registerationList,
-      metaInfo: state._changeRequest.registerationListMetaInfo,
-      count: state._changeRequest.registerationCount,
+      role: "registration",
+      data: state._changeRequest.registrationList,
+      metaInfo: state._changeRequest.registrationListMetaInfo,
+      count: state._changeRequest.registrationCount,
       returnURL: `/changeRequest/${state._changeRequest.id}/list`,
-      currentPage: state._changeRequest.registerationCurrentPageNumber,
-      searchFormParameters: state._changeRequest.registerationSearchFormParameters,
+      currentPage: state._changeRequest.registrationCurrentPageNumber,
+      searchFormParameters: state._changeRequest.registrationSearchFormParameters,
       loading: state._changeRequest.loading,
-      owner: { type: '_changeRequest', id: state._changeRequest.id, referenceName: 'changeRequest', listName: 'registerationList', ref:state._changeRequest, listDisplayName: appLocaleName(userContext,"List")}, // this is for model namespace and
-    }))(RegisterationCreateForm)
+      owner: { type: '_changeRequest', id: state._changeRequest.id, referenceName: 'changeRequest', listName: 'registrationList', ref:state._changeRequest, listDisplayName: appLocaleName(userContext,"List")}, // this is for model namespace and
+    }))(RegistrationCreateForm)
   }
   
-  getRegisterationUpdateForm = () => {
+  getRegistrationUpdateForm = () => {
     const userContext = null
-  	const {RegisterationUpdateForm} = GlobalComponents;
+  	const {RegistrationUpdateForm} = GlobalComponents;
     return connect(state => ({
       selectedRows: state._changeRequest.selectedRows,
-      role: "registeration",
+      role: "registration",
       currentUpdateIndex: state._changeRequest.currentUpdateIndex,
-      owner: { type: '_changeRequest', id: state._changeRequest.id, listName: 'registerationList', ref:state._changeRequest, listDisplayName: appLocaleName(userContext,"List") }, // this is for model namespace and
-    }))(RegisterationUpdateForm)
+      owner: { type: '_changeRequest', id: state._changeRequest.id, listName: 'registrationList', ref:state._changeRequest, listDisplayName: appLocaleName(userContext,"List") }, // this is for model namespace and
+    }))(RegistrationUpdateForm)
   }
 
   getStartExamSearch = () => {
@@ -350,9 +350,9 @@ class ChangeRequestBizApp extends React.PureComponent {
   	
   	
   	
-  	{path:"/changeRequest/:id/list/registerationList", component: this.getRegisterationSearch()},
-  	{path:"/changeRequest/:id/list/registerationCreateForm", component: this.getRegisterationCreateForm()},
-  	{path:"/changeRequest/:id/list/registerationUpdateForm", component: this.getRegisterationUpdateForm()},
+  	{path:"/changeRequest/:id/list/registrationList", component: this.getRegistrationSearch()},
+  	{path:"/changeRequest/:id/list/registrationCreateForm", component: this.getRegistrationCreateForm()},
+  	{path:"/changeRequest/:id/list/registrationUpdateForm", component: this.getRegistrationUpdateForm()},
    	
   	{path:"/changeRequest/:id/list/startExamList", component: this.getStartExamSearch()},
   	{path:"/changeRequest/:id/list/startExamCreateForm", component: this.getStartExamCreateForm()},

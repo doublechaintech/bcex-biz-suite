@@ -12,10 +12,10 @@ import com.doublechaintech.bcex.platform.Platform;
 import com.doublechaintech.bcex.changerequesttype.ChangeRequestType;
 import com.doublechaintech.bcex.answerquestion.AnswerQuestion;
 import com.doublechaintech.bcex.startexam.StartExam;
-import com.doublechaintech.bcex.registeration.Registeration;
+import com.doublechaintech.bcex.registration.Registration;
 
-import com.doublechaintech.bcex.registeration.RegisterationDAO;
 import com.doublechaintech.bcex.platform.PlatformDAO;
+import com.doublechaintech.bcex.registration.RegistrationDAO;
 import com.doublechaintech.bcex.changerequesttype.ChangeRequestTypeDAO;
 import com.doublechaintech.bcex.startexam.StartExamDAO;
 import com.doublechaintech.bcex.answerquestion.AnswerQuestionDAO;
@@ -49,21 +49,21 @@ public interface ChangeRequestDAO{
 	public ChangeRequest disconnectFromAll(String changeRequestId, int version) throws Exception;
 	public int deleteAll() throws Exception;
 
-	public RegisterationDAO getRegisterationDAO();
+	public RegistrationDAO getRegistrationDAO();
 		
 	public StartExamDAO getStartExamDAO();
 		
 	public AnswerQuestionDAO getAnswerQuestionDAO();
 		
 	
- 	public SmartList<ChangeRequest> requestCandidateChangeRequestForRegisteration(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception;
+ 	public SmartList<ChangeRequest> requestCandidateChangeRequestForRegistration(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception;
 		
  	public SmartList<ChangeRequest> requestCandidateChangeRequestForStartExam(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception;
 		
  	public SmartList<ChangeRequest> requestCandidateChangeRequestForAnswerQuestion(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception;
 		
 	
-	public ChangeRequest planToRemoveRegisterationList(ChangeRequest changeRequest, String registerationIds[], Map<String,Object> options)throws Exception;
+	public ChangeRequest planToRemoveRegistrationList(ChangeRequest changeRequest, String registrationIds[], Map<String,Object> options)throws Exception;
 
 
 	public ChangeRequest planToRemoveStartExamList(ChangeRequest changeRequest, String startExamIds[], Map<String,Object> options)throws Exception;
@@ -100,8 +100,8 @@ public interface ChangeRequestDAO{
 
  
  
-	// 需要一个加载引用我的对象的enhance方法:Registeration的changeRequest的RegisterationList
-	public SmartList<Registeration> loadOurRegisterationList(BcexUserContext userContext, List<ChangeRequest> us, Map<String,Object> options) throws Exception;
+	// 需要一个加载引用我的对象的enhance方法:Registration的changeRequest的RegistrationList
+	public SmartList<Registration> loadOurRegistrationList(BcexUserContext userContext, List<ChangeRequest> us, Map<String,Object> options) throws Exception;
 	
 	// 需要一个加载引用我的对象的enhance方法:StartExam的changeRequest的StartExamList
 	public SmartList<StartExam> loadOurStartExamList(BcexUserContext userContext, List<ChangeRequest> us, Map<String,Object> options) throws Exception;

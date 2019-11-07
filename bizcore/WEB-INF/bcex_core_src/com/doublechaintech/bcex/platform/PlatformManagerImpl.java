@@ -1440,25 +1440,25 @@ public class PlatformManagerImpl extends CustomBcexCheckerManager implements Pla
 
 
 
-	protected void checkParamsForAddingExamRanking(BcexUserContext userContext, String platformId, String name, String avarta,String [] tokensExpr) throws Exception{
+	protected void checkParamsForAddingExamRanking(BcexUserContext userContext, String platformId, String name, String avatar,String [] tokensExpr) throws Exception{
 		
 				checkerOf(userContext).checkIdOfPlatform(platformId);
 
 		
 		checkerOf(userContext).checkNameOfExamRanking(name);
 		
-		checkerOf(userContext).checkAvartaOfExamRanking(avarta);
+		checkerOf(userContext).checkAvatarOfExamRanking(avatar);
 	
 		checkerOf(userContext).throwExceptionIfHasErrors(PlatformManagerException.class);
 
 	
 	}
-	public  Platform addExamRanking(BcexUserContext userContext, String platformId, String name, String avarta, String [] tokensExpr) throws Exception
+	public  Platform addExamRanking(BcexUserContext userContext, String platformId, String name, String avatar, String [] tokensExpr) throws Exception
 	{	
 		
-		checkParamsForAddingExamRanking(userContext,platformId,name, avarta,tokensExpr);
+		checkParamsForAddingExamRanking(userContext,platformId,name, avatar,tokensExpr);
 		
-		ExamRanking examRanking = createExamRanking(userContext,name, avarta);
+		ExamRanking examRanking = createExamRanking(userContext,name, avatar);
 		
 		Platform platform = loadPlatform(userContext, platformId, allTokens());
 		synchronized(platform){ 
@@ -1471,20 +1471,20 @@ public class PlatformManagerImpl extends CustomBcexCheckerManager implements Pla
 			return present(userContext,platform, mergedAllTokens(tokensExpr));
 		}
 	}
-	protected void checkParamsForUpdatingExamRankingProperties(BcexUserContext userContext, String platformId,String id,String name,String avarta,String [] tokensExpr) throws Exception {
+	protected void checkParamsForUpdatingExamRankingProperties(BcexUserContext userContext, String platformId,String id,String name,String avatar,String [] tokensExpr) throws Exception {
 		
 		checkerOf(userContext).checkIdOfPlatform(platformId);
 		checkerOf(userContext).checkIdOfExamRanking(id);
 		
 		checkerOf(userContext).checkNameOfExamRanking( name);
-		checkerOf(userContext).checkAvartaOfExamRanking( avarta);
+		checkerOf(userContext).checkAvatarOfExamRanking( avatar);
 
 		checkerOf(userContext).throwExceptionIfHasErrors(PlatformManagerException.class);
 		
 	}
-	public  Platform updateExamRankingProperties(BcexUserContext userContext, String platformId, String id,String name,String avarta, String [] tokensExpr) throws Exception
+	public  Platform updateExamRankingProperties(BcexUserContext userContext, String platformId, String id,String name,String avatar, String [] tokensExpr) throws Exception
 	{	
-		checkParamsForUpdatingExamRankingProperties(userContext,platformId,id,name,avarta,tokensExpr);
+		checkParamsForUpdatingExamRankingProperties(userContext,platformId,id,name,avatar,tokensExpr);
 
 		Map<String, Object> options = tokens()
 				.allTokens()
@@ -1500,7 +1500,7 @@ public class PlatformManagerImpl extends CustomBcexCheckerManager implements Pla
 		ExamRanking item = platformToUpdate.getExamRankingList().first();
 		
 		item.updateName( name );
-		item.updateAvarta( avarta );
+		item.updateAvatar( avatar );
 
 		
 		//checkParamsForAddingExamRanking(userContext,platformId,name, code, used,tokensExpr);
@@ -1511,13 +1511,13 @@ public class PlatformManagerImpl extends CustomBcexCheckerManager implements Pla
 	}
 	
 	
-	protected ExamRanking createExamRanking(BcexUserContext userContext, String name, String avarta) throws Exception{
+	protected ExamRanking createExamRanking(BcexUserContext userContext, String name, String avatar) throws Exception{
 
 		ExamRanking examRanking = new ExamRanking();
 		
 		
 		examRanking.setName(name);		
-		examRanking.setAvarta(avarta);
+		examRanking.setAvatar(avatar);
 	
 		
 		return examRanking;
@@ -1633,8 +1633,8 @@ public class PlatformManagerImpl extends CustomBcexCheckerManager implements Pla
 			checkerOf(userContext).checkNameOfExamRanking(parseString(newValueExpr));
 		}
 		
-		if(ExamRanking.AVARTA_PROPERTY.equals(property)){
-			checkerOf(userContext).checkAvartaOfExamRanking(parseString(newValueExpr));
+		if(ExamRanking.AVATAR_PROPERTY.equals(property)){
+			checkerOf(userContext).checkAvatarOfExamRanking(parseString(newValueExpr));
 		}
 		
 	

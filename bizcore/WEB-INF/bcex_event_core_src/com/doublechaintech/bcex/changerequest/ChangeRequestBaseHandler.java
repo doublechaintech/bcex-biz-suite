@@ -10,7 +10,7 @@ import com.doublechaintech.bcex.CustomBcexCheckerManager;
 import com.doublechaintech.bcex.changerequest.ChangeRequest;
 public class ChangeRequestBaseHandler extends CustomBcexCheckerManager{
 	
-	private static final String SUB_EVENT_NAMES[]={"registerationProcessor","startExamProcessor","answerQuestionProcessor"};
+	private static final String SUB_EVENT_NAMES[]={"registrationProcessor","startExamProcessor","answerQuestionProcessor"};
 	
 	public ChangeRequest handle(BcexUserContext userContext, ChangeRequest request) throws Exception {
 		

@@ -222,6 +222,90 @@ public class WechatUserForm extends BaseForm {
 	}
 
 
+	public WechatUserForm wechatLoginInfoIdFieldForWechatLoginInfo(String parameterName, String initValue){
+		FormField field =  idFromWechatLoginInfo(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public WechatUserForm wechatLoginInfoIdFieldForWechatLoginInfo(String initValue){
+		return wechatLoginInfoIdFieldForWechatLoginInfo("wechatLoginInfoId",initValue);
+	}
+	public WechatUserForm wechatLoginInfoIdFieldForWechatLoginInfo(){
+		return wechatLoginInfoIdFieldForWechatLoginInfo("wechatLoginInfoId","");
+	}
+
+
+	public WechatUserForm wechatUserIdFieldForWechatLoginInfo(String parameterName, String initValue){
+		FormField field =  wechatUserIdFromWechatLoginInfo(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public WechatUserForm wechatUserIdFieldForWechatLoginInfo(String initValue){
+		return wechatUserIdFieldForWechatLoginInfo("wechatUserId",initValue);
+	}
+	public WechatUserForm wechatUserIdFieldForWechatLoginInfo(){
+		return wechatUserIdFieldForWechatLoginInfo("wechatUserId","");
+	}
+
+
+	public WechatUserForm appIdFieldForWechatLoginInfo(String parameterName, String initValue){
+		FormField field =  appIdFromWechatLoginInfo(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public WechatUserForm appIdFieldForWechatLoginInfo(String initValue){
+		return appIdFieldForWechatLoginInfo("appId",initValue);
+	}
+	public WechatUserForm appIdFieldForWechatLoginInfo(){
+		return appIdFieldForWechatLoginInfo("appId","");
+	}
+
+
+	public WechatUserForm openIdFieldForWechatLoginInfo(String parameterName, String initValue){
+		FormField field =  openIdFromWechatLoginInfo(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public WechatUserForm openIdFieldForWechatLoginInfo(String initValue){
+		return openIdFieldForWechatLoginInfo("openId",initValue);
+	}
+	public WechatUserForm openIdFieldForWechatLoginInfo(){
+		return openIdFieldForWechatLoginInfo("openId","");
+	}
+
+
+	public WechatUserForm sessionKeyFieldForWechatLoginInfo(String parameterName, String initValue){
+		FormField field =  sessionKeyFromWechatLoginInfo(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public WechatUserForm sessionKeyFieldForWechatLoginInfo(String initValue){
+		return sessionKeyFieldForWechatLoginInfo("sessionKey",initValue);
+	}
+	public WechatUserForm sessionKeyFieldForWechatLoginInfo(){
+		return sessionKeyFieldForWechatLoginInfo("sessionKey","");
+	}
+
+
+	public WechatUserForm lastUpdateTimeFieldForWechatLoginInfo(String parameterName, String initValue){
+		FormField field =  lastUpdateTimeFromWechatLoginInfo(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public WechatUserForm lastUpdateTimeFieldForWechatLoginInfo(String initValue){
+		return lastUpdateTimeFieldForWechatLoginInfo("lastUpdateTime",initValue);
+	}
+	public WechatUserForm lastUpdateTimeFieldForWechatLoginInfo(){
+		return lastUpdateTimeFieldForWechatLoginInfo("lastUpdateTime","");
+	}
+
+
 	public WechatUserForm examIdFieldForExam(String parameterName, String initValue){
 		FormField field =  idFromExam(parameterName, initValue);		
 		this.addFormField(field);

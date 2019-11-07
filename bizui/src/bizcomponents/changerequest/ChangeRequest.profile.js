@@ -53,7 +53,7 @@ class ChangeRequestProfile extends Component {
   render() {
     // eslint-disable-next-line max-len
     const  changeRequest = this.props.changeRequest;
-    const { id,displayName, registerationCount, startExamCount, answerQuestionCount } = changeRequest
+    const { id,displayName, registrationCount, startExamCount, answerQuestionCount } = changeRequest
     const  returnURL = `/changeRequest/${id}/dashboard`
     const cardsData = {cardsName:"变更请求",cardsFor: "changeRequest",cardsSource: changeRequest,displayName,returnURL,
   		subItems: [

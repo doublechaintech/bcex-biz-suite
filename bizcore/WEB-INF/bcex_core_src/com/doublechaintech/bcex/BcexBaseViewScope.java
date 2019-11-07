@@ -6,7 +6,7 @@ import com.terapico.caf.viewpage.SerializeScope;
 import com.doublechaintech.bcex.platform.Platform;
 import com.doublechaintech.bcex.changerequesttype.ChangeRequestType;
 import com.doublechaintech.bcex.changerequest.ChangeRequest;
-import com.doublechaintech.bcex.registeration.Registeration;
+import com.doublechaintech.bcex.registration.Registration;
 import com.doublechaintech.bcex.startexam.StartExam;
 import com.doublechaintech.bcex.answerquestion.AnswerQuestion;
 import com.doublechaintech.bcex.examstatus.ExamStatus;
@@ -14,6 +14,7 @@ import com.doublechaintech.bcex.question.Question;
 import com.doublechaintech.bcex.examranking.ExamRanking;
 import com.doublechaintech.bcex.answer.Answer;
 import com.doublechaintech.bcex.wechatuser.WechatUser;
+import com.doublechaintech.bcex.wechatlogininfo.WechatLoginInfo;
 import com.doublechaintech.bcex.exam.Exam;
 import com.doublechaintech.bcex.useranswer.UserAnswer;
 import com.doublechaintech.bcex.faultanswer.FaultAnswer;
@@ -73,15 +74,15 @@ public class BcexBaseViewScope {
 		return ChangeRequestBaseSummaryScope;
 	}
 
-	protected static SerializeScope RegisterationBaseSummaryScope = SerializeScope.INCLUDE()
+	protected static SerializeScope RegistrationBaseSummaryScope = SerializeScope.INCLUDE()
 		.field(BcexBaseConstants.X_LINK_TO_URL)
-		.field(Registeration.ID_PROPERTY)
-		.field(Registeration.NICK_NAME_PROPERTY)
-		.field(Registeration.AVARTA_PROPERTY)
+		.field(Registration.ID_PROPERTY)
+		.field(Registration.NICK_NAME_PROPERTY)
+		.field(Registration.AVATAR_PROPERTY)
 		;
-	/** 用于Registeration的子对象的详情页时需要序列化的属性列表 */
-	public static SerializeScope getRegisterationSummaryScope() {
-		return RegisterationBaseSummaryScope;
+	/** 用于Registration的子对象的详情页时需要序列化的属性列表 */
+	public static SerializeScope getRegistrationSummaryScope() {
+		return RegistrationBaseSummaryScope;
 	}
 
 	protected static SerializeScope StartExamBaseSummaryScope = SerializeScope.INCLUDE()
@@ -137,7 +138,7 @@ public class BcexBaseViewScope {
 		.field(BcexBaseConstants.X_LINK_TO_URL)
 		.field(ExamRanking.ID_PROPERTY)
 		.field(ExamRanking.NAME_PROPERTY)
-		.field(ExamRanking.AVARTA_PROPERTY)
+		.field(ExamRanking.AVATAR_PROPERTY)
 		;
 	/** 用于ExamRanking的子对象的详情页时需要序列化的属性列表 */
 	public static SerializeScope getExamRankingSummaryScope() {
@@ -165,6 +166,19 @@ public class BcexBaseViewScope {
 	/** 用于WechatUser的子对象的详情页时需要序列化的属性列表 */
 	public static SerializeScope getWechatUserSummaryScope() {
 		return WechatUserBaseSummaryScope;
+	}
+
+	protected static SerializeScope WechatLoginInfoBaseSummaryScope = SerializeScope.INCLUDE()
+		.field(BcexBaseConstants.X_LINK_TO_URL)
+		.field(WechatLoginInfo.ID_PROPERTY)
+		.field(WechatLoginInfo.APP_ID_PROPERTY)
+		.field(WechatLoginInfo.OPEN_ID_PROPERTY)
+		.field(WechatLoginInfo.SESSION_KEY_PROPERTY)
+		.field(WechatLoginInfo.LAST_UPDATE_TIME_PROPERTY)
+		;
+	/** 用于WechatLoginInfo的子对象的详情页时需要序列化的属性列表 */
+	public static SerializeScope getWechatLoginInfoSummaryScope() {
+		return WechatLoginInfoBaseSummaryScope;
 	}
 
 	protected static SerializeScope ExamBaseSummaryScope = SerializeScope.INCLUDE()
@@ -464,15 +478,15 @@ public class BcexBaseViewScope {
 		return ChangeRequestBaseSecondaryListItemScope;
 	}
 
-	protected static SerializeScope RegisterationBaseSecondaryListItemScope = SerializeScope.INCLUDE()
+	protected static SerializeScope RegistrationBaseSecondaryListItemScope = SerializeScope.INCLUDE()
 		.field(BcexBaseConstants.X_LINK_TO_URL)
-		.field(Registeration.ID_PROPERTY)
-		.field(Registeration.NICK_NAME_PROPERTY)
-		.field(Registeration.AVARTA_PROPERTY)
+		.field(Registration.ID_PROPERTY)
+		.field(Registration.NICK_NAME_PROPERTY)
+		.field(Registration.AVATAR_PROPERTY)
 		;
-	/** 用于Registeration的父对象的列表时需要序列化的属性列表 */
-	public static SerializeScope getRegisterationSecondaryListItemScope() {
-		return RegisterationBaseSecondaryListItemScope;
+	/** 用于Registration的父对象的列表时需要序列化的属性列表 */
+	public static SerializeScope getRegistrationSecondaryListItemScope() {
+		return RegistrationBaseSecondaryListItemScope;
 	}
 
 	protected static SerializeScope StartExamBaseSecondaryListItemScope = SerializeScope.INCLUDE()
@@ -528,7 +542,7 @@ public class BcexBaseViewScope {
 		.field(BcexBaseConstants.X_LINK_TO_URL)
 		.field(ExamRanking.ID_PROPERTY)
 		.field(ExamRanking.NAME_PROPERTY)
-		.field(ExamRanking.AVARTA_PROPERTY)
+		.field(ExamRanking.AVATAR_PROPERTY)
 		;
 	/** 用于ExamRanking的父对象的列表时需要序列化的属性列表 */
 	public static SerializeScope getExamRankingSecondaryListItemScope() {
@@ -556,6 +570,19 @@ public class BcexBaseViewScope {
 	/** 用于WechatUser的父对象的列表时需要序列化的属性列表 */
 	public static SerializeScope getWechatUserSecondaryListItemScope() {
 		return WechatUserBaseSecondaryListItemScope;
+	}
+
+	protected static SerializeScope WechatLoginInfoBaseSecondaryListItemScope = SerializeScope.INCLUDE()
+		.field(BcexBaseConstants.X_LINK_TO_URL)
+		.field(WechatLoginInfo.ID_PROPERTY)
+		.field(WechatLoginInfo.APP_ID_PROPERTY)
+		.field(WechatLoginInfo.OPEN_ID_PROPERTY)
+		.field(WechatLoginInfo.SESSION_KEY_PROPERTY)
+		.field(WechatLoginInfo.LAST_UPDATE_TIME_PROPERTY)
+		;
+	/** 用于WechatLoginInfo的父对象的列表时需要序列化的属性列表 */
+	public static SerializeScope getWechatLoginInfoSecondaryListItemScope() {
+		return WechatLoginInfoBaseSecondaryListItemScope;
 	}
 
 	protected static SerializeScope ExamBaseSecondaryListItemScope = SerializeScope.INCLUDE()
@@ -859,7 +886,7 @@ public class BcexBaseViewScope {
 		.field(ChangeRequest.REMOTE_IP_PROPERTY)
 		.field(ChangeRequest.REQUEST_TYPE_PROPERTY, getChangeRequestTypeSummaryScope())
 		.field(ChangeRequest.PLATFORM_PROPERTY, getPlatformSummaryScope())
-		.field(ChangeRequest.REGISTERATION_LIST, getRegisterationSecondaryListItemScope())
+		.field(ChangeRequest.REGISTRATION_LIST, getRegistrationSecondaryListItemScope())
 		.field(ChangeRequest.START_EXAM_LIST, getStartExamSecondaryListItemScope())
 		.field(ChangeRequest.ANSWER_QUESTION_LIST, getAnswerQuestionSecondaryListItemScope())
 		;
@@ -868,16 +895,16 @@ public class BcexBaseViewScope {
 		return ChangeRequestBaseListItemScope;
 	}
 
-	protected static SerializeScope RegisterationBaseListItemScope = SerializeScope.INCLUDE()
+	protected static SerializeScope RegistrationBaseListItemScope = SerializeScope.INCLUDE()
 		.field(BcexBaseConstants.X_LINK_TO_URL)
-		.field(Registeration.ID_PROPERTY)
-		.field(Registeration.NICK_NAME_PROPERTY)
-		.field(Registeration.AVARTA_PROPERTY)
-		.field(Registeration.CHANGE_REQUEST_PROPERTY, getChangeRequestSummaryScope())
+		.field(Registration.ID_PROPERTY)
+		.field(Registration.NICK_NAME_PROPERTY)
+		.field(Registration.AVATAR_PROPERTY)
+		.field(Registration.CHANGE_REQUEST_PROPERTY, getChangeRequestSummaryScope())
 		;
-	/** 用于Registeration对象的列表时需要序列化的属性列表 */
-	public static SerializeScope getRegisterationListItemScope() {
-		return RegisterationBaseListItemScope;
+	/** 用于Registration对象的列表时需要序列化的属性列表 */
+	public static SerializeScope getRegistrationListItemScope() {
+		return RegistrationBaseListItemScope;
 	}
 
 	protected static SerializeScope StartExamBaseListItemScope = SerializeScope.INCLUDE()
@@ -943,7 +970,7 @@ public class BcexBaseViewScope {
 		.field(BcexBaseConstants.X_LINK_TO_URL)
 		.field(ExamRanking.ID_PROPERTY)
 		.field(ExamRanking.NAME_PROPERTY)
-		.field(ExamRanking.AVARTA_PROPERTY)
+		.field(ExamRanking.AVATAR_PROPERTY)
 		.field(ExamRanking.PLATFORM_PROPERTY, getPlatformSummaryScope())
 		;
 	/** 用于ExamRanking对象的列表时需要序列化的属性列表 */
@@ -971,12 +998,27 @@ public class BcexBaseViewScope {
 		.field(WechatUser.CREATE_TIME_PROPERTY)
 		.field(WechatUser.PLATFORM_PROPERTY, getPlatformSummaryScope())
 		.field(WechatUser.ANSWER_QUESTION_LIST, getAnswerQuestionSecondaryListItemScope())
+		.field(WechatUser.WECHAT_LOGIN_INFO_LIST, getWechatLoginInfoSecondaryListItemScope())
 		.field(WechatUser.EXAM_LIST, getExamSecondaryListItemScope())
 		.field(WechatUser.FAULT_ANSWER_LIST, getFaultAnswerSecondaryListItemScope())
 		;
 	/** 用于WechatUser对象的列表时需要序列化的属性列表 */
 	public static SerializeScope getWechatUserListItemScope() {
 		return WechatUserBaseListItemScope;
+	}
+
+	protected static SerializeScope WechatLoginInfoBaseListItemScope = SerializeScope.INCLUDE()
+		.field(BcexBaseConstants.X_LINK_TO_URL)
+		.field(WechatLoginInfo.ID_PROPERTY)
+		.field(WechatLoginInfo.WECHAT_USER_PROPERTY, getWechatUserSummaryScope())
+		.field(WechatLoginInfo.APP_ID_PROPERTY)
+		.field(WechatLoginInfo.OPEN_ID_PROPERTY)
+		.field(WechatLoginInfo.SESSION_KEY_PROPERTY)
+		.field(WechatLoginInfo.LAST_UPDATE_TIME_PROPERTY)
+		;
+	/** 用于WechatLoginInfo对象的列表时需要序列化的属性列表 */
+	public static SerializeScope getWechatLoginInfoListItemScope() {
+		return WechatLoginInfoBaseListItemScope;
 	}
 
 	protected static SerializeScope ExamBaseListItemScope = SerializeScope.INCLUDE()
@@ -1314,7 +1356,7 @@ public class BcexBaseViewScope {
 		.field(ChangeRequest.REMOTE_IP_PROPERTY)
 		.field(ChangeRequest.REQUEST_TYPE_PROPERTY, getChangeRequestTypeSummaryScope())
 		.field(ChangeRequest.PLATFORM_PROPERTY, getPlatformSummaryScope())
-		.field(ChangeRequest.REGISTERATION_LIST, getRegisterationListItemScope())
+		.field(ChangeRequest.REGISTRATION_LIST, getRegistrationListItemScope())
 		.field(ChangeRequest.START_EXAM_LIST, getStartExamListItemScope())
 		.field(ChangeRequest.ANSWER_QUESTION_LIST, getAnswerQuestionListItemScope())
 		;
@@ -1323,16 +1365,16 @@ public class BcexBaseViewScope {
 		return ChangeRequestBaseDetailScope;
 	}
 
-	protected static SerializeScope RegisterationBaseDetailScope = SerializeScope.INCLUDE()
+	protected static SerializeScope RegistrationBaseDetailScope = SerializeScope.INCLUDE()
 		.field(BcexBaseConstants.X_LINK_TO_URL)
-		.field(Registeration.ID_PROPERTY)
-		.field(Registeration.NICK_NAME_PROPERTY)
-		.field(Registeration.AVARTA_PROPERTY)
-		.field(Registeration.CHANGE_REQUEST_PROPERTY, getChangeRequestSummaryScope())
+		.field(Registration.ID_PROPERTY)
+		.field(Registration.NICK_NAME_PROPERTY)
+		.field(Registration.AVATAR_PROPERTY)
+		.field(Registration.CHANGE_REQUEST_PROPERTY, getChangeRequestSummaryScope())
 		;
-	/** 用于Registeration对象的详情页时需要序列化的属性列表 */
-	public static SerializeScope getRegisterationDetailScope() {
-		return RegisterationBaseDetailScope;
+	/** 用于Registration对象的详情页时需要序列化的属性列表 */
+	public static SerializeScope getRegistrationDetailScope() {
+		return RegistrationBaseDetailScope;
 	}
 
 	protected static SerializeScope StartExamBaseDetailScope = SerializeScope.INCLUDE()
@@ -1398,7 +1440,7 @@ public class BcexBaseViewScope {
 		.field(BcexBaseConstants.X_LINK_TO_URL)
 		.field(ExamRanking.ID_PROPERTY)
 		.field(ExamRanking.NAME_PROPERTY)
-		.field(ExamRanking.AVARTA_PROPERTY)
+		.field(ExamRanking.AVATAR_PROPERTY)
 		.field(ExamRanking.PLATFORM_PROPERTY, getPlatformSummaryScope())
 		;
 	/** 用于ExamRanking对象的详情页时需要序列化的属性列表 */
@@ -1426,12 +1468,27 @@ public class BcexBaseViewScope {
 		.field(WechatUser.CREATE_TIME_PROPERTY)
 		.field(WechatUser.PLATFORM_PROPERTY, getPlatformSummaryScope())
 		.field(WechatUser.ANSWER_QUESTION_LIST, getAnswerQuestionListItemScope())
+		.field(WechatUser.WECHAT_LOGIN_INFO_LIST, getWechatLoginInfoListItemScope())
 		.field(WechatUser.EXAM_LIST, getExamListItemScope())
 		.field(WechatUser.FAULT_ANSWER_LIST, getFaultAnswerListItemScope())
 		;
 	/** 用于WechatUser对象的详情页时需要序列化的属性列表 */
 	public static SerializeScope getWechatUserDetailScope() {
 		return WechatUserBaseDetailScope;
+	}
+
+	protected static SerializeScope WechatLoginInfoBaseDetailScope = SerializeScope.INCLUDE()
+		.field(BcexBaseConstants.X_LINK_TO_URL)
+		.field(WechatLoginInfo.ID_PROPERTY)
+		.field(WechatLoginInfo.WECHAT_USER_PROPERTY, getWechatUserSummaryScope())
+		.field(WechatLoginInfo.APP_ID_PROPERTY)
+		.field(WechatLoginInfo.OPEN_ID_PROPERTY)
+		.field(WechatLoginInfo.SESSION_KEY_PROPERTY)
+		.field(WechatLoginInfo.LAST_UPDATE_TIME_PROPERTY)
+		;
+	/** 用于WechatLoginInfo对象的详情页时需要序列化的属性列表 */
+	public static SerializeScope getWechatLoginInfoDetailScope() {
+		return WechatLoginInfoBaseDetailScope;
 	}
 
 	protected static SerializeScope ExamBaseDetailScope = SerializeScope.INCLUDE()

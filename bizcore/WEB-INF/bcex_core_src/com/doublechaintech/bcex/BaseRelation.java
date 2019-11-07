@@ -115,8 +115,8 @@ public class BaseRelation{
 		String [] changeRequestRelatedObjectNames = {"request_type:ChangeRequestType","platform:Platform"};
 		addRelationIndex("ChangeRequest",changeRequestRelatedObjectNames);
 
-		String [] registerationRelatedObjectNames = {"change_request:ChangeRequest"};
-		addRelationIndex("Registeration",registerationRelatedObjectNames);
+		String [] registrationRelatedObjectNames = {"change_request:ChangeRequest"};
+		addRelationIndex("Registration",registrationRelatedObjectNames);
 
 		String [] startExamRelatedObjectNames = {"change_request:ChangeRequest"};
 		addRelationIndex("StartExam",startExamRelatedObjectNames);
@@ -138,6 +138,9 @@ public class BaseRelation{
 
 		String [] wechatUserRelatedObjectNames = {"platform:Platform"};
 		addRelationIndex("WechatUser",wechatUserRelatedObjectNames);
+
+		String [] wechatLoginInfoRelatedObjectNames = {"wechat_user:WechatUser"};
+		addRelationIndex("WechatLoginInfo",wechatLoginInfoRelatedObjectNames);
 
 		String [] examRelatedObjectNames = {"status:ExamStatus","user:WechatUser"};
 		addRelationIndex("Exam",examRelatedObjectNames);
@@ -207,7 +210,7 @@ public class BaseRelation{
 		addGenericRelation("ChangeRequestType"                     ,TRUST_CHAIN_READ,"platform");
 		addGenericRelation("ChangeRequest"                         ,TRUST_CHAIN_READ,"requestType");
 		addGenericRelation("ChangeRequest"                         ,TRUST_CHAIN_READ,"platform");
-		addGenericRelation("Registeration"                         ,TRUST_CHAIN_READ,"changeRequest");
+		addGenericRelation("Registration"                          ,TRUST_CHAIN_READ,"changeRequest");
 		addGenericRelation("StartExam"                             ,TRUST_CHAIN_READ,"changeRequest");
 		addGenericRelation("AnswerQuestion"                        ,TRUST_CHAIN_READ,"user");
 		addGenericRelation("AnswerQuestion"                        ,TRUST_CHAIN_READ,"question");
@@ -217,6 +220,7 @@ public class BaseRelation{
 		addGenericRelation("ExamRanking"                           ,TRUST_CHAIN_READ,"platform");
 		addGenericRelation("Answer"                                ,TRUST_CHAIN_READ,"question");
 		addGenericRelation("WechatUser"                            ,TRUST_CHAIN_READ,"platform");
+		addGenericRelation("WechatLoginInfo"                       ,TRUST_CHAIN_READ,"wechatUser");
 		addGenericRelation("Exam"                                  ,TRUST_CHAIN_READ,"status");
 		addGenericRelation("Exam"                                  ,TRUST_CHAIN_READ,"user");
 		addGenericRelation("UserAnswer"                            ,TRUST_CHAIN_READ,"question");

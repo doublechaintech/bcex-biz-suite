@@ -74,7 +74,7 @@ class ChangeRequestAssociateForm extends Component {
     const {ChangeRequestService} = GlobalComponents
     const userContext = null
     
- const {RegisterationModalTable} = GlobalComponents;
+ const {RegistrationModalTable} = GlobalComponents;
  const {StartExamModalTable} = GlobalComponents;
  const {AnswerQuestionModalTable} = GlobalComponents;
 
@@ -205,7 +205,7 @@ class ChangeRequestAssociateForm extends Component {
 			
         </Card>
         
-	<RegisterationModalTable data={data.registerationList} owner={owner} />
+	<RegistrationModalTable data={data.registrationList} owner={owner} />
 	<StartExamModalTable data={data.startExamList} owner={owner} />
 	<AnswerQuestionModalTable data={data.answerQuestionList} owner={owner} />
         

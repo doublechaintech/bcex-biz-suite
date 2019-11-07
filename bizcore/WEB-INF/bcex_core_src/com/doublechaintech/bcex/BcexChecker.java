@@ -158,47 +158,47 @@ public class BcexChecker extends BaseChecker{
 		return this;
 	}	
 
-	public static final String  ID_OF_REGISTERATION ="registeration.id";
-	public BcexChecker checkIdOfRegisteration(String id)
+	public static final String  ID_OF_REGISTRATION ="registration.id";
+	public BcexChecker checkIdOfRegistration(String id)
 	{
 		
-	 	checkStringLengthRange(id,2, 64,ID_OF_REGISTERATION ); 		
+	 	checkStringLengthRange(id,2, 64,ID_OF_REGISTRATION ); 		
 		
 		return this;
 	}	
 
-	public static final String  NICK_NAME_OF_REGISTERATION ="registeration.nick_name";
-	public BcexChecker checkNickNameOfRegisteration(String nickName)
+	public static final String  NICK_NAME_OF_REGISTRATION ="registration.nick_name";
+	public BcexChecker checkNickNameOfRegistration(String nickName)
 	{
 		
-	 	checkStringLengthRange(nickName,1, 200,NICK_NAME_OF_REGISTERATION ); 		
+	 	checkStringLengthRange(nickName,1, 200,NICK_NAME_OF_REGISTRATION ); 		
 		
 		return this;
 	}	
 
-	public static final String  AVARTA_OF_REGISTERATION ="registeration.avarta";
-	public BcexChecker checkAvartaOfRegisteration(String avarta)
+	public static final String  AVATAR_OF_REGISTRATION ="registration.avatar";
+	public BcexChecker checkAvatarOfRegistration(String avatar)
 	{
 		
-	 	checkImage(avarta,0, 512,AVARTA_OF_REGISTERATION ); 		
+	 	checkImage(avatar,0, 512,AVATAR_OF_REGISTRATION ); 		
 		
 		return this;
 	}	
 
-	public static final String  CHANGE_REQUEST_OF_REGISTERATION ="registeration.change_request";
-	public BcexChecker checkChangeRequestIdOfRegisteration(String changeRequestId)
+	public static final String  CHANGE_REQUEST_OF_REGISTRATION ="registration.change_request";
+	public BcexChecker checkChangeRequestIdOfRegistration(String changeRequestId)
 	{
 		
-	 	checkIdOfRegisteration(changeRequestId ); 		
+	 	checkIdOfRegistration(changeRequestId ); 		
 		
 		return this;
 	}	
 
-	public static final String  VERSION_OF_REGISTERATION ="registeration.version";
-	public BcexChecker checkVersionOfRegisteration(int version)
+	public static final String  VERSION_OF_REGISTRATION ="registration.version";
+	public BcexChecker checkVersionOfRegistration(int version)
 	{
 		
-	 	checkIntegerRange(version,0, Integer.MAX_VALUE,VERSION_OF_REGISTERATION ); 		
+	 	checkIntegerRange(version,0, Integer.MAX_VALUE,VERSION_OF_REGISTRATION ); 		
 		
 		return this;
 	}	
@@ -464,11 +464,11 @@ public class BcexChecker extends BaseChecker{
 		return this;
 	}	
 
-	public static final String  AVARTA_OF_EXAM_RANKING ="exam_ranking.avarta";
-	public BcexChecker checkAvartaOfExamRanking(String avarta)
+	public static final String  AVATAR_OF_EXAM_RANKING ="exam_ranking.avatar";
+	public BcexChecker checkAvatarOfExamRanking(String avatar)
 	{
 		
-	 	checkImage(avarta,0, 512,AVARTA_OF_EXAM_RANKING ); 		
+	 	checkImage(avatar,0, 512,AVATAR_OF_EXAM_RANKING ); 		
 		
 		return this;
 	}	
@@ -577,6 +577,60 @@ public class BcexChecker extends BaseChecker{
 	{
 		
 	 	checkIntegerRange(version,0, Integer.MAX_VALUE,VERSION_OF_WECHAT_USER ); 		
+		
+		return this;
+	}	
+
+	public static final String  ID_OF_WECHAT_LOGIN_INFO ="wechat_login_info.id";
+	public BcexChecker checkIdOfWechatLoginInfo(String id)
+	{
+		
+	 	checkStringLengthRange(id,2, 64,ID_OF_WECHAT_LOGIN_INFO ); 		
+		
+		return this;
+	}	
+
+	public static final String  WECHAT_USER_OF_WECHAT_LOGIN_INFO ="wechat_login_info.wechat_user";
+	public BcexChecker checkWechatUserIdOfWechatLoginInfo(String wechatUserId)
+	{
+		
+	 	checkIdOfWechatLoginInfo(wechatUserId ); 		
+		
+		return this;
+	}	
+
+	public static final String  APP_ID_OF_WECHAT_LOGIN_INFO ="wechat_login_info.app_id";
+	public BcexChecker checkAppIdOfWechatLoginInfo(String appId)
+	{
+		
+	 	checkStringLengthRange(appId,0, 100,APP_ID_OF_WECHAT_LOGIN_INFO ); 		
+		
+		return this;
+	}	
+
+	public static final String  OPEN_ID_OF_WECHAT_LOGIN_INFO ="wechat_login_info.open_id";
+	public BcexChecker checkOpenIdOfWechatLoginInfo(String openId)
+	{
+		
+	 	checkStringLengthRange(openId,1, 100,OPEN_ID_OF_WECHAT_LOGIN_INFO ); 		
+		
+		return this;
+	}	
+
+	public static final String  SESSION_KEY_OF_WECHAT_LOGIN_INFO ="wechat_login_info.session_key";
+	public BcexChecker checkSessionKeyOfWechatLoginInfo(String sessionKey)
+	{
+		
+	 	checkStringLengthRange(sessionKey,1, 200,SESSION_KEY_OF_WECHAT_LOGIN_INFO ); 		
+		
+		return this;
+	}	
+
+	public static final String  VERSION_OF_WECHAT_LOGIN_INFO ="wechat_login_info.version";
+	public BcexChecker checkVersionOfWechatLoginInfo(int version)
+	{
+		
+	 	checkIntegerRange(version,0, Integer.MAX_VALUE,VERSION_OF_WECHAT_LOGIN_INFO ); 		
 		
 		return this;
 	}	

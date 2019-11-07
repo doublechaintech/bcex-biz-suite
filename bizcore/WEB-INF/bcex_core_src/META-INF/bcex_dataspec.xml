@@ -34,11 +34,11 @@
 		</fields>
 	</table>
 
-	<table name="registeration_data">
+	<table name="registration_data">
 		<fields>
 			<field name="id" nullable="false" type="string" checkType="StringLengthRange" min="2" max="64" description="ID" />
 			<field name="nick_name" type="string" checkType="StringLengthRange" min="1" max="200" description="昵称" />
-			<field name="avarta" type="string_image" checkType="Image" min="0" max="512" description="Avarta" />
+			<field name="avatar" type="string_image" checkType="Image" min="0" max="512" description="头像" />
 			<field name="change_request" type="reference" checkType="exist(change_request)" description="变更请求" />
 			<field name="version" type="int" checkType="IntegerRange" min="0" max="Integer.MAX_VALUE" description="版本" />
 		</fields>
@@ -95,7 +95,7 @@
 		<fields>
 			<field name="id" nullable="false" type="string" checkType="StringLengthRange" min="2" max="64" description="ID" />
 			<field name="name" type="string" checkType="StringLengthRange" min="2" max="20" description="名称" />
-			<field name="avarta" type="string_image" checkType="Image" min="0" max="512" description="Avarta" />
+			<field name="avatar" type="string_image" checkType="Image" min="0" max="512" description="头像" />
 			<field name="platform" type="reference" checkType="exist(platform)" description="平台" />
 			<field name="version" type="int" checkType="IntegerRange" min="0" max="Integer.MAX_VALUE" description="版本" />
 		</fields>
@@ -118,6 +118,18 @@
 			<field name="avarta" type="string_image" checkType="Image" min="0" max="512" description="Avarta" />
 			<field name="create_time" type="date_time_create" checkType="DateTimeCreate" min="1900-01-01T00:00:00" max="createTime()" description="创建时间" />
 			<field name="platform" type="reference" checkType="exist(platform)" description="平台" />
+			<field name="version" type="int" checkType="IntegerRange" min="0" max="Integer.MAX_VALUE" description="版本" />
+		</fields>
+	</table>
+
+	<table name="wechat_login_info_data">
+		<fields>
+			<field name="id" nullable="false" type="string" checkType="StringLengthRange" min="2" max="64" description="ID" />
+			<field name="wechat_user" type="reference" checkType="exist(wechat_user)" description="微信用户" />
+			<field name="app_id" type="string" checkType="StringLengthRange" min="0" max="100" description="应用程序Id" />
+			<field name="open_id" type="string" checkType="StringLengthRange" min="1" max="100" description="开放Id" />
+			<field name="session_key" type="string" checkType="StringLengthRange" min="1" max="200" description="会话密钥" />
+			<field name="last_update_time" type="date_time_update" checkType="DateTimeUpdate" min="1900-01-01T00:00:00" max="updateTime()" description="最后更新时间" />
 			<field name="version" type="int" checkType="IntegerRange" min="0" max="Integer.MAX_VALUE" description="版本" />
 		</fields>
 	</table>

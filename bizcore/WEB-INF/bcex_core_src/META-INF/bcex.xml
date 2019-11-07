@@ -79,7 +79,7 @@
 
 	<bean id="changeRequestDAOBase" class="com.doublechaintech.bcex.changerequest.ChangeRequestJDBCTemplateDAO">
 		<property name="dataSource" ref="dataSource" /><property name="changeRequestTypeDAO" ref="changeRequestTypeDAO" /><property name="platformDAO" ref="platformDAO" />
-		<property name="registerationDAO" ref="registerationDAO" />
+		<property name="registrationDAO" ref="registrationDAO" />
 		
 		<property name="startExamDAO" ref="startExamDAO" />
 		
@@ -89,10 +89,10 @@
 	<bean id="changeRequestDAO" parent="changeRequestDAOBase"></bean>
 	
 
-	<bean id="registerationDAOBase" class="com.doublechaintech.bcex.registeration.RegisterationJDBCTemplateDAO">
+	<bean id="registrationDAOBase" class="com.doublechaintech.bcex.registration.RegistrationJDBCTemplateDAO">
 		<property name="dataSource" ref="dataSource" /><property name="changeRequestDAO" ref="changeRequestDAO" />
 	</bean>
-	<bean id="registerationDAO" parent="registerationDAOBase"></bean>
+	<bean id="registrationDAO" parent="registrationDAOBase"></bean>
 	
 
 	<bean id="startExamDAOBase" class="com.doublechaintech.bcex.startexam.StartExamJDBCTemplateDAO">
@@ -143,12 +143,20 @@
 		<property name="dataSource" ref="dataSource" /><property name="platformDAO" ref="platformDAO" />
 		<property name="answerQuestionDAO" ref="answerQuestionDAO" />
 		
+		<property name="wechatLoginInfoDAO" ref="wechatLoginInfoDAO" />
+		
 		<property name="examDAO" ref="examDAO" />
 		
 		<property name="faultAnswerDAO" ref="faultAnswerDAO" />
 		
 	</bean>
 	<bean id="wechatUserDAO" parent="wechatUserDAOBase"></bean>
+	
+
+	<bean id="wechatLoginInfoDAOBase" class="com.doublechaintech.bcex.wechatlogininfo.WechatLoginInfoJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" /><property name="wechatUserDAO" ref="wechatUserDAO" />
+	</bean>
+	<bean id="wechatLoginInfoDAO" parent="wechatLoginInfoDAOBase"></bean>
 	
 
 	<bean id="examDAOBase" class="com.doublechaintech.bcex.exam.ExamJDBCTemplateDAO">
@@ -300,7 +308,7 @@
 		<property name="platformDAO" ref="platformDAO"/>
 		<property name="changeRequestTypeDAO" ref="changeRequestTypeDAO"/>
 		<property name="changeRequestDAO" ref="changeRequestDAO"/>
-		<property name="registerationDAO" ref="registerationDAO"/>
+		<property name="registrationDAO" ref="registrationDAO"/>
 		<property name="startExamDAO" ref="startExamDAO"/>
 		<property name="answerQuestionDAO" ref="answerQuestionDAO"/>
 		<property name="examStatusDAO" ref="examStatusDAO"/>
@@ -308,6 +316,7 @@
 		<property name="examRankingDAO" ref="examRankingDAO"/>
 		<property name="answerDAO" ref="answerDAO"/>
 		<property name="wechatUserDAO" ref="wechatUserDAO"/>
+		<property name="wechatLoginInfoDAO" ref="wechatLoginInfoDAO"/>
 		<property name="examDAO" ref="examDAO"/>
 		<property name="userAnswerDAO" ref="userAnswerDAO"/>
 		<property name="faultAnswerDAO" ref="faultAnswerDAO"/>

@@ -174,24 +174,24 @@ public class BcexObjectChecker extends BcexChecker{
 		commonObjectPropertyCheck(changeRequestAsBaseEntity,"requestType",this::checkRequestTypeOfChangeRequest);
 		commonObjectPropertyCheck(changeRequestAsBaseEntity,"platform",this::checkPlatformOfChangeRequest);
 		commonObjectPropertyCheck(changeRequestAsBaseEntity,"version",this::checkVersionOfChangeRequest);
-		commonObjectPropertyCheck(changeRequestAsBaseEntity,"registerationList",this::checkRegisterationListOfChangeRequest);
+		commonObjectPropertyCheck(changeRequestAsBaseEntity,"registrationList",this::checkRegistrationListOfChangeRequest);
 		commonObjectPropertyCheck(changeRequestAsBaseEntity,"startExamList",this::checkStartExamListOfChangeRequest);
 		commonObjectPropertyCheck(changeRequestAsBaseEntity,"answerQuestionList",this::checkAnswerQuestionListOfChangeRequest);
 		return this;
 
 	}
 
-	public BcexObjectChecker checkAndFixRegisteration(BaseEntity registerationAsBaseEntity){
+	public BcexObjectChecker checkAndFixRegistration(BaseEntity registrationAsBaseEntity){
 
-		if( isChecked(registerationAsBaseEntity) ){
+		if( isChecked(registrationAsBaseEntity) ){
 			return this;
 		}
-		markAsChecked(registerationAsBaseEntity);
-		commonObjectPropertyCheck(registerationAsBaseEntity,"id",this::checkIdOfRegisteration);
-		commonObjectPropertyCheck(registerationAsBaseEntity,"nickName",this::checkNickNameOfRegisteration);
-		commonObjectPropertyCheck(registerationAsBaseEntity,"avarta",this::checkAvartaOfRegisteration);
-		commonObjectPropertyCheck(registerationAsBaseEntity,"changeRequest",this::checkChangeRequestOfRegisteration);
-		commonObjectPropertyCheck(registerationAsBaseEntity,"version",this::checkVersionOfRegisteration);
+		markAsChecked(registrationAsBaseEntity);
+		commonObjectPropertyCheck(registrationAsBaseEntity,"id",this::checkIdOfRegistration);
+		commonObjectPropertyCheck(registrationAsBaseEntity,"nickName",this::checkNickNameOfRegistration);
+		commonObjectPropertyCheck(registrationAsBaseEntity,"avatar",this::checkAvatarOfRegistration);
+		commonObjectPropertyCheck(registrationAsBaseEntity,"changeRequest",this::checkChangeRequestOfRegistration);
+		commonObjectPropertyCheck(registrationAsBaseEntity,"version",this::checkVersionOfRegistration);
 		return this;
 
 	}
@@ -275,7 +275,7 @@ public class BcexObjectChecker extends BcexChecker{
 		markAsChecked(examRankingAsBaseEntity);
 		commonObjectPropertyCheck(examRankingAsBaseEntity,"id",this::checkIdOfExamRanking);
 		commonObjectPropertyCheck(examRankingAsBaseEntity,"name",this::checkNameOfExamRanking);
-		commonObjectPropertyCheck(examRankingAsBaseEntity,"avarta",this::checkAvartaOfExamRanking);
+		commonObjectPropertyCheck(examRankingAsBaseEntity,"avatar",this::checkAvatarOfExamRanking);
 		commonObjectPropertyCheck(examRankingAsBaseEntity,"platform",this::checkPlatformOfExamRanking);
 		commonObjectPropertyCheck(examRankingAsBaseEntity,"version",this::checkVersionOfExamRanking);
 		return this;
@@ -310,8 +310,26 @@ public class BcexObjectChecker extends BcexChecker{
 		commonObjectPropertyCheck(wechatUserAsBaseEntity,"platform",this::checkPlatformOfWechatUser);
 		commonObjectPropertyCheck(wechatUserAsBaseEntity,"version",this::checkVersionOfWechatUser);
 		commonObjectPropertyCheck(wechatUserAsBaseEntity,"answerQuestionList",this::checkAnswerQuestionListOfWechatUser);
+		commonObjectPropertyCheck(wechatUserAsBaseEntity,"wechatLoginInfoList",this::checkWechatLoginInfoListOfWechatUser);
 		commonObjectPropertyCheck(wechatUserAsBaseEntity,"examList",this::checkExamListOfWechatUser);
 		commonObjectPropertyCheck(wechatUserAsBaseEntity,"faultAnswerList",this::checkFaultAnswerListOfWechatUser);
+		return this;
+
+	}
+
+	public BcexObjectChecker checkAndFixWechatLoginInfo(BaseEntity wechatLoginInfoAsBaseEntity){
+
+		if( isChecked(wechatLoginInfoAsBaseEntity) ){
+			return this;
+		}
+		markAsChecked(wechatLoginInfoAsBaseEntity);
+		commonObjectPropertyCheck(wechatLoginInfoAsBaseEntity,"id",this::checkIdOfWechatLoginInfo);
+		commonObjectPropertyCheck(wechatLoginInfoAsBaseEntity,"wechatUser",this::checkWechatUserOfWechatLoginInfo);
+		commonObjectPropertyCheck(wechatLoginInfoAsBaseEntity,"appId",this::checkAppIdOfWechatLoginInfo);
+		commonObjectPropertyCheck(wechatLoginInfoAsBaseEntity,"openId",this::checkOpenIdOfWechatLoginInfo);
+		commonObjectPropertyCheck(wechatLoginInfoAsBaseEntity,"sessionKey",this::checkSessionKeyOfWechatLoginInfo);
+		commonObjectPropertyAssign(wechatLoginInfoAsBaseEntity,"lastUpdateTime",this::assignLastUpdateTimeOfWechatLoginInfo);
+		commonObjectPropertyCheck(wechatLoginInfoAsBaseEntity,"version",this::checkVersionOfWechatLoginInfo);
 		return this;
 
 	}
@@ -731,10 +749,10 @@ public class BcexObjectChecker extends BcexChecker{
 	}
 
 
-	public BcexObjectChecker checkRegisterationListOfChangeRequest(List<BaseEntity> registerationList){
+	public BcexObjectChecker checkRegistrationListOfChangeRequest(List<BaseEntity> registrationList){
 		AtomicInteger index = new AtomicInteger();
-		registerationList.stream().forEach(registeration->
-			commonObjectElementCheck(registeration,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixRegisteration));
+		registrationList.stream().forEach(registration->
+			commonObjectElementCheck(registration,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixRegistration));
 		return this;
 	}
 
@@ -780,13 +798,13 @@ public class BcexObjectChecker extends BcexChecker{
 	}
 
 
-	public static final String CHANGE_REQUEST_OF_REGISTERATION = "registeration.change_request";
+	public static final String CHANGE_REQUEST_OF_REGISTRATION = "registration.change_request";
 
 
-	public BcexObjectChecker checkChangeRequestOfRegisteration(BaseEntity changeRequestAsBaseEntity){
+	public BcexObjectChecker checkChangeRequestOfRegistration(BaseEntity changeRequestAsBaseEntity){
 
 		if(changeRequestAsBaseEntity == null){
-			checkBaseEntityReference(changeRequestAsBaseEntity,true,CHANGE_REQUEST_OF_REGISTERATION);
+			checkBaseEntityReference(changeRequestAsBaseEntity,true,CHANGE_REQUEST_OF_REGISTRATION);
 			return this;
 		}
 		checkAndFixChangeRequest(changeRequestAsBaseEntity);
@@ -941,6 +959,13 @@ public class BcexObjectChecker extends BcexChecker{
 		return this;
 	}
 
+	public BcexObjectChecker checkWechatLoginInfoListOfWechatUser(List<BaseEntity> wechatLoginInfoList){
+		AtomicInteger index = new AtomicInteger();
+		wechatLoginInfoList.stream().forEach(wechatLoginInfo->
+			commonObjectElementCheck(wechatLoginInfo,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixWechatLoginInfo));
+		return this;
+	}
+
 	public BcexObjectChecker checkExamListOfWechatUser(List<BaseEntity> examList){
 		AtomicInteger index = new AtomicInteger();
 		examList.stream().forEach(exam->
@@ -965,6 +990,20 @@ public class BcexObjectChecker extends BcexChecker{
 			return this;
 		}
 		checkAndFixPlatform(platformAsBaseEntity);
+		return this;
+	}
+
+
+	public static final String WECHAT_USER_OF_WECHAT_LOGIN_INFO = "wechat_login_info.wechat_user";
+
+
+	public BcexObjectChecker checkWechatUserOfWechatLoginInfo(BaseEntity wechatUserAsBaseEntity){
+
+		if(wechatUserAsBaseEntity == null){
+			checkBaseEntityReference(wechatUserAsBaseEntity,true,WECHAT_USER_OF_WECHAT_LOGIN_INFO);
+			return this;
+		}
+		checkAndFixWechatUser(wechatUserAsBaseEntity);
 		return this;
 	}
 
@@ -1364,6 +1403,13 @@ public class BcexObjectChecker extends BcexChecker{
 			return this;
 		}
 		setEntityProperty(targetEntity,"createTime",userContext.now());
+		return this;
+	}
+	public BcexObjectChecker assignLastUpdateTimeOfWechatLoginInfo(BaseEntity targetEntity){
+		if(userContext==null){
+			return this;
+		}
+		setEntityProperty(targetEntity,"lastUpdateTime",userContext.now());
 		return this;
 	}
 	public BcexObjectChecker assignCreateTimeOfExam(BaseEntity targetEntity){

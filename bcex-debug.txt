@@ -20,10 +20,10 @@ Remote Ip|远程Ip
 Request Type|请求类型
 Platform|平台
 Version|版本
-Registeration|在注册
+Registration|登记
 Id|ID
 Nick Name|昵称
-Avarta|Avarta
+Avatar|头像
 Change Request|变更请求
 Version|版本
 Start Exam|开始考试
@@ -60,7 +60,7 @@ Version|版本
 Exam Ranking|考试排名
 Id|ID
 Name|名称
-Avarta|Avarta
+Avatar|头像
 Platform|平台
 Version|版本
 Answer|回答
@@ -75,6 +75,14 @@ Name|名称
 Avarta|Avarta
 Create Time|创建时间
 Platform|平台
+Version|版本
+Wechat Login Info|微信登录信息
+Id|ID
+Wechat User|微信用户
+App Id|应用程序Id
+Open Id|开放Id
+Session Key|会话密钥
+Last Update Time|最后更新时间
 Version|版本
 Exam|考试
 Id|ID
@@ -256,6 +264,7 @@ Transfer to Another Platform|转到平台
 Transfer to Another Platform|转到平台
 Transfer to Another Question|转移到问题
 Transfer to Another Platform|转到平台
+Transfer to Another Wechat User|转移到微信用户
 Transfer to Another Status|转移到状态
 Transfer to Another User|转移到用户
 Transfer to Another Question|转移到问题

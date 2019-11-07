@@ -274,10 +274,10 @@ public class BaseForm extends GenericForm{
 		return field;
 	}
 
-	protected FormField idFromRegisteration(String parameterName, String initValue){
+	protected FormField idFromRegistration(String parameterName, String initValue){
 		FormField field = new FormField();
 		field.setLabel("ID");
-		field.setLocaleKey("registeration.id");
+		field.setLocaleKey("registration.id");
 		field.setParameterName(parameterName);
 		field.setDefaultValue(initValue);
 		field.setFieldGroup("基本信息");
@@ -287,10 +287,10 @@ public class BaseForm extends GenericForm{
 		return field;
 	}
 
-	protected FormField nickNameFromRegisteration(String parameterName, String initValue){
+	protected FormField nickNameFromRegistration(String parameterName, String initValue){
 		FormField field = new FormField();
 		field.setLabel("昵称");
-		field.setLocaleKey("registeration.nick_name");
+		field.setLocaleKey("registration.nick_name");
 		field.setParameterName(parameterName);
 		field.setDefaultValue(initValue);
 		field.setFieldGroup("基本信息");
@@ -300,23 +300,23 @@ public class BaseForm extends GenericForm{
 		return field;
 	}
 
-	protected FormField avartaFromRegisteration(String parameterName, String initValue){
+	protected FormField avatarFromRegistration(String parameterName, String initValue){
 		FormField field = new FormField();
-		field.setLabel("Avarta");
-		field.setLocaleKey("registeration.avarta");
+		field.setLabel("头像");
+		field.setLocaleKey("registration.avatar");
 		field.setParameterName(parameterName);
 		field.setDefaultValue(initValue);
 		field.setFieldGroup("基本信息");
 		field.setType("image");
 		field.setRequired(true);
-		field.setPlaceholder("请填写Avarta");
+		field.setPlaceholder("请填写头像");
 		return field;
 	}
 
-	protected FormField changeRequestIdFromRegisteration(String parameterName, String initValue){
+	protected FormField changeRequestIdFromRegistration(String parameterName, String initValue){
 		FormField field = new FormField();
 		field.setLabel("变更请求");
-		field.setLocaleKey("registeration.change_request");
+		field.setLocaleKey("registration.change_request");
 		field.setParameterName(parameterName);
 		field.setDefaultValue(initValue);
 		field.setFieldGroup("基本信息");
@@ -651,16 +651,16 @@ public class BaseForm extends GenericForm{
 		return field;
 	}
 
-	protected FormField avartaFromExamRanking(String parameterName, String initValue){
+	protected FormField avatarFromExamRanking(String parameterName, String initValue){
 		FormField field = new FormField();
-		field.setLabel("Avarta");
-		field.setLocaleKey("exam_ranking.avarta");
+		field.setLabel("头像");
+		field.setLocaleKey("exam_ranking.avatar");
 		field.setParameterName(parameterName);
 		field.setDefaultValue(initValue);
 		field.setFieldGroup("基本信息");
 		field.setType("image");
 		field.setRequired(true);
-		field.setPlaceholder("请填写Avarta");
+		field.setPlaceholder("请填写头像");
 		return field;
 	}
 
@@ -791,6 +791,84 @@ public class BaseForm extends GenericForm{
 		field.setType("Platform");
 		field.setRequired(true);
 		field.setPlaceholder("请填写平台");
+		return field;
+	}
+
+	protected FormField idFromWechatLoginInfo(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("ID");
+		field.setLocaleKey("wechat_login_info.id");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("text");
+		field.setRequired(true);
+		field.setPlaceholder("请填写ID");
+		return field;
+	}
+
+	protected FormField wechatUserIdFromWechatLoginInfo(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("微信用户");
+		field.setLocaleKey("wechat_login_info.wechat_user");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("WechatUser");
+		field.setRequired(true);
+		field.setPlaceholder("请填写微信用户");
+		return field;
+	}
+
+	protected FormField appIdFromWechatLoginInfo(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("应用程序Id");
+		field.setLocaleKey("wechat_login_info.app_id");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("text");
+		field.setRequired(true);
+		field.setPlaceholder("请填写应用程序Id");
+		return field;
+	}
+
+	protected FormField openIdFromWechatLoginInfo(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("开放Id");
+		field.setLocaleKey("wechat_login_info.open_id");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("text");
+		field.setRequired(true);
+		field.setPlaceholder("请填写开放Id");
+		return field;
+	}
+
+	protected FormField sessionKeyFromWechatLoginInfo(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("会话密钥");
+		field.setLocaleKey("wechat_login_info.session_key");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("text");
+		field.setRequired(true);
+		field.setPlaceholder("请填写会话密钥");
+		return field;
+	}
+
+	protected FormField lastUpdateTimeFromWechatLoginInfo(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("最后更新时间");
+		field.setLocaleKey("wechat_login_info.last_update_time");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("date_time");
+		field.setRequired(true);
+		field.setPlaceholder("请填写最后更新时间");
 		return field;
 	}
 

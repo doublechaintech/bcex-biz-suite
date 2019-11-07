@@ -14,6 +14,7 @@ public class RegisterationCustomProcessor extends RegisterationProcessor{
 		userContext.log("RegisterationCustomProcessor\t"+ event +" from processor");
 		
 		
+		
 	}
 	
 }

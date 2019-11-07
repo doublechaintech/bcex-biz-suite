@@ -32,9 +32,9 @@
 		_features="change_request"
 	/>
 	
-	<registeration
+	<registration
 		nick_name="豆豆鬼|[1,200]"
-		avarta="share.jpg"
+		avatar="share.jpg"
 		change_request="$(change_request)"
 		_features="event"
 	/>
@@ -62,8 +62,7 @@
 		platform="$(platform)"
 		_features="status"
 		_identified_by="code"
-		
-		
+
 	/>
 	
 	
@@ -83,9 +82,12 @@
 	
 	
 	
+	
+	
+	
 	<exam_ranking
 		name="张喜来**"
-		avarta="wechat.jpg"
+		avatar="wechat.jpg"
 		platform="$(platform)"
 	/>
 	
@@ -103,7 +105,15 @@
 		platform="$(platform)"
 		_features="merchant"
 	/>
-	
+	<wechat_login_info
+		wechat_user="$(wechat_user)"
+		app_id="user123|[0,100]"
+		open_id="user123|[1,100]"
+		session_key="session123|[1,200]"
+		last_update_time="updateTime()"
+		_identified_by="openid_id"
+		/>
+		
 	<exam
 		name="区块链技术考试|[1,200]"
 		create_time="createTime()"

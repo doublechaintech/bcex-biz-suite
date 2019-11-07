@@ -9,13 +9,25 @@ public class CustomRelation extends BaseRelation{
 	{
 		super.prepareRelation();
 		//Uncomment to make any change to the relation type
+		//replaceGenericRelation("ChangeRequestType"                     , BaseRelation.TRUST_CHAIN_ALL, "platform");
+		//replaceGenericRelation("ChangeRequest"                         , BaseRelation.TRUST_CHAIN_ALL, "requestType");
+		//replaceGenericRelation("ChangeRequest"                         , BaseRelation.TRUST_CHAIN_ALL, "platform");
+		//replaceGenericRelation("Registeration"                         , BaseRelation.TRUST_CHAIN_ALL, "changeRequest");
+		//replaceGenericRelation("StartExam"                             , BaseRelation.TRUST_CHAIN_ALL, "changeRequest");
+		//replaceGenericRelation("AnswerQuestion"                        , BaseRelation.TRUST_CHAIN_ALL, "user");
+		//replaceGenericRelation("AnswerQuestion"                        , BaseRelation.TRUST_CHAIN_ALL, "question");
+		//replaceGenericRelation("AnswerQuestion"                        , BaseRelation.TRUST_CHAIN_ALL, "changeRequest");
+		//replaceGenericRelation("ExamStatus"                            , BaseRelation.TRUST_CHAIN_ALL, "platform");
 		//replaceGenericRelation("Question"                              , BaseRelation.TRUST_CHAIN_ALL, "platform");
 		//replaceGenericRelation("ExamRanking"                           , BaseRelation.TRUST_CHAIN_ALL, "platform");
 		//replaceGenericRelation("Answer"                                , BaseRelation.TRUST_CHAIN_ALL, "question");
 		//replaceGenericRelation("WechatUser"                            , BaseRelation.TRUST_CHAIN_ALL, "platform");
+		//replaceGenericRelation("WechatLoginInfo"                       , BaseRelation.TRUST_CHAIN_ALL, "wechatUser");
+		//replaceGenericRelation("Exam"                                  , BaseRelation.TRUST_CHAIN_ALL, "status");
 		//replaceGenericRelation("Exam"                                  , BaseRelation.TRUST_CHAIN_ALL, "user");
 		//replaceGenericRelation("UserAnswer"                            , BaseRelation.TRUST_CHAIN_ALL, "question");
 		//replaceGenericRelation("UserAnswer"                            , BaseRelation.TRUST_CHAIN_ALL, "exam");
+		//replaceGenericRelation("FaultAnswer"                           , BaseRelation.TRUST_CHAIN_ALL, "user");
 		//replaceGenericRelation("FaultAnswer"                           , BaseRelation.TRUST_CHAIN_ALL, "exam");
 		//replaceGenericRelation("UserWhiteList"                         , BaseRelation.TRUST_CHAIN_ALL, "domain");
 		//replaceGenericRelation("SecUser"                               , BaseRelation.TRUST_CHAIN_ALL, "domain");
@@ -41,6 +53,24 @@ public class CustomRelation extends BaseRelation{
 		Just uncomment the definition line and replaceRelationIndex line to replace existing one.
 		
 		*/
+		//String [] changeRequestTypeRelatedObjectNames = {"platform:Platform"};
+		//replaceRelationIndex("ChangeRequestType",changeRequestTypeRelatedObjectNames);
+
+		//String [] changeRequestRelatedObjectNames = {"request_type:ChangeRequestType","platform:Platform"};
+		//replaceRelationIndex("ChangeRequest",changeRequestRelatedObjectNames);
+
+		//String [] registerationRelatedObjectNames = {"change_request:ChangeRequest"};
+		//replaceRelationIndex("Registeration",registerationRelatedObjectNames);
+
+		//String [] startExamRelatedObjectNames = {"change_request:ChangeRequest"};
+		//replaceRelationIndex("StartExam",startExamRelatedObjectNames);
+
+		//String [] answerQuestionRelatedObjectNames = {"user:WechatUser","question:Question","change_request:ChangeRequest"};
+		//replaceRelationIndex("AnswerQuestion",answerQuestionRelatedObjectNames);
+
+		//String [] examStatusRelatedObjectNames = {"platform:Platform"};
+		//replaceRelationIndex("ExamStatus",examStatusRelatedObjectNames);
+
 		//String [] questionRelatedObjectNames = {"platform:Platform"};
 		//replaceRelationIndex("Question",questionRelatedObjectNames);
 
@@ -53,13 +83,16 @@ public class CustomRelation extends BaseRelation{
 		//String [] wechatUserRelatedObjectNames = {"platform:Platform"};
 		//replaceRelationIndex("WechatUser",wechatUserRelatedObjectNames);
 
-		//String [] examRelatedObjectNames = {"user:WechatUser"};
+		//String [] wechatLoginInfoRelatedObjectNames = {"wechat_user:WechatUser"};
+		//replaceRelationIndex("WechatLoginInfo",wechatLoginInfoRelatedObjectNames);
+
+		//String [] examRelatedObjectNames = {"status:ExamStatus","user:WechatUser"};
 		//replaceRelationIndex("Exam",examRelatedObjectNames);
 
 		//String [] userAnswerRelatedObjectNames = {"question:Question","exam:Exam"};
 		//replaceRelationIndex("UserAnswer",userAnswerRelatedObjectNames);
 
-		//String [] faultAnswerRelatedObjectNames = {"exam:Exam"};
+		//String [] faultAnswerRelatedObjectNames = {"user:WechatUser","exam:Exam"};
 		//replaceRelationIndex("FaultAnswer",faultAnswerRelatedObjectNames);
 
 		//String [] userWhiteListRelatedObjectNames = {"domain:UserDomain"};

@@ -16,7 +16,7 @@ function RouterConfig({ history }) {
 	const {PlatformBizApp} = GlobalComponents
 	const {ChangeRequestTypeBizApp} = GlobalComponents
 	const {ChangeRequestBizApp} = GlobalComponents
-	const {RegisterationBizApp} = GlobalComponents
+	const {RegistrationBizApp} = GlobalComponents
 	const {StartExamBizApp} = GlobalComponents
 	const {AnswerQuestionBizApp} = GlobalComponents
 	const {ExamStatusBizApp} = GlobalComponents
@@ -24,6 +24,7 @@ function RouterConfig({ history }) {
 	const {ExamRankingBizApp} = GlobalComponents
 	const {AnswerBizApp} = GlobalComponents
 	const {WechatUserBizApp} = GlobalComponents
+	const {WechatLoginInfoBizApp} = GlobalComponents
 	const {ExamBizApp} = GlobalComponents
 	const {UserAnswerBizApp} = GlobalComponents
 	const {FaultAnswerBizApp} = GlobalComponents
@@ -55,7 +56,7 @@ function RouterConfig({ history }) {
           <Route path="/platform/" component={PlatformBizApp} />
           <Route path="/changeRequestType/" component={ChangeRequestTypeBizApp} />
           <Route path="/changeRequest/" component={ChangeRequestBizApp} />
-          <Route path="/registeration/" component={RegisterationBizApp} />
+          <Route path="/registration/" component={RegistrationBizApp} />
           <Route path="/startExam/" component={StartExamBizApp} />
           <Route path="/answerQuestion/" component={AnswerQuestionBizApp} />
           <Route path="/examStatus/" component={ExamStatusBizApp} />
@@ -63,6 +64,7 @@ function RouterConfig({ history }) {
           <Route path="/examRanking/" component={ExamRankingBizApp} />
           <Route path="/answer/" component={AnswerBizApp} />
           <Route path="/wechatUser/" component={WechatUserBizApp} />
+          <Route path="/wechatLoginInfo/" component={WechatLoginInfoBizApp} />
           <Route path="/exam/" component={ExamBizApp} />
           <Route path="/userAnswer/" component={UserAnswerBizApp} />
           <Route path="/faultAnswer/" component={FaultAnswerBizApp} />

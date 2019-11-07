@@ -111,14 +111,14 @@ const removeQuestionList = (targetObjectId, parameters) => {
 
 
 const addExamRanking = (targetObjectId, parameters) => {
-  const url = `${PREFIX}platformManager/addExamRanking/platformId/name/avarta/tokensExpr/`
+  const url = `${PREFIX}platformManager/addExamRanking/platformId/name/avatar/tokensExpr/`
   const platformId = targetObjectId
   const requestParameters = { ...parameters, platformId, tokensExpr: 'none' }
   return postForm({ url,requestParameters})
 }
 
 const updateExamRanking = (targetObjectId, parameters) => {
-  const url = `${PREFIX}platformManager/updateExamRankingProperties/platformId/id/name/avarta/tokensExpr/`
+  const url = `${PREFIX}platformManager/updateExamRankingProperties/platformId/id/name/avatar/tokensExpr/`
   const platformId = targetObjectId
   const requestParameters = { ...parameters, platformId, tokensExpr: 'none' }
   return postForm({ url,requestParameters})

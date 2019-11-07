@@ -52,8 +52,21 @@
 	</bean>
 
 
-
-
+	<bean id="wxMaService"	class="cn.binarywang.wx.miniapp.api.impl.WxMaServiceImpl">
+		<property name="wxMaConfig">
+			<bean class="cn.binarywang.wx.miniapp.api.impl.WxMaDefaultConfigImpl">
+				<property name="appid" value="${app.wx.appId}" />
+				<property name="secret" value="${app.wx.secret}" />
+				<property name="token" value="${app.wx.token}" />
+				<property name="aesKey" value="${app.wx.aesKey}" />
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="wxappService"	class="com.doublechain.bcex.wxappservice.WxappserviceViewBizService">
+		<property name="wxMaService" ref="wxMaService"/>
+	</bean>
+	
 
 </beans>
 

@@ -29,11 +29,11 @@ public interface ChangeRequestManager{
 	/*======================================================DATA MAINTENANCE===========================================================*/
 	
 
-	//public  RegisterationManager getRegisterationManager(BcexUserContext userContext, String changeRequestId, String nickName, String avarta ,String [] tokensExpr)  throws Exception;
+	//public  RegistrationManager getRegistrationManager(BcexUserContext userContext, String changeRequestId, String nickName, String avatar ,String [] tokensExpr)  throws Exception;
 	
-	public  ChangeRequest addRegisteration(BcexUserContext userContext, String changeRequestId, String nickName, String avarta , String [] tokensExpr)  throws Exception;
-	public  ChangeRequest removeRegisteration(BcexUserContext userContext, String changeRequestId, String registerationId, int registerationVersion,String [] tokensExpr)  throws Exception;
-	public  ChangeRequest updateRegisteration(BcexUserContext userContext, String changeRequestId, String registerationId, int registerationVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
+	public  ChangeRequest addRegistration(BcexUserContext userContext, String changeRequestId, String nickName, String avatar , String [] tokensExpr)  throws Exception;
+	public  ChangeRequest removeRegistration(BcexUserContext userContext, String changeRequestId, String registrationId, int registrationVersion,String [] tokensExpr)  throws Exception;
+	public  ChangeRequest updateRegistration(BcexUserContext userContext, String changeRequestId, String registrationId, int registrationVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
 
 	/*
 

@@ -32,7 +32,7 @@ const renderReferenceCell=defaultRenderReferenceCell
 
 const menuData = {menuName:"变更请求", menuFor: "changeRequest",
   		subItems: [
-  {name: 'registerationList', displayName:'在注册', icon:'at',readPermission: false,createPermission: false,deletePermission: false,updatePermission: false,executionPermission: false, viewGroup: '__no_group'},
+  {name: 'registrationList', displayName:'登记', icon:'at',readPermission: false,createPermission: false,deletePermission: false,updatePermission: false,executionPermission: false, viewGroup: '__no_group'},
   {name: 'startExamList', displayName:'开始考试', icon:'hourglass-start',readPermission: false,createPermission: false,deletePermission: false,updatePermission: false,executionPermission: false, viewGroup: '__no_group'},
   {name: 'answerQuestionList', displayName:'回答问题', icon:'question',readPermission: false,createPermission: false,deletePermission: false,updatePermission: false,executionPermission: false, viewGroup: '__no_group'},
   

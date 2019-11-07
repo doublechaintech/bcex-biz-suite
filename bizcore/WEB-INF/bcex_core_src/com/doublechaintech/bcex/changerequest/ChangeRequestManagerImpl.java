@@ -24,7 +24,7 @@ import com.doublechaintech.bcex.platform.Platform;
 import com.doublechaintech.bcex.changerequesttype.ChangeRequestType;
 import com.doublechaintech.bcex.answerquestion.AnswerQuestion;
 import com.doublechaintech.bcex.startexam.StartExam;
-import com.doublechaintech.bcex.registeration.Registeration;
+import com.doublechaintech.bcex.registration.Registration;
 
 import com.doublechaintech.bcex.platform.CandidatePlatform;
 import com.doublechaintech.bcex.changerequesttype.CandidateChangeRequestType;
@@ -158,10 +158,10 @@ public class ChangeRequestManagerImpl extends CustomBcexCheckerManager implement
 		
 		addAction(userContext, changeRequest, tokens,"change_request.transfer_to_request_type","transferToAnotherRequestType","transferToAnotherRequestType/"+changeRequest.getId()+"/","main","primary");
 		addAction(userContext, changeRequest, tokens,"change_request.transfer_to_platform","transferToAnotherPlatform","transferToAnotherPlatform/"+changeRequest.getId()+"/","main","primary");
-		addAction(userContext, changeRequest, tokens,"change_request.addRegisteration","addRegisteration","addRegisteration/"+changeRequest.getId()+"/","registerationList","primary");
-		addAction(userContext, changeRequest, tokens,"change_request.removeRegisteration","removeRegisteration","removeRegisteration/"+changeRequest.getId()+"/","registerationList","primary");
-		addAction(userContext, changeRequest, tokens,"change_request.updateRegisteration","updateRegisteration","updateRegisteration/"+changeRequest.getId()+"/","registerationList","primary");
-		addAction(userContext, changeRequest, tokens,"change_request.copyRegisterationFrom","copyRegisterationFrom","copyRegisterationFrom/"+changeRequest.getId()+"/","registerationList","primary");
+		addAction(userContext, changeRequest, tokens,"change_request.addRegistration","addRegistration","addRegistration/"+changeRequest.getId()+"/","registrationList","primary");
+		addAction(userContext, changeRequest, tokens,"change_request.removeRegistration","removeRegistration","removeRegistration/"+changeRequest.getId()+"/","registrationList","primary");
+		addAction(userContext, changeRequest, tokens,"change_request.updateRegistration","updateRegistration","updateRegistration/"+changeRequest.getId()+"/","registrationList","primary");
+		addAction(userContext, changeRequest, tokens,"change_request.copyRegistrationFrom","copyRegistrationFrom","copyRegistrationFrom/"+changeRequest.getId()+"/","registrationList","primary");
 		addAction(userContext, changeRequest, tokens,"change_request.addStartExam","addStartExam","addStartExam/"+changeRequest.getId()+"/","startExamList","primary");
 		addAction(userContext, changeRequest, tokens,"change_request.removeStartExam","removeStartExam","removeStartExam/"+changeRequest.getId()+"/","startExamList","primary");
 		addAction(userContext, changeRequest, tokens,"change_request.updateStartExam","updateStartExam","updateStartExam/"+changeRequest.getId()+"/","startExamList","primary");
@@ -338,7 +338,7 @@ public class ChangeRequestManagerImpl extends CustomBcexCheckerManager implement
 	}
 	protected Map<String,Object> viewTokens(){
 		return tokens().allTokens()
-		.sortRegisterationListWith("id","desc")
+		.sortRegistrationListWith("id","desc")
 		.sortStartExamListWith("id","desc")
 		.sortAnswerQuestionListWith("id","desc")
 		.analyzeAllLists().done();
@@ -584,170 +584,170 @@ public class ChangeRequestManagerImpl extends CustomBcexCheckerManager implement
 	
 	
 
-	protected void checkParamsForAddingRegisteration(BcexUserContext userContext, String changeRequestId, String nickName, String avarta,String [] tokensExpr) throws Exception{
+	protected void checkParamsForAddingRegistration(BcexUserContext userContext, String changeRequestId, String nickName, String avatar,String [] tokensExpr) throws Exception{
 		
 				checkerOf(userContext).checkIdOfChangeRequest(changeRequestId);
 
 		
-		checkerOf(userContext).checkNickNameOfRegisteration(nickName);
+		checkerOf(userContext).checkNickNameOfRegistration(nickName);
 		
-		checkerOf(userContext).checkAvartaOfRegisteration(avarta);
+		checkerOf(userContext).checkAvatarOfRegistration(avatar);
 	
 		checkerOf(userContext).throwExceptionIfHasErrors(ChangeRequestManagerException.class);
 
 	
 	}
-	public  ChangeRequest addRegisteration(BcexUserContext userContext, String changeRequestId, String nickName, String avarta, String [] tokensExpr) throws Exception
+	public  ChangeRequest addRegistration(BcexUserContext userContext, String changeRequestId, String nickName, String avatar, String [] tokensExpr) throws Exception
 	{	
 		
-		checkParamsForAddingRegisteration(userContext,changeRequestId,nickName, avarta,tokensExpr);
+		checkParamsForAddingRegistration(userContext,changeRequestId,nickName, avatar,tokensExpr);
 		
-		Registeration registeration = createRegisteration(userContext,nickName, avarta);
+		Registration registration = createRegistration(userContext,nickName, avatar);
 		
 		ChangeRequest changeRequest = loadChangeRequest(userContext, changeRequestId, allTokens());
 		synchronized(changeRequest){ 
 			//Will be good when the changeRequest loaded from this JVM process cache.
 			//Also good when there is a RAM based DAO implementation
-			changeRequest.addRegisteration( registeration );		
-			changeRequest = saveChangeRequest(userContext, changeRequest, tokens().withRegisterationList().done());
+			changeRequest.addRegistration( registration );		
+			changeRequest = saveChangeRequest(userContext, changeRequest, tokens().withRegistrationList().done());
 			
-			userContext.getManagerGroup().getRegisterationManager().onNewInstanceCreated(userContext, registeration);
+			userContext.getManagerGroup().getRegistrationManager().onNewInstanceCreated(userContext, registration);
 			return present(userContext,changeRequest, mergedAllTokens(tokensExpr));
 		}
 	}
-	protected void checkParamsForUpdatingRegisterationProperties(BcexUserContext userContext, String changeRequestId,String id,String nickName,String avarta,String [] tokensExpr) throws Exception {
+	protected void checkParamsForUpdatingRegistrationProperties(BcexUserContext userContext, String changeRequestId,String id,String nickName,String avatar,String [] tokensExpr) throws Exception {
 		
 		checkerOf(userContext).checkIdOfChangeRequest(changeRequestId);
-		checkerOf(userContext).checkIdOfRegisteration(id);
+		checkerOf(userContext).checkIdOfRegistration(id);
 		
-		checkerOf(userContext).checkNickNameOfRegisteration( nickName);
-		checkerOf(userContext).checkAvartaOfRegisteration( avarta);
+		checkerOf(userContext).checkNickNameOfRegistration( nickName);
+		checkerOf(userContext).checkAvatarOfRegistration( avatar);
 
 		checkerOf(userContext).throwExceptionIfHasErrors(ChangeRequestManagerException.class);
 		
 	}
-	public  ChangeRequest updateRegisterationProperties(BcexUserContext userContext, String changeRequestId, String id,String nickName,String avarta, String [] tokensExpr) throws Exception
+	public  ChangeRequest updateRegistrationProperties(BcexUserContext userContext, String changeRequestId, String id,String nickName,String avatar, String [] tokensExpr) throws Exception
 	{	
-		checkParamsForUpdatingRegisterationProperties(userContext,changeRequestId,id,nickName,avarta,tokensExpr);
+		checkParamsForUpdatingRegistrationProperties(userContext,changeRequestId,id,nickName,avatar,tokensExpr);
 
 		Map<String, Object> options = tokens()
 				.allTokens()
-				//.withRegisterationListList()
-				.searchRegisterationListWith(Registeration.ID_PROPERTY, "is", id).done();
+				//.withRegistrationListList()
+				.searchRegistrationListWith(Registration.ID_PROPERTY, "is", id).done();
 		
 		ChangeRequest changeRequestToUpdate = loadChangeRequest(userContext, changeRequestId, options);
 		
-		if(changeRequestToUpdate.getRegisterationList().isEmpty()){
-			throw new ChangeRequestManagerException("Registeration is NOT FOUND with id: '"+id+"'");
+		if(changeRequestToUpdate.getRegistrationList().isEmpty()){
+			throw new ChangeRequestManagerException("Registration is NOT FOUND with id: '"+id+"'");
 		}
 		
-		Registeration item = changeRequestToUpdate.getRegisterationList().first();
+		Registration item = changeRequestToUpdate.getRegistrationList().first();
 		
 		item.updateNickName( nickName );
-		item.updateAvarta( avarta );
+		item.updateAvatar( avatar );
 
 		
-		//checkParamsForAddingRegisteration(userContext,changeRequestId,name, code, used,tokensExpr);
-		ChangeRequest changeRequest = saveChangeRequest(userContext, changeRequestToUpdate, tokens().withRegisterationList().done());
+		//checkParamsForAddingRegistration(userContext,changeRequestId,name, code, used,tokensExpr);
+		ChangeRequest changeRequest = saveChangeRequest(userContext, changeRequestToUpdate, tokens().withRegistrationList().done());
 		synchronized(changeRequest){ 
 			return present(userContext,changeRequest, mergedAllTokens(tokensExpr));
 		}
 	}
 	
 	
-	protected Registeration createRegisteration(BcexUserContext userContext, String nickName, String avarta) throws Exception{
+	protected Registration createRegistration(BcexUserContext userContext, String nickName, String avatar) throws Exception{
 
-		Registeration registeration = new Registeration();
+		Registration registration = new Registration();
 		
 		
-		registeration.setNickName(nickName);		
-		registeration.setAvarta(avarta);
+		registration.setNickName(nickName);		
+		registration.setAvatar(avatar);
 	
 		
-		return registeration;
+		return registration;
 	
 		
 	}
 	
-	protected Registeration createIndexedRegisteration(String id, int version){
+	protected Registration createIndexedRegistration(String id, int version){
 
-		Registeration registeration = new Registeration();
-		registeration.setId(id);
-		registeration.setVersion(version);
-		return registeration;			
+		Registration registration = new Registration();
+		registration.setId(id);
+		registration.setVersion(version);
+		return registration;			
 		
 	}
 	
-	protected void checkParamsForRemovingRegisterationList(BcexUserContext userContext, String changeRequestId, 
-			String registerationIds[],String [] tokensExpr) throws Exception {
+	protected void checkParamsForRemovingRegistrationList(BcexUserContext userContext, String changeRequestId, 
+			String registrationIds[],String [] tokensExpr) throws Exception {
 		
 		checkerOf(userContext).checkIdOfChangeRequest(changeRequestId);
-		for(String registerationIdItem: registerationIds){
-			checkerOf(userContext).checkIdOfRegisteration(registerationIdItem);
+		for(String registrationIdItem: registrationIds){
+			checkerOf(userContext).checkIdOfRegistration(registrationIdItem);
 		}
 		
 		checkerOf(userContext).throwExceptionIfHasErrors(ChangeRequestManagerException.class);
 		
 	}
-	public  ChangeRequest removeRegisterationList(BcexUserContext userContext, String changeRequestId, 
-			String registerationIds[],String [] tokensExpr) throws Exception{
+	public  ChangeRequest removeRegistrationList(BcexUserContext userContext, String changeRequestId, 
+			String registrationIds[],String [] tokensExpr) throws Exception{
 			
-			checkParamsForRemovingRegisterationList(userContext, changeRequestId,  registerationIds, tokensExpr);
+			checkParamsForRemovingRegistrationList(userContext, changeRequestId,  registrationIds, tokensExpr);
 			
 			
 			ChangeRequest changeRequest = loadChangeRequest(userContext, changeRequestId, allTokens());
 			synchronized(changeRequest){ 
 				//Will be good when the changeRequest loaded from this JVM process cache.
 				//Also good when there is a RAM based DAO implementation
-				changeRequestDaoOf(userContext).planToRemoveRegisterationList(changeRequest, registerationIds, allTokens());
-				changeRequest = saveChangeRequest(userContext, changeRequest, tokens().withRegisterationList().done());
-				deleteRelationListInGraph(userContext, changeRequest.getRegisterationList());
+				changeRequestDaoOf(userContext).planToRemoveRegistrationList(changeRequest, registrationIds, allTokens());
+				changeRequest = saveChangeRequest(userContext, changeRequest, tokens().withRegistrationList().done());
+				deleteRelationListInGraph(userContext, changeRequest.getRegistrationList());
 				return present(userContext,changeRequest, mergedAllTokens(tokensExpr));
 			}
 	}
 	
-	protected void checkParamsForRemovingRegisteration(BcexUserContext userContext, String changeRequestId, 
-		String registerationId, int registerationVersion,String [] tokensExpr) throws Exception{
+	protected void checkParamsForRemovingRegistration(BcexUserContext userContext, String changeRequestId, 
+		String registrationId, int registrationVersion,String [] tokensExpr) throws Exception{
 		
 		checkerOf(userContext).checkIdOfChangeRequest( changeRequestId);
-		checkerOf(userContext).checkIdOfRegisteration(registerationId);
-		checkerOf(userContext).checkVersionOfRegisteration(registerationVersion);
+		checkerOf(userContext).checkIdOfRegistration(registrationId);
+		checkerOf(userContext).checkVersionOfRegistration(registrationVersion);
 		checkerOf(userContext).throwExceptionIfHasErrors(ChangeRequestManagerException.class);
 	
 	}
-	public  ChangeRequest removeRegisteration(BcexUserContext userContext, String changeRequestId, 
-		String registerationId, int registerationVersion,String [] tokensExpr) throws Exception{
+	public  ChangeRequest removeRegistration(BcexUserContext userContext, String changeRequestId, 
+		String registrationId, int registrationVersion,String [] tokensExpr) throws Exception{
 		
-		checkParamsForRemovingRegisteration(userContext,changeRequestId, registerationId, registerationVersion,tokensExpr);
+		checkParamsForRemovingRegistration(userContext,changeRequestId, registrationId, registrationVersion,tokensExpr);
 		
-		Registeration registeration = createIndexedRegisteration(registerationId, registerationVersion);
+		Registration registration = createIndexedRegistration(registrationId, registrationVersion);
 		ChangeRequest changeRequest = loadChangeRequest(userContext, changeRequestId, allTokens());
 		synchronized(changeRequest){ 
 			//Will be good when the changeRequest loaded from this JVM process cache.
 			//Also good when there is a RAM based DAO implementation
-			changeRequest.removeRegisteration( registeration );		
-			changeRequest = saveChangeRequest(userContext, changeRequest, tokens().withRegisterationList().done());
-			deleteRelationInGraph(userContext, registeration);
+			changeRequest.removeRegistration( registration );		
+			changeRequest = saveChangeRequest(userContext, changeRequest, tokens().withRegistrationList().done());
+			deleteRelationInGraph(userContext, registration);
 			return present(userContext,changeRequest, mergedAllTokens(tokensExpr));
 		}
 		
 		
 	}
-	protected void checkParamsForCopyingRegisteration(BcexUserContext userContext, String changeRequestId, 
-		String registerationId, int registerationVersion,String [] tokensExpr) throws Exception{
+	protected void checkParamsForCopyingRegistration(BcexUserContext userContext, String changeRequestId, 
+		String registrationId, int registrationVersion,String [] tokensExpr) throws Exception{
 		
 		checkerOf(userContext).checkIdOfChangeRequest( changeRequestId);
-		checkerOf(userContext).checkIdOfRegisteration(registerationId);
-		checkerOf(userContext).checkVersionOfRegisteration(registerationVersion);
+		checkerOf(userContext).checkIdOfRegistration(registrationId);
+		checkerOf(userContext).checkVersionOfRegistration(registrationVersion);
 		checkerOf(userContext).throwExceptionIfHasErrors(ChangeRequestManagerException.class);
 	
 	}
-	public  ChangeRequest copyRegisterationFrom(BcexUserContext userContext, String changeRequestId, 
-		String registerationId, int registerationVersion,String [] tokensExpr) throws Exception{
+	public  ChangeRequest copyRegistrationFrom(BcexUserContext userContext, String changeRequestId, 
+		String registrationId, int registrationVersion,String [] tokensExpr) throws Exception{
 		
-		checkParamsForCopyingRegisteration(userContext,changeRequestId, registerationId, registerationVersion,tokensExpr);
+		checkParamsForCopyingRegistration(userContext,changeRequestId, registrationId, registrationVersion,tokensExpr);
 		
-		Registeration registeration = createIndexedRegisteration(registerationId, registerationVersion);
+		Registration registration = createIndexedRegistration(registrationId, registrationVersion);
 		ChangeRequest changeRequest = loadChangeRequest(userContext, changeRequestId, allTokens());
 		synchronized(changeRequest){ 
 			//Will be good when the changeRequest loaded from this JVM process cache.
@@ -755,30 +755,30 @@ public class ChangeRequestManagerImpl extends CustomBcexCheckerManager implement
 			
 			
 			
-			changeRequest.copyRegisterationFrom( registeration );		
-			changeRequest = saveChangeRequest(userContext, changeRequest, tokens().withRegisterationList().done());
+			changeRequest.copyRegistrationFrom( registration );		
+			changeRequest = saveChangeRequest(userContext, changeRequest, tokens().withRegistrationList().done());
 			
-			userContext.getManagerGroup().getRegisterationManager().onNewInstanceCreated(userContext, (Registeration)changeRequest.getFlexiableObjects().get(BaseEntity.COPIED_CHILD));
+			userContext.getManagerGroup().getRegistrationManager().onNewInstanceCreated(userContext, (Registration)changeRequest.getFlexiableObjects().get(BaseEntity.COPIED_CHILD));
 			return present(userContext,changeRequest, mergedAllTokens(tokensExpr));
 		}
 		
 	}
 	
-	protected void checkParamsForUpdatingRegisteration(BcexUserContext userContext, String changeRequestId, String registerationId, int registerationVersion, String property, String newValueExpr,String [] tokensExpr) throws Exception{
+	protected void checkParamsForUpdatingRegistration(BcexUserContext userContext, String changeRequestId, String registrationId, int registrationVersion, String property, String newValueExpr,String [] tokensExpr) throws Exception{
 		
 
 		
 		checkerOf(userContext).checkIdOfChangeRequest(changeRequestId);
-		checkerOf(userContext).checkIdOfRegisteration(registerationId);
-		checkerOf(userContext).checkVersionOfRegisteration(registerationVersion);
+		checkerOf(userContext).checkIdOfRegistration(registrationId);
+		checkerOf(userContext).checkVersionOfRegistration(registrationVersion);
 		
 
-		if(Registeration.NICK_NAME_PROPERTY.equals(property)){
-			checkerOf(userContext).checkNickNameOfRegisteration(parseString(newValueExpr));
+		if(Registration.NICK_NAME_PROPERTY.equals(property)){
+			checkerOf(userContext).checkNickNameOfRegistration(parseString(newValueExpr));
 		}
 		
-		if(Registeration.AVARTA_PROPERTY.equals(property)){
-			checkerOf(userContext).checkAvartaOfRegisteration(parseString(newValueExpr));
+		if(Registration.AVATAR_PROPERTY.equals(property)){
+			checkerOf(userContext).checkAvatarOfRegistration(parseString(newValueExpr));
 		}
 		
 	
@@ -786,12 +786,12 @@ public class ChangeRequestManagerImpl extends CustomBcexCheckerManager implement
 	
 	}
 	
-	public  ChangeRequest updateRegisteration(BcexUserContext userContext, String changeRequestId, String registerationId, int registerationVersion, String property, String newValueExpr,String [] tokensExpr)
+	public  ChangeRequest updateRegistration(BcexUserContext userContext, String changeRequestId, String registrationId, int registrationVersion, String property, String newValueExpr,String [] tokensExpr)
 			throws Exception{
 		
-		checkParamsForUpdatingRegisteration(userContext, changeRequestId, registerationId, registerationVersion, property, newValueExpr,  tokensExpr);
+		checkParamsForUpdatingRegistration(userContext, changeRequestId, registrationId, registrationVersion, property, newValueExpr,  tokensExpr);
 		
-		Map<String,Object> loadTokens = this.tokens().withRegisterationList().searchRegisterationListWith(Registeration.ID_PROPERTY, "eq", registerationId).done();
+		Map<String,Object> loadTokens = this.tokens().withRegistrationList().searchRegistrationListWith(Registration.ID_PROPERTY, "eq", registrationId).done();
 		
 		
 		
@@ -800,18 +800,18 @@ public class ChangeRequestManagerImpl extends CustomBcexCheckerManager implement
 		synchronized(changeRequest){ 
 			//Will be good when the changeRequest loaded from this JVM process cache.
 			//Also good when there is a RAM based DAO implementation
-			//changeRequest.removeRegisteration( registeration );	
+			//changeRequest.removeRegistration( registration );	
 			//make changes to AcceleraterAccount.
-			Registeration registerationIndex = createIndexedRegisteration(registerationId, registerationVersion);
+			Registration registrationIndex = createIndexedRegistration(registrationId, registrationVersion);
 		
-			Registeration registeration = changeRequest.findTheRegisteration(registerationIndex);
-			if(registeration == null){
-				throw new ChangeRequestManagerException(registeration+" is NOT FOUND" );
+			Registration registration = changeRequest.findTheRegistration(registrationIndex);
+			if(registration == null){
+				throw new ChangeRequestManagerException(registration+" is NOT FOUND" );
 			}
 			
-			registeration.changeProperty(property, newValueExpr);
+			registration.changeProperty(property, newValueExpr);
 			
-			changeRequest = saveChangeRequest(userContext, changeRequest, tokens().withRegisterationList().done());
+			changeRequest = saveChangeRequest(userContext, changeRequest, tokens().withRegistrationList().done());
 			return present(userContext,changeRequest, mergedAllTokens(tokensExpr));
 		}
 

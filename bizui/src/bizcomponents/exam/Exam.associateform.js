@@ -19,7 +19,7 @@ const testValues = {};
 /*
 const testValues = {
   name: '区块链技术考试',
-  score: '75',
+  score: '99',
   statusId: 'STARTED',
   userId: 'WU000001',
 }

@@ -103,11 +103,11 @@ public class BcexCheckerManager extends BaseManagerImpl {
 	public com.doublechaintech.bcex.changerequest.ChangeRequestDAO changeRequestDaoOf(BcexUserContext userContext){
 		return userContext.getDAOGroup().getChangeRequestDAO();
 	}
-	public com.doublechaintech.bcex.registeration.RegisterationManager registerationManagerOf(BcexUserContext userContext){
-		return userContext.getManagerGroup().getRegisterationManager();
+	public com.doublechaintech.bcex.registration.RegistrationManager registrationManagerOf(BcexUserContext userContext){
+		return userContext.getManagerGroup().getRegistrationManager();
 	}
-	public com.doublechaintech.bcex.registeration.RegisterationDAO registerationDaoOf(BcexUserContext userContext){
-		return userContext.getDAOGroup().getRegisterationDAO();
+	public com.doublechaintech.bcex.registration.RegistrationDAO registrationDaoOf(BcexUserContext userContext){
+		return userContext.getDAOGroup().getRegistrationDAO();
 	}
 	public com.doublechaintech.bcex.startexam.StartExamManager startExamManagerOf(BcexUserContext userContext){
 		return userContext.getManagerGroup().getStartExamManager();
@@ -150,6 +150,12 @@ public class BcexCheckerManager extends BaseManagerImpl {
 	}
 	public com.doublechaintech.bcex.wechatuser.WechatUserDAO wechatUserDaoOf(BcexUserContext userContext){
 		return userContext.getDAOGroup().getWechatUserDAO();
+	}
+	public com.doublechaintech.bcex.wechatlogininfo.WechatLoginInfoManager wechatLoginInfoManagerOf(BcexUserContext userContext){
+		return userContext.getManagerGroup().getWechatLoginInfoManager();
+	}
+	public com.doublechaintech.bcex.wechatlogininfo.WechatLoginInfoDAO wechatLoginInfoDaoOf(BcexUserContext userContext){
+		return userContext.getDAOGroup().getWechatLoginInfoDAO();
 	}
 	public com.doublechaintech.bcex.exam.ExamManager examManagerOf(BcexUserContext userContext){
 		return userContext.getManagerGroup().getExamManager();

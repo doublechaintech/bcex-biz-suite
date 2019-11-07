@@ -4,13 +4,12 @@ package  com.doublechaintech.bcex.changerequest;
 import com.doublechaintech.bcex.BcexUserContext;
 public class ChangeRequestCustomService extends ChangeRequestService{
 	
-	
+	/*
+	 * 小程序端可以注册，分享用户的昵称和头像
+	 * 
+	 * */
 	
 	public ChangeRequest register(BcexUserContext userContext, String nickname,  String avartImage ) {
-		
-		
-		
-		
 		return null;
 	}
 	/*
@@ -31,7 +30,7 @@ public class ChangeRequestCustomService extends ChangeRequestService{
 	 * 
 	 * 
 	 * */
-	public ChangeRequest answerQuestion(BcexUserContext userContext, String awserId,  String userAnser) {
+	public ChangeRequest answerQuestion(BcexUserContext userContext, String awserId,  String userAwnser) {
 		
 		return null;
 	}

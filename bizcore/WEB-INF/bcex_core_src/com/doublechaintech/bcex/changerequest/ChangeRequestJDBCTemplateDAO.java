@@ -24,10 +24,10 @@ import com.doublechaintech.bcex.platform.Platform;
 import com.doublechaintech.bcex.changerequesttype.ChangeRequestType;
 import com.doublechaintech.bcex.answerquestion.AnswerQuestion;
 import com.doublechaintech.bcex.startexam.StartExam;
-import com.doublechaintech.bcex.registeration.Registeration;
+import com.doublechaintech.bcex.registration.Registration;
 
-import com.doublechaintech.bcex.registeration.RegisterationDAO;
 import com.doublechaintech.bcex.platform.PlatformDAO;
+import com.doublechaintech.bcex.registration.RegistrationDAO;
 import com.doublechaintech.bcex.changerequesttype.ChangeRequestTypeDAO;
 import com.doublechaintech.bcex.startexam.StartExamDAO;
 import com.doublechaintech.bcex.answerquestion.AnswerQuestionDAO;
@@ -63,20 +63,20 @@ public class ChangeRequestJDBCTemplateDAO extends BcexBaseDAOImpl implements Cha
 			
 		
 	
-  	private  RegisterationDAO  registerationDAO;
- 	public void setRegisterationDAO(RegisterationDAO pRegisterationDAO){
+  	private  RegistrationDAO  registrationDAO;
+ 	public void setRegistrationDAO(RegistrationDAO pRegistrationDAO){
  	
- 		if(pRegisterationDAO == null){
- 			throw new IllegalStateException("Do not try to set registerationDAO to null.");
+ 		if(pRegistrationDAO == null){
+ 			throw new IllegalStateException("Do not try to set registrationDAO to null.");
  		}
-	 	this.registerationDAO = pRegisterationDAO;
+	 	this.registrationDAO = pRegistrationDAO;
  	}
- 	public RegisterationDAO getRegisterationDAO(){
- 		if(this.registerationDAO == null){
- 			throw new IllegalStateException("The registerationDAO is not configured yet, please config it some where.");
+ 	public RegistrationDAO getRegistrationDAO(){
+ 		if(this.registrationDAO == null){
+ 			throw new IllegalStateException("The registrationDAO is not configured yet, please config it some where.");
  		}
  		
-	 	return this.registerationDAO;
+	 	return this.registrationDAO;
  	}	
  	
 			
@@ -169,8 +169,8 @@ public class ChangeRequestJDBCTemplateDAO extends BcexBaseDAOImpl implements Cha
 		
 		
  		
- 		if(isSaveRegisterationListEnabled(options)){
- 			for(Registeration item: newChangeRequest.getRegisterationList()){
+ 		if(isSaveRegistrationListEnabled(options)){
+ 			for(Registration item: newChangeRequest.getRegistrationList()){
  				item.setVersion(0);
  			}
  		}
@@ -309,15 +309,15 @@ public class ChangeRequestJDBCTemplateDAO extends BcexBaseDAOImpl implements Cha
  
 		
 	
-	protected boolean isExtractRegisterationListEnabled(Map<String,Object> options){		
- 		return checkOptions(options,ChangeRequestTokens.REGISTERATION_LIST);
+	protected boolean isExtractRegistrationListEnabled(Map<String,Object> options){		
+ 		return checkOptions(options,ChangeRequestTokens.REGISTRATION_LIST);
  	}
- 	protected boolean isAnalyzeRegisterationListEnabled(Map<String,Object> options){		 		
- 		return ChangeRequestTokens.of(options).analyzeRegisterationListEnabled();
+ 	protected boolean isAnalyzeRegistrationListEnabled(Map<String,Object> options){		 		
+ 		return ChangeRequestTokens.of(options).analyzeRegistrationListEnabled();
  	}
 	
-	protected boolean isSaveRegisterationListEnabled(Map<String,Object> options){
-		return checkOptions(options, ChangeRequestTokens.REGISTERATION_LIST);
+	protected boolean isSaveRegistrationListEnabled(Map<String,Object> options){
+		return checkOptions(options, ChangeRequestTokens.REGISTRATION_LIST);
 		
  	}
  	
@@ -385,11 +385,11 @@ public class ChangeRequestJDBCTemplateDAO extends BcexBaseDAOImpl implements Cha
  		}
  
 		
-		if(isExtractRegisterationListEnabled(loadOptions)){
-	 		extractRegisterationList(changeRequest, loadOptions);
+		if(isExtractRegistrationListEnabled(loadOptions)){
+	 		extractRegistrationList(changeRequest, loadOptions);
  		}	
- 		if(isAnalyzeRegisterationListEnabled(loadOptions)){
-	 		analyzeRegisterationList(changeRequest, loadOptions);
+ 		if(isAnalyzeRegistrationListEnabled(loadOptions)){
+	 		analyzeRegistrationList(changeRequest, loadOptions);
  		}
  		
 		
@@ -455,12 +455,12 @@ public class ChangeRequestJDBCTemplateDAO extends BcexBaseDAOImpl implements Cha
  		
  
 		
-	protected void enhanceRegisterationList(SmartList<Registeration> registerationList,Map<String,Object> options){
+	protected void enhanceRegistrationList(SmartList<Registration> registrationList,Map<String,Object> options){
 		//extract multiple list from difference sources
 		//Trying to use a single SQL to extract all data from database and do the work in java side, java is easier to scale to N ndoes;
 	}
 	
-	protected ChangeRequest extractRegisterationList(ChangeRequest changeRequest, Map<String,Object> options){
+	protected ChangeRequest extractRegistrationList(ChangeRequest changeRequest, Map<String,Object> options){
 		
 		
 		if(changeRequest == null){
@@ -472,17 +472,17 @@ public class ChangeRequestJDBCTemplateDAO extends BcexBaseDAOImpl implements Cha
 
 		
 		
-		SmartList<Registeration> registerationList = getRegisterationDAO().findRegisterationByChangeRequest(changeRequest.getId(),options);
-		if(registerationList != null){
-			enhanceRegisterationList(registerationList,options);
-			changeRequest.setRegisterationList(registerationList);
+		SmartList<Registration> registrationList = getRegistrationDAO().findRegistrationByChangeRequest(changeRequest.getId(),options);
+		if(registrationList != null){
+			enhanceRegistrationList(registrationList,options);
+			changeRequest.setRegistrationList(registrationList);
 		}
 		
 		return changeRequest;
 	
 	}	
 	
-	protected ChangeRequest analyzeRegisterationList(ChangeRequest changeRequest, Map<String,Object> options){
+	protected ChangeRequest analyzeRegistrationList(ChangeRequest changeRequest, Map<String,Object> options){
 		
 		
 		if(changeRequest == null){
@@ -494,9 +494,9 @@ public class ChangeRequestJDBCTemplateDAO extends BcexBaseDAOImpl implements Cha
 
 		
 		
-		SmartList<Registeration> registerationList = changeRequest.getRegisterationList();
-		if(registerationList != null){
-			getRegisterationDAO().analyzeRegisterationByChangeRequest(registerationList, changeRequest.getId(), options);
+		SmartList<Registration> registrationList = changeRequest.getRegistrationList();
+		if(registrationList != null){
+			getRegistrationDAO().analyzeRegistrationByChangeRequest(registrationList, changeRequest.getId(), options);
 			
 		}
 		
@@ -903,9 +903,9 @@ public class ChangeRequestJDBCTemplateDAO extends BcexBaseDAOImpl implements Cha
  		}
  
 		
-		if(isSaveRegisterationListEnabled(options)){
-	 		saveRegisterationList(changeRequest, options);
-	 		//removeRegisterationList(changeRequest, options);
+		if(isSaveRegistrationListEnabled(options)){
+	 		saveRegistrationList(changeRequest, options);
+	 		//removeRegistrationList(changeRequest, options);
 	 		//Not delete the record
 	 		
  		}		
@@ -968,29 +968,29 @@ public class ChangeRequestJDBCTemplateDAO extends BcexBaseDAOImpl implements Cha
  
 
 	
-	public ChangeRequest planToRemoveRegisterationList(ChangeRequest changeRequest, String registerationIds[], Map<String,Object> options)throws Exception{
+	public ChangeRequest planToRemoveRegistrationList(ChangeRequest changeRequest, String registrationIds[], Map<String,Object> options)throws Exception{
 	
 		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(Registeration.CHANGE_REQUEST_PROPERTY, changeRequest.getId());
-		key.put(Registeration.ID_PROPERTY, registerationIds);
+		key.put(Registration.CHANGE_REQUEST_PROPERTY, changeRequest.getId());
+		key.put(Registration.ID_PROPERTY, registrationIds);
 		
-		SmartList<Registeration> externalRegisterationList = getRegisterationDAO().
-				findRegisterationWithKey(key, options);
-		if(externalRegisterationList == null){
+		SmartList<Registration> externalRegistrationList = getRegistrationDAO().
+				findRegistrationWithKey(key, options);
+		if(externalRegistrationList == null){
 			return changeRequest;
 		}
-		if(externalRegisterationList.isEmpty()){
+		if(externalRegistrationList.isEmpty()){
 			return changeRequest;
 		}
 		
-		for(Registeration registerationItem: externalRegisterationList){
+		for(Registration registrationItem: externalRegistrationList){
 
-			registerationItem.clearFromAll();
+			registrationItem.clearFromAll();
 		}
 		
 		
-		SmartList<Registeration> registerationList = changeRequest.getRegisterationList();		
-		registerationList.addAllToRemoveList(externalRegisterationList);
+		SmartList<Registration> registrationList = changeRequest.getRegistrationList();		
+		registrationList.addAllToRemoveList(externalRegistrationList);
 		return changeRequest;	
 	
 	}
@@ -1142,33 +1142,33 @@ public class ChangeRequestJDBCTemplateDAO extends BcexBaseDAOImpl implements Cha
 	
 
 		
-	protected ChangeRequest saveRegisterationList(ChangeRequest changeRequest, Map<String,Object> options){
+	protected ChangeRequest saveRegistrationList(ChangeRequest changeRequest, Map<String,Object> options){
 		
 		
 		
 		
-		SmartList<Registeration> registerationList = changeRequest.getRegisterationList();
-		if(registerationList == null){
+		SmartList<Registration> registrationList = changeRequest.getRegistrationList();
+		if(registrationList == null){
 			//null list means nothing
 			return changeRequest;
 		}
-		SmartList<Registeration> mergedUpdateRegisterationList = new SmartList<Registeration>();
+		SmartList<Registration> mergedUpdateRegistrationList = new SmartList<Registration>();
 		
 		
-		mergedUpdateRegisterationList.addAll(registerationList); 
-		if(registerationList.getToRemoveList() != null){
+		mergedUpdateRegistrationList.addAll(registrationList); 
+		if(registrationList.getToRemoveList() != null){
 			//ensures the toRemoveList is not null
-			mergedUpdateRegisterationList.addAll(registerationList.getToRemoveList());
-			registerationList.removeAll(registerationList.getToRemoveList());
+			mergedUpdateRegistrationList.addAll(registrationList.getToRemoveList());
+			registrationList.removeAll(registrationList.getToRemoveList());
 			//OK for now, need fix later
 		}
 
 		//adding new size can improve performance
 	
-		getRegisterationDAO().saveRegisterationList(mergedUpdateRegisterationList,options);
+		getRegistrationDAO().saveRegistrationList(mergedUpdateRegistrationList,options);
 		
-		if(registerationList.getToRemoveList() != null){
-			registerationList.removeAll(registerationList.getToRemoveList());
+		if(registrationList.getToRemoveList() != null){
+			registrationList.removeAll(registrationList.getToRemoveList());
 		}
 		
 		
@@ -1176,25 +1176,25 @@ public class ChangeRequestJDBCTemplateDAO extends BcexBaseDAOImpl implements Cha
 	
 	}
 	
-	protected ChangeRequest removeRegisterationList(ChangeRequest changeRequest, Map<String,Object> options){
+	protected ChangeRequest removeRegistrationList(ChangeRequest changeRequest, Map<String,Object> options){
 	
 	
-		SmartList<Registeration> registerationList = changeRequest.getRegisterationList();
-		if(registerationList == null){
+		SmartList<Registration> registrationList = changeRequest.getRegistrationList();
+		if(registrationList == null){
 			return changeRequest;
 		}	
 	
-		SmartList<Registeration> toRemoveRegisterationList = registerationList.getToRemoveList();
+		SmartList<Registration> toRemoveRegistrationList = registrationList.getToRemoveList();
 		
-		if(toRemoveRegisterationList == null){
+		if(toRemoveRegistrationList == null){
 			return changeRequest;
 		}
-		if(toRemoveRegisterationList.isEmpty()){
+		if(toRemoveRegistrationList.isEmpty()){
 			return changeRequest;// Does this mean delete all from the parent object?
 		}
 		//Call DAO to remove the list
 		
-		getRegisterationDAO().removeRegisterationList(toRemoveRegisterationList,options);
+		getRegistrationDAO().removeRegistrationList(toRemoveRegistrationList,options);
 		
 		return changeRequest;
 	
@@ -1343,7 +1343,7 @@ public class ChangeRequestJDBCTemplateDAO extends BcexBaseDAOImpl implements Cha
 
 	public ChangeRequest present(ChangeRequest changeRequest,Map<String, Object> options){
 	
-		presentRegisterationList(changeRequest,options);
+		presentRegistrationList(changeRequest,options);
 		presentStartExamList(changeRequest,options);
 		presentAnswerQuestionList(changeRequest,options);
 
@@ -1352,20 +1352,20 @@ public class ChangeRequestJDBCTemplateDAO extends BcexBaseDAOImpl implements Cha
 	}
 		
 	//Using java8 feature to reduce the code significantly
- 	protected ChangeRequest presentRegisterationList(
+ 	protected ChangeRequest presentRegistrationList(
 			ChangeRequest changeRequest,
 			Map<String, Object> options) {
 
-		SmartList<Registeration> registerationList = changeRequest.getRegisterationList();		
-				SmartList<Registeration> newList= presentSubList(changeRequest.getId(),
-				registerationList,
+		SmartList<Registration> registrationList = changeRequest.getRegistrationList();		
+				SmartList<Registration> newList= presentSubList(changeRequest.getId(),
+				registrationList,
 				options,
-				getRegisterationDAO()::countRegisterationByChangeRequest,
-				getRegisterationDAO()::findRegisterationByChangeRequest
+				getRegistrationDAO()::countRegistrationByChangeRequest,
+				getRegistrationDAO()::findRegistrationByChangeRequest
 				);
 
 		
-		changeRequest.setRegisterationList(newList);
+		changeRequest.setRegistrationList(newList);
 		
 
 		return changeRequest;
@@ -1413,7 +1413,7 @@ public class ChangeRequestJDBCTemplateDAO extends BcexBaseDAOImpl implements Cha
 		
 
 	
-    public SmartList<ChangeRequest> requestCandidateChangeRequestForRegisteration(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception {
+    public SmartList<ChangeRequest> requestCandidateChangeRequestForRegistration(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception {
         // NOTE: by default, ignore owner info, just return all by filter key.
 		// You need override this method if you have different candidate-logic
 		return findAllCandidateByFilter(ChangeRequestTable.COLUMN_NAME, filterKey, pageNo, pageSize, getChangeRequestMapper());
@@ -1443,25 +1443,25 @@ public class ChangeRequestJDBCTemplateDAO extends BcexBaseDAOImpl implements Cha
 	}
 	
 	
-	// 需要一个加载引用我的对象的enhance方法:Registeration的changeRequest的RegisterationList
-	public SmartList<Registeration> loadOurRegisterationList(BcexUserContext userContext, List<ChangeRequest> us, Map<String,Object> options) throws Exception{
+	// 需要一个加载引用我的对象的enhance方法:Registration的changeRequest的RegistrationList
+	public SmartList<Registration> loadOurRegistrationList(BcexUserContext userContext, List<ChangeRequest> us, Map<String,Object> options) throws Exception{
 		if (us == null || us.isEmpty()){
 			return new SmartList<>();
 		}
 		Set<String> ids = us.stream().map(it->it.getId()).collect(Collectors.toSet());
 		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(Registeration.CHANGE_REQUEST_PROPERTY, ids.toArray(new String[ids.size()]));
-		SmartList<Registeration> loadedObjs = userContext.getDAOGroup().getRegisterationDAO().findRegisterationWithKey(key, options);
-		Map<String, List<Registeration>> loadedMap = loadedObjs.stream().collect(Collectors.groupingBy(it->it.getChangeRequest().getId()));
+		key.put(Registration.CHANGE_REQUEST_PROPERTY, ids.toArray(new String[ids.size()]));
+		SmartList<Registration> loadedObjs = userContext.getDAOGroup().getRegistrationDAO().findRegistrationWithKey(key, options);
+		Map<String, List<Registration>> loadedMap = loadedObjs.stream().collect(Collectors.groupingBy(it->it.getChangeRequest().getId()));
 		us.forEach(it->{
 			String id = it.getId();
-			List<Registeration> loadedList = loadedMap.get(id);
+			List<Registration> loadedList = loadedMap.get(id);
 			if (loadedList == null || loadedList.isEmpty()) {
 				return;
 			}
-			SmartList<Registeration> loadedSmartList = new SmartList<>();
+			SmartList<Registration> loadedSmartList = new SmartList<>();
 			loadedSmartList.addAll(loadedList);
-			it.setRegisterationList(loadedSmartList);
+			it.setRegistrationList(loadedSmartList);
 		});
 		return loadedObjs;
 	}

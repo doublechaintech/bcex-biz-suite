@@ -19,15 +19,15 @@ public class ExamRankingTable{
 	public static final String TABLE_NAME="exam_ranking_data";
 	static final String COLUMN_ID = "id";
 	static final String COLUMN_NAME = "name";
-	static final String COLUMN_AVARTA = "avarta";
+	static final String COLUMN_AVATAR = "avatar";
 	static final String COLUMN_PLATFORM = "platform";
 	static final String COLUMN_VERSION = "version";
  
 	public static final String []ALL_CLOUMNS = {COLUMN_ID, 
-		COLUMN_NAME, COLUMN_AVARTA, COLUMN_PLATFORM, 
+		COLUMN_NAME, COLUMN_AVATAR, COLUMN_PLATFORM, 
 		COLUMN_VERSION};
 	public static final String []NORMAL_CLOUMNS = {
-		COLUMN_NAME, COLUMN_AVARTA, COLUMN_PLATFORM
+		COLUMN_NAME, COLUMN_AVATAR, COLUMN_PLATFORM
 		};
 	
 	

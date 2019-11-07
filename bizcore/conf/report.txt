@@ -1,9 +1,8 @@
-@warning object definition: registeration: word 'registeration' seems not found in library
-@warning registeration.avarta: word 'avarta' seems not found in library
+@warning wechat_user.avarta: word 'avarta' seems not found in library
 
 
 
-=================Execute Report (Model Time 191107T1634) @Thu Nov 07 16:35:11 CST 2019, 30 objects and 213 fields===========================
+=================Execute Report (Model Time 191107T1853) @Thu Nov 07 18:57:36 CST 2019, 31 objects and 220 fields===========================
 
 
 
@@ -34,13 +33,13 @@ Info: Add virtual field [change_requests(es)] to <platform>
 	change_request.platform
 
 
- processing: registeration
+ processing: registration
 
 
- processing: registeration.change_request.change_request
+ processing: registration.change_request.change_request
 
-Info: Add virtual field [registerations(es)] to <change_request>
-	registeration.change_request
+Info: Add virtual field [registrations(es)] to <change_request>
+	registration.change_request
 
 
  processing: start_exam
@@ -116,6 +115,15 @@ Info: Add virtual field [answers(es)] to <question>
 
 Info: Add virtual field [wechat_users(es)] to <platform>
 	wechat_user.platform
+
+
+ processing: wechat_login_info
+
+
+ processing: wechat_login_info.wechat_user.wechat_user
+
+Info: Add virtual field [wechat_login_infos(es)] to <wechat_user>
+	wechat_login_info.wechat_user
 
 
  processing: exam
@@ -208,18 +216,18 @@ change_request{
 		int	version('2147483647'), verb: false, required: true;
 	}
 	references field(3){
-		registerationList	change_request(__no_group)--change_request;
+		registrationList	change_request(__no_group)--change_request;
 		startExamList	change_request(__no_group)--change_request;
 		answerQuestionList	change_request(__no_group)--change_request;
 	}
 } depth=2; isRoot = false
 
-registeration{
+registration{
 	fields(5){
 		string	id('ABCD'), verb: false, required: true;
 		string	nick_name('豆豆鬼'), verb: false, required: true;
-		string_image	avarta('share.jpg'), verb: false, required: true;
-		change_request	change_request('$(object)'), verb: false, required: true, referenceBy: registerationList;
+		string_image	avatar('share.jpg'), verb: false, required: true;
+		change_request	change_request('$(object)'), verb: false, required: true, referenceBy: registrationList;
 		int	version('2147483647'), verb: false, required: true;
 	}
 	references field(0){
@@ -289,7 +297,7 @@ exam_ranking{
 	fields(5){
 		string	id('ABCD'), verb: false, required: true;
 		string	name('张喜来**'), verb: false, required: true;
-		string_image	avarta('wechat.jpg'), verb: false, required: true;
+		string_image	avatar('wechat.jpg'), verb: false, required: true;
 		platform	platform('$(object)'), verb: false, required: true, referenceBy: examRankingList;
 		int	version('2147483647'), verb: false, required: true;
 	}
@@ -318,12 +326,27 @@ wechat_user{
 		platform	platform('$(object)'), verb: false, required: true, referenceBy: wechatUserList;
 		int	version('2147483647'), verb: false, required: true;
 	}
-	references field(3){
+	references field(4){
 		answerQuestionList	user(__no_group)--user;
+		wechatLoginInfoList	wechat_user(__no_group)--wechat_user;
 		examList	user(__no_group)--user;
 		faultAnswerList	user(__no_group)--user;
 	}
 } depth=1; isRoot = false
+
+wechat_login_info{
+	fields(7){
+		string	id('ABCD'), verb: false, required: true;
+		wechat_user	wechat_user('$(object)'), verb: false, required: true, referenceBy: wechatLoginInfoList;
+		string	app_id('user123'), verb: false, required: true;
+		string	open_id('user123'), verb: false, required: true;
+		string	session_key('session123'), verb: false, required: true;
+		date_time_update	last_update_time('updateTime()'), verb: false, required: true;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(0){
+	}
+} depth=2; isRoot = false
 
 exam{
 	fields(7){
@@ -412,18 +435,18 @@ change_request{
 		int	version('2147483647'), verb: false, required: true;
 	}
 	references field(3){
-		registerationList	change_request(__no_group)--change_request;
+		registrationList	change_request(__no_group)--change_request;
 		startExamList	change_request(__no_group)--change_request;
 		answerQuestionList	change_request(__no_group)--change_request;
 	}
 } depth=2; isRoot = false
 
-registeration{
+registration{
 	fields(5){
 		string	id('ABCD'), verb: false, required: true;
 		string	nick_name('豆豆鬼'), verb: false, required: true;
-		string_image	avarta('share.jpg'), verb: false, required: true;
-		change_request	change_request('$(object)'), verb: false, required: true, referenceBy: registerationList;
+		string_image	avatar('share.jpg'), verb: false, required: true;
+		change_request	change_request('$(object)'), verb: false, required: true, referenceBy: registrationList;
 		int	version('2147483647'), verb: false, required: true;
 	}
 	references field(0){
@@ -493,7 +516,7 @@ exam_ranking{
 	fields(5){
 		string	id('ABCD'), verb: false, required: true;
 		string	name('张喜来**'), verb: false, required: true;
-		string_image	avarta('wechat.jpg'), verb: false, required: true;
+		string_image	avatar('wechat.jpg'), verb: false, required: true;
 		platform	platform('$(object)'), verb: false, required: true, referenceBy: examRankingList;
 		int	version('2147483647'), verb: false, required: true;
 	}
@@ -522,12 +545,27 @@ wechat_user{
 		platform	platform('$(object)'), verb: false, required: true, referenceBy: wechatUserList;
 		int	version('2147483647'), verb: false, required: true;
 	}
-	references field(3){
+	references field(4){
 		answerQuestionList	user(__no_group)--user;
+		wechatLoginInfoList	wechat_user(__no_group)--wechat_user;
 		examList	user(__no_group)--user;
 		faultAnswerList	user(__no_group)--user;
 	}
 } depth=1; isRoot = false
+
+wechat_login_info{
+	fields(7){
+		string	id('ABCD'), verb: false, required: true;
+		wechat_user	wechat_user('$(object)'), verb: false, required: true, referenceBy: wechatLoginInfoList;
+		string	app_id('user123'), verb: false, required: true;
+		string	open_id('user123'), verb: false, required: true;
+		string	session_key('session123'), verb: false, required: true;
+		date_time_update	last_update_time('updateTime()'), verb: false, required: true;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(0){
+	}
+} depth=2; isRoot = false
 
 exam{
 	fields(7){

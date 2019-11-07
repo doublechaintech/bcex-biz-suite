@@ -53,7 +53,7 @@ class WechatUserProfile extends Component {
   render() {
     // eslint-disable-next-line max-len
     const  wechatUser = this.props.wechatUser;
-    const { id,displayName, answerQuestionCount, examCount, faultAnswerCount } = wechatUser
+    const { id,displayName, answerQuestionCount, wechatLoginInfoCount, examCount, faultAnswerCount } = wechatUser
     const  returnURL = `/wechatUser/${id}/dashboard`
     const cardsData = {cardsName:"微信用户",cardsFor: "wechatUser",cardsSource: wechatUser,displayName,returnURL,
   		subItems: [

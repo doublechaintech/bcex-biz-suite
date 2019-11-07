@@ -157,7 +157,7 @@ class ChangeRequestDashboard extends Component {
 
   render() {
     // eslint-disable-next-line max-len
-    const { id,displayName, registerationListMetaInfo, startExamListMetaInfo, answerQuestionListMetaInfo, registerationCount, startExamCount, answerQuestionCount } = this.props.changeRequest
+    const { id,displayName, registrationListMetaInfo, startExamListMetaInfo, answerQuestionListMetaInfo, registrationCount, startExamCount, answerQuestionCount } = this.props.changeRequest
     if(!this.props.changeRequest.class){
       return null
     }
@@ -166,7 +166,7 @@ class ChangeRequestDashboard extends Component {
     const cardsData = {cardsName:"变更请求",cardsFor: "changeRequest",
     	cardsSource: this.props.changeRequest,returnURL,displayName,
   		subItems: [
-{name: 'registerationList', displayName:'在注册',type:'registeration',count:registerationCount,addFunction: true, role: 'registeration', metaInfo: registerationListMetaInfo, renderItem: GlobalComponents.RegisterationBase.renderItemOfList},
+{name: 'registrationList', displayName:'登记',type:'registration',count:registrationCount,addFunction: true, role: 'registration', metaInfo: registrationListMetaInfo, renderItem: GlobalComponents.RegistrationBase.renderItemOfList},
 {name: 'startExamList', displayName:'开始考试',type:'startExam',count:startExamCount,addFunction: true, role: 'startExam', metaInfo: startExamListMetaInfo, renderItem: GlobalComponents.StartExamBase.renderItemOfList},
 {name: 'answerQuestionList', displayName:'回答问题',type:'answerQuestion',count:answerQuestionCount,addFunction: true, role: 'answerQuestion', metaInfo: answerQuestionListMetaInfo, renderItem: GlobalComponents.AnswerQuestionBase.renderItemOfList},
     

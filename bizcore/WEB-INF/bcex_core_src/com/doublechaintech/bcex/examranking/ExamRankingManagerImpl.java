@@ -161,7 +161,7 @@ public class ExamRankingManagerImpl extends CustomBcexCheckerManager implements 
  	
 
 
-	public ExamRanking createExamRanking(BcexUserContext userContext,String name, String avarta, String platformId) throws Exception
+	public ExamRanking createExamRanking(BcexUserContext userContext,String name, String avatar, String platformId) throws Exception
 	{
 		
 		
@@ -169,7 +169,7 @@ public class ExamRankingManagerImpl extends CustomBcexCheckerManager implements 
 		
 
 		checkerOf(userContext).checkNameOfExamRanking(name);
-		checkerOf(userContext).checkAvartaOfExamRanking(avarta);
+		checkerOf(userContext).checkAvatarOfExamRanking(avatar);
 	
 		checkerOf(userContext).throwExceptionIfHasErrors(ExamRankingManagerException.class);
 
@@ -177,7 +177,7 @@ public class ExamRankingManagerImpl extends CustomBcexCheckerManager implements 
 		ExamRanking examRanking=createNewExamRanking();	
 
 		examRanking.setName(name);
-		examRanking.setAvarta(avarta);
+		examRanking.setAvatar(avatar);
 			
 		Platform platform = loadPlatform(userContext, platformId,emptyOptions());
 		examRanking.setPlatform(platform);
@@ -210,8 +210,8 @@ public class ExamRankingManagerImpl extends CustomBcexCheckerManager implements 
 		if(ExamRanking.NAME_PROPERTY.equals(property)){
 			checkerOf(userContext).checkNameOfExamRanking(parseString(newValueExpr));
 		}
-		if(ExamRanking.AVARTA_PROPERTY.equals(property)){
-			checkerOf(userContext).checkAvartaOfExamRanking(parseString(newValueExpr));
+		if(ExamRanking.AVATAR_PROPERTY.equals(property)){
+			checkerOf(userContext).checkAvatarOfExamRanking(parseString(newValueExpr));
 		}		
 
 		

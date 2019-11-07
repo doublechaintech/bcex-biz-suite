@@ -14,7 +14,7 @@ public class ExamRankingMapper extends BaseRowMapper<ExamRanking>{
 		 		
  		setId(examRanking, rs, rowNumber); 		
  		setName(examRanking, rs, rowNumber); 		
- 		setAvarta(examRanking, rs, rowNumber); 		
+ 		setAvatar(examRanking, rs, rowNumber); 		
  		setPlatform(examRanking, rs, rowNumber); 		
  		setVersion(examRanking, rs, rowNumber);
 
@@ -49,16 +49,16 @@ public class ExamRankingMapper extends BaseRowMapper<ExamRanking>{
 		examRanking.setName(name);
 	}
 		
-	protected void setAvarta(ExamRanking examRanking, ResultSet rs, int rowNumber) throws SQLException{
+	protected void setAvatar(ExamRanking examRanking, ResultSet rs, int rowNumber) throws SQLException{
 	
 		//there will be issue when the type is double/int/long
-		String avarta = rs.getString(ExamRankingTable.COLUMN_AVARTA);
-		if(avarta == null){
+		String avatar = rs.getString(ExamRankingTable.COLUMN_AVATAR);
+		if(avatar == null){
 			//do nothing when nothing found in database
 			return;
 		}
 		
-		examRanking.setAvarta(avarta);
+		examRanking.setAvatar(avatar);
 	}
 		 		
  	protected void setPlatform(ExamRanking examRanking, ResultSet rs, int rowNumber) throws SQLException{

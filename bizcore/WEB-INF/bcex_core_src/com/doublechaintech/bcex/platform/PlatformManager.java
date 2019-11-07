@@ -67,9 +67,9 @@ public interface PlatformManager{
 
 	*/
 
-	//public  ExamRankingManager getExamRankingManager(BcexUserContext userContext, String platformId, String name, String avarta ,String [] tokensExpr)  throws Exception;
+	//public  ExamRankingManager getExamRankingManager(BcexUserContext userContext, String platformId, String name, String avatar ,String [] tokensExpr)  throws Exception;
 	
-	public  Platform addExamRanking(BcexUserContext userContext, String platformId, String name, String avarta , String [] tokensExpr)  throws Exception;
+	public  Platform addExamRanking(BcexUserContext userContext, String platformId, String name, String avatar , String [] tokensExpr)  throws Exception;
 	public  Platform removeExamRanking(BcexUserContext userContext, String platformId, String examRankingId, int examRankingVersion,String [] tokensExpr)  throws Exception;
 	public  Platform updateExamRanking(BcexUserContext userContext, String platformId, String examRankingId, int examRankingVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
 

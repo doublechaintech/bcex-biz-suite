@@ -23,7 +23,7 @@ const testValues = {
 */
 
 const imageKeys = [
-  'avarta',
+  'avatar',
 ]
 
 
@@ -177,10 +177,10 @@ class ExamRankingCreateFormBody extends Component {
 
               <Col lg={6} md={12} sm={24}>
                 <ImageComponent
-                  buttonTitle="Avarta"
+                  buttonTitle="头像"
                   handlePreview={this.handlePreview}
-                  handleChange={event => this.handleChange(event, 'avarta')}
-                  fileList={convertedImagesValues.avarta}
+                  handleChange={event => this.handleChange(event, 'avatar')}
+                  fileList={convertedImagesValues.avatar}
                 />
               </Col>
 

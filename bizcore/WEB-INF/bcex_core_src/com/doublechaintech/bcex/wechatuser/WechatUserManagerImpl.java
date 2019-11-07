@@ -20,6 +20,7 @@ import com.doublechaintech.bcex.BcexUserContext;
 import com.doublechaintech.bcex.BcexCheckerManager;
 import com.doublechaintech.bcex.CustomBcexCheckerManager;
 
+import com.doublechaintech.bcex.wechatlogininfo.WechatLoginInfo;
 import com.doublechaintech.bcex.platform.Platform;
 import com.doublechaintech.bcex.faultanswer.FaultAnswer;
 import com.doublechaintech.bcex.answerquestion.AnswerQuestion;
@@ -161,6 +162,10 @@ public class WechatUserManagerImpl extends CustomBcexCheckerManager implements W
 		addAction(userContext, wechatUser, tokens,"wechat_user.removeAnswerQuestion","removeAnswerQuestion","removeAnswerQuestion/"+wechatUser.getId()+"/","answerQuestionList","primary");
 		addAction(userContext, wechatUser, tokens,"wechat_user.updateAnswerQuestion","updateAnswerQuestion","updateAnswerQuestion/"+wechatUser.getId()+"/","answerQuestionList","primary");
 		addAction(userContext, wechatUser, tokens,"wechat_user.copyAnswerQuestionFrom","copyAnswerQuestionFrom","copyAnswerQuestionFrom/"+wechatUser.getId()+"/","answerQuestionList","primary");
+		addAction(userContext, wechatUser, tokens,"wechat_user.addWechatLoginInfo","addWechatLoginInfo","addWechatLoginInfo/"+wechatUser.getId()+"/","wechatLoginInfoList","primary");
+		addAction(userContext, wechatUser, tokens,"wechat_user.removeWechatLoginInfo","removeWechatLoginInfo","removeWechatLoginInfo/"+wechatUser.getId()+"/","wechatLoginInfoList","primary");
+		addAction(userContext, wechatUser, tokens,"wechat_user.updateWechatLoginInfo","updateWechatLoginInfo","updateWechatLoginInfo/"+wechatUser.getId()+"/","wechatLoginInfoList","primary");
+		addAction(userContext, wechatUser, tokens,"wechat_user.copyWechatLoginInfoFrom","copyWechatLoginInfoFrom","copyWechatLoginInfoFrom/"+wechatUser.getId()+"/","wechatLoginInfoList","primary");
 		addAction(userContext, wechatUser, tokens,"wechat_user.addExam","addExam","addExam/"+wechatUser.getId()+"/","examList","primary");
 		addAction(userContext, wechatUser, tokens,"wechat_user.removeExam","removeExam","removeExam/"+wechatUser.getId()+"/","examList","primary");
 		addAction(userContext, wechatUser, tokens,"wechat_user.updateExam","updateExam","updateExam/"+wechatUser.getId()+"/","examList","primary");
@@ -335,6 +340,7 @@ public class WechatUserManagerImpl extends CustomBcexCheckerManager implements W
 	protected Map<String,Object> viewTokens(){
 		return tokens().allTokens()
 		.sortAnswerQuestionListWith("id","desc")
+		.sortWechatLoginInfoListWith("id","desc")
 		.sortExamListWith("id","desc")
 		.sortFaultAnswerListWith("id","desc")
 		.analyzeAllLists().done();
@@ -478,6 +484,42 @@ public class WechatUserManagerImpl extends CustomBcexCheckerManager implements W
 				wechatUserDaoOf(userContext).planToRemoveAnswerQuestionListWithChangeRequest(wechatUser, changeRequestId, this.emptyOptions());
 
 				wechatUser = saveWechatUser(userContext, wechatUser, tokens().withAnswerQuestionList().done());
+				return wechatUser;
+			}
+	}
+	//disconnect WechatUser with app_id in WechatLoginInfo
+	protected WechatUser breakWithWechatLoginInfoByAppId(BcexUserContext userContext, String wechatUserId, String appIdId,  String [] tokensExpr)
+		 throws Exception{
+			
+			//TODO add check code here
+			
+			WechatUser wechatUser = loadWechatUser(userContext, wechatUserId, allTokens());
+
+			synchronized(wechatUser){ 
+				//Will be good when the thread loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				
+				wechatUserDaoOf(userContext).planToRemoveWechatLoginInfoListWithAppId(wechatUser, appIdId, this.emptyOptions());
+
+				wechatUser = saveWechatUser(userContext, wechatUser, tokens().withWechatLoginInfoList().done());
+				return wechatUser;
+			}
+	}
+	//disconnect WechatUser with open_id in WechatLoginInfo
+	protected WechatUser breakWithWechatLoginInfoByOpenId(BcexUserContext userContext, String wechatUserId, String openIdId,  String [] tokensExpr)
+		 throws Exception{
+			
+			//TODO add check code here
+			
+			WechatUser wechatUser = loadWechatUser(userContext, wechatUserId, allTokens());
+
+			synchronized(wechatUser){ 
+				//Will be good when the thread loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				
+				wechatUserDaoOf(userContext).planToRemoveWechatLoginInfoListWithOpenId(wechatUser, openIdId, this.emptyOptions());
+
+				wechatUser = saveWechatUser(userContext, wechatUser, tokens().withWechatLoginInfoList().done());
 				return wechatUser;
 			}
 	}
@@ -761,6 +803,255 @@ public class WechatUserManagerImpl extends CustomBcexCheckerManager implements W
 			answerQuestion.changeProperty(property, newValueExpr);
 			
 			wechatUser = saveWechatUser(userContext, wechatUser, tokens().withAnswerQuestionList().done());
+			return present(userContext,wechatUser, mergedAllTokens(tokensExpr));
+		}
+
+	}
+	/*
+
+	*/
+	
+
+
+
+	protected void checkParamsForAddingWechatLoginInfo(BcexUserContext userContext, String wechatUserId, String appId, String openId, String sessionKey,String [] tokensExpr) throws Exception{
+		
+				checkerOf(userContext).checkIdOfWechatUser(wechatUserId);
+
+		
+		checkerOf(userContext).checkAppIdOfWechatLoginInfo(appId);
+		
+		checkerOf(userContext).checkOpenIdOfWechatLoginInfo(openId);
+		
+		checkerOf(userContext).checkSessionKeyOfWechatLoginInfo(sessionKey);
+	
+		checkerOf(userContext).throwExceptionIfHasErrors(WechatUserManagerException.class);
+
+	
+	}
+	public  WechatUser addWechatLoginInfo(BcexUserContext userContext, String wechatUserId, String appId, String openId, String sessionKey, String [] tokensExpr) throws Exception
+	{	
+		
+		checkParamsForAddingWechatLoginInfo(userContext,wechatUserId,appId, openId, sessionKey,tokensExpr);
+		
+		WechatLoginInfo wechatLoginInfo = createWechatLoginInfo(userContext,appId, openId, sessionKey);
+		
+		WechatUser wechatUser = loadWechatUser(userContext, wechatUserId, allTokens());
+		synchronized(wechatUser){ 
+			//Will be good when the wechatUser loaded from this JVM process cache.
+			//Also good when there is a RAM based DAO implementation
+			wechatUser.addWechatLoginInfo( wechatLoginInfo );		
+			wechatUser = saveWechatUser(userContext, wechatUser, tokens().withWechatLoginInfoList().done());
+			
+			userContext.getManagerGroup().getWechatLoginInfoManager().onNewInstanceCreated(userContext, wechatLoginInfo);
+			return present(userContext,wechatUser, mergedAllTokens(tokensExpr));
+		}
+	}
+	protected void checkParamsForUpdatingWechatLoginInfoProperties(BcexUserContext userContext, String wechatUserId,String id,String appId,String openId,String sessionKey,String [] tokensExpr) throws Exception {
+		
+		checkerOf(userContext).checkIdOfWechatUser(wechatUserId);
+		checkerOf(userContext).checkIdOfWechatLoginInfo(id);
+		
+		checkerOf(userContext).checkAppIdOfWechatLoginInfo( appId);
+		checkerOf(userContext).checkOpenIdOfWechatLoginInfo( openId);
+		checkerOf(userContext).checkSessionKeyOfWechatLoginInfo( sessionKey);
+
+		checkerOf(userContext).throwExceptionIfHasErrors(WechatUserManagerException.class);
+		
+	}
+	public  WechatUser updateWechatLoginInfoProperties(BcexUserContext userContext, String wechatUserId, String id,String appId,String openId,String sessionKey, String [] tokensExpr) throws Exception
+	{	
+		checkParamsForUpdatingWechatLoginInfoProperties(userContext,wechatUserId,id,appId,openId,sessionKey,tokensExpr);
+
+		Map<String, Object> options = tokens()
+				.allTokens()
+				//.withWechatLoginInfoListList()
+				.searchWechatLoginInfoListWith(WechatLoginInfo.ID_PROPERTY, "is", id).done();
+		
+		WechatUser wechatUserToUpdate = loadWechatUser(userContext, wechatUserId, options);
+		
+		if(wechatUserToUpdate.getWechatLoginInfoList().isEmpty()){
+			throw new WechatUserManagerException("WechatLoginInfo is NOT FOUND with id: '"+id+"'");
+		}
+		
+		WechatLoginInfo item = wechatUserToUpdate.getWechatLoginInfoList().first();
+		
+		item.updateAppId( appId );
+		item.updateOpenId( openId );
+		item.updateSessionKey( sessionKey );
+
+		
+		//checkParamsForAddingWechatLoginInfo(userContext,wechatUserId,name, code, used,tokensExpr);
+		WechatUser wechatUser = saveWechatUser(userContext, wechatUserToUpdate, tokens().withWechatLoginInfoList().done());
+		synchronized(wechatUser){ 
+			return present(userContext,wechatUser, mergedAllTokens(tokensExpr));
+		}
+	}
+	
+	
+	protected WechatLoginInfo createWechatLoginInfo(BcexUserContext userContext, String appId, String openId, String sessionKey) throws Exception{
+
+		WechatLoginInfo wechatLoginInfo = new WechatLoginInfo();
+		
+		
+		wechatLoginInfo.setAppId(appId);		
+		wechatLoginInfo.setOpenId(openId);		
+		wechatLoginInfo.setSessionKey(sessionKey);		
+		wechatLoginInfo.setLastUpdateTime(userContext.now());
+	
+		
+		return wechatLoginInfo;
+	
+		
+	}
+	
+	protected WechatLoginInfo createIndexedWechatLoginInfo(String id, int version){
+
+		WechatLoginInfo wechatLoginInfo = new WechatLoginInfo();
+		wechatLoginInfo.setId(id);
+		wechatLoginInfo.setVersion(version);
+		return wechatLoginInfo;			
+		
+	}
+	
+	protected void checkParamsForRemovingWechatLoginInfoList(BcexUserContext userContext, String wechatUserId, 
+			String wechatLoginInfoIds[],String [] tokensExpr) throws Exception {
+		
+		checkerOf(userContext).checkIdOfWechatUser(wechatUserId);
+		for(String wechatLoginInfoIdItem: wechatLoginInfoIds){
+			checkerOf(userContext).checkIdOfWechatLoginInfo(wechatLoginInfoIdItem);
+		}
+		
+		checkerOf(userContext).throwExceptionIfHasErrors(WechatUserManagerException.class);
+		
+	}
+	public  WechatUser removeWechatLoginInfoList(BcexUserContext userContext, String wechatUserId, 
+			String wechatLoginInfoIds[],String [] tokensExpr) throws Exception{
+			
+			checkParamsForRemovingWechatLoginInfoList(userContext, wechatUserId,  wechatLoginInfoIds, tokensExpr);
+			
+			
+			WechatUser wechatUser = loadWechatUser(userContext, wechatUserId, allTokens());
+			synchronized(wechatUser){ 
+				//Will be good when the wechatUser loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				wechatUserDaoOf(userContext).planToRemoveWechatLoginInfoList(wechatUser, wechatLoginInfoIds, allTokens());
+				wechatUser = saveWechatUser(userContext, wechatUser, tokens().withWechatLoginInfoList().done());
+				deleteRelationListInGraph(userContext, wechatUser.getWechatLoginInfoList());
+				return present(userContext,wechatUser, mergedAllTokens(tokensExpr));
+			}
+	}
+	
+	protected void checkParamsForRemovingWechatLoginInfo(BcexUserContext userContext, String wechatUserId, 
+		String wechatLoginInfoId, int wechatLoginInfoVersion,String [] tokensExpr) throws Exception{
+		
+		checkerOf(userContext).checkIdOfWechatUser( wechatUserId);
+		checkerOf(userContext).checkIdOfWechatLoginInfo(wechatLoginInfoId);
+		checkerOf(userContext).checkVersionOfWechatLoginInfo(wechatLoginInfoVersion);
+		checkerOf(userContext).throwExceptionIfHasErrors(WechatUserManagerException.class);
+	
+	}
+	public  WechatUser removeWechatLoginInfo(BcexUserContext userContext, String wechatUserId, 
+		String wechatLoginInfoId, int wechatLoginInfoVersion,String [] tokensExpr) throws Exception{
+		
+		checkParamsForRemovingWechatLoginInfo(userContext,wechatUserId, wechatLoginInfoId, wechatLoginInfoVersion,tokensExpr);
+		
+		WechatLoginInfo wechatLoginInfo = createIndexedWechatLoginInfo(wechatLoginInfoId, wechatLoginInfoVersion);
+		WechatUser wechatUser = loadWechatUser(userContext, wechatUserId, allTokens());
+		synchronized(wechatUser){ 
+			//Will be good when the wechatUser loaded from this JVM process cache.
+			//Also good when there is a RAM based DAO implementation
+			wechatUser.removeWechatLoginInfo( wechatLoginInfo );		
+			wechatUser = saveWechatUser(userContext, wechatUser, tokens().withWechatLoginInfoList().done());
+			deleteRelationInGraph(userContext, wechatLoginInfo);
+			return present(userContext,wechatUser, mergedAllTokens(tokensExpr));
+		}
+		
+		
+	}
+	protected void checkParamsForCopyingWechatLoginInfo(BcexUserContext userContext, String wechatUserId, 
+		String wechatLoginInfoId, int wechatLoginInfoVersion,String [] tokensExpr) throws Exception{
+		
+		checkerOf(userContext).checkIdOfWechatUser( wechatUserId);
+		checkerOf(userContext).checkIdOfWechatLoginInfo(wechatLoginInfoId);
+		checkerOf(userContext).checkVersionOfWechatLoginInfo(wechatLoginInfoVersion);
+		checkerOf(userContext).throwExceptionIfHasErrors(WechatUserManagerException.class);
+	
+	}
+	public  WechatUser copyWechatLoginInfoFrom(BcexUserContext userContext, String wechatUserId, 
+		String wechatLoginInfoId, int wechatLoginInfoVersion,String [] tokensExpr) throws Exception{
+		
+		checkParamsForCopyingWechatLoginInfo(userContext,wechatUserId, wechatLoginInfoId, wechatLoginInfoVersion,tokensExpr);
+		
+		WechatLoginInfo wechatLoginInfo = createIndexedWechatLoginInfo(wechatLoginInfoId, wechatLoginInfoVersion);
+		WechatUser wechatUser = loadWechatUser(userContext, wechatUserId, allTokens());
+		synchronized(wechatUser){ 
+			//Will be good when the wechatUser loaded from this JVM process cache.
+			//Also good when there is a RAM based DAO implementation
+			
+			wechatLoginInfo.updateLastUpdateTime(userContext.now());
+			
+			wechatUser.copyWechatLoginInfoFrom( wechatLoginInfo );		
+			wechatUser = saveWechatUser(userContext, wechatUser, tokens().withWechatLoginInfoList().done());
+			
+			userContext.getManagerGroup().getWechatLoginInfoManager().onNewInstanceCreated(userContext, (WechatLoginInfo)wechatUser.getFlexiableObjects().get(BaseEntity.COPIED_CHILD));
+			return present(userContext,wechatUser, mergedAllTokens(tokensExpr));
+		}
+		
+	}
+	
+	protected void checkParamsForUpdatingWechatLoginInfo(BcexUserContext userContext, String wechatUserId, String wechatLoginInfoId, int wechatLoginInfoVersion, String property, String newValueExpr,String [] tokensExpr) throws Exception{
+		
+
+		
+		checkerOf(userContext).checkIdOfWechatUser(wechatUserId);
+		checkerOf(userContext).checkIdOfWechatLoginInfo(wechatLoginInfoId);
+		checkerOf(userContext).checkVersionOfWechatLoginInfo(wechatLoginInfoVersion);
+		
+
+		if(WechatLoginInfo.APP_ID_PROPERTY.equals(property)){
+			checkerOf(userContext).checkAppIdOfWechatLoginInfo(parseString(newValueExpr));
+		}
+		
+		if(WechatLoginInfo.OPEN_ID_PROPERTY.equals(property)){
+			checkerOf(userContext).checkOpenIdOfWechatLoginInfo(parseString(newValueExpr));
+		}
+		
+		if(WechatLoginInfo.SESSION_KEY_PROPERTY.equals(property)){
+			checkerOf(userContext).checkSessionKeyOfWechatLoginInfo(parseString(newValueExpr));
+		}
+		
+	
+		checkerOf(userContext).throwExceptionIfHasErrors(WechatUserManagerException.class);
+	
+	}
+	
+	public  WechatUser updateWechatLoginInfo(BcexUserContext userContext, String wechatUserId, String wechatLoginInfoId, int wechatLoginInfoVersion, String property, String newValueExpr,String [] tokensExpr)
+			throws Exception{
+		
+		checkParamsForUpdatingWechatLoginInfo(userContext, wechatUserId, wechatLoginInfoId, wechatLoginInfoVersion, property, newValueExpr,  tokensExpr);
+		
+		Map<String,Object> loadTokens = this.tokens().withWechatLoginInfoList().searchWechatLoginInfoListWith(WechatLoginInfo.ID_PROPERTY, "eq", wechatLoginInfoId).done();
+		
+		
+		
+		WechatUser wechatUser = loadWechatUser(userContext, wechatUserId, loadTokens);
+		
+		synchronized(wechatUser){ 
+			//Will be good when the wechatUser loaded from this JVM process cache.
+			//Also good when there is a RAM based DAO implementation
+			//wechatUser.removeWechatLoginInfo( wechatLoginInfo );	
+			//make changes to AcceleraterAccount.
+			WechatLoginInfo wechatLoginInfoIndex = createIndexedWechatLoginInfo(wechatLoginInfoId, wechatLoginInfoVersion);
+		
+			WechatLoginInfo wechatLoginInfo = wechatUser.findTheWechatLoginInfo(wechatLoginInfoIndex);
+			if(wechatLoginInfo == null){
+				throw new WechatUserManagerException(wechatLoginInfo+" is NOT FOUND" );
+			}
+			
+			wechatLoginInfo.changeProperty(property, newValueExpr);
+			wechatLoginInfo.updateLastUpdateTime(userContext.now());
+			wechatUser = saveWechatUser(userContext, wechatUser, tokens().withWechatLoginInfoList().done());
 			return present(userContext,wechatUser, mergedAllTokens(tokensExpr));
 		}
 

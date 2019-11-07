@@ -186,6 +186,75 @@ export default {
 
 
 
+    *addWechatLoginInfo({ payload }, { call, put }) {
+      const userContext = null
+      const {WechatUserService} = GlobalComponents;
+
+      const { id, role, parameters, continueNext } = payload
+      console.log('get form parameters', parameters)
+      const data = yield call(WechatUserService.addWechatLoginInfo, id, parameters)
+      if (hasError(data)) {
+        handleServerError(data)
+        return
+      }
+      const newPlayload = { ...payload, ...data }
+      yield put({ type: 'updateState', payload: newPlayload })
+      // yield put(routerRedux.push(`/wechatUser/${id}/list/${role}CreateForm'))
+      notifySuccess(userContext)
+      if (continueNext) {
+        return
+      }
+      const partialList = true
+      const newState = {...data, partialList}
+      const location = { pathname: `/wechatUser/${id}/list/WechatLoginInfoList/微信登录信息+${appLocaleName(userContext,'List')}`, state: newState }
+      yield put(routerRedux.push(location))
+    },
+    *updateWechatLoginInfo({ payload }, { call, put }) {
+      const userContext = null
+      const {WechatUserService} = GlobalComponents;      
+      const { id, type, parameters, continueNext, selectedRows, currentUpdateIndex } = payload
+      console.log('get form parameters', parameters)
+      const data = yield call(WechatUserService.updateWechatLoginInfo, id, parameters)
+      if (hasError(data)) {
+        handleServerError(data)
+        return
+      }
+      const partialList = true
+      
+      const newPlayload = { ...payload, ...data, selectedRows, currentUpdateIndex,partialList }
+      yield put({ type: 'updateState', payload: newPlayload })
+      notifySuccess(userContext)
+      
+      if (continueNext) {
+        return
+      }
+      const location = { pathname: `/wechatUser/${id}/list/WechatLoginInfoList/微信登录信息列表`, state: newPlayload }
+      yield put(routerRedux.push(location))
+    },
+    *gotoNextWechatLoginInfoUpdateRow({ payload }, { call, put }) {
+      const { id, type, parameters, continueNext, selectedRows, currentUpdateIndex } = payload
+      const newPlayload = { ...payload, selectedRows, currentUpdateIndex }
+      yield put({ type: 'updateState', payload: newPlayload })
+    },
+    *removeWechatLoginInfoList({ payload }, { call, put }) {
+     const userContext = null
+      const {WechatUserService} = GlobalComponents; 
+      const { id, role, parameters, continueNext } = payload
+      console.log('get form parameters', parameters)
+      const data = yield call(WechatUserService.removeWechatLoginInfoList, id, parameters)
+      if (hasError(data)) {
+        handleServerError(data)
+        return
+      }
+      const newPlayload = { ...payload, ...data }
+
+      yield put({ type: 'updateState', payload: newPlayload })
+      notifySuccess(userContext)
+    },
+
+
+
+
     *addExam({ payload }, { call, put }) {
       const userContext = null
       const {WechatUserService} = GlobalComponents;

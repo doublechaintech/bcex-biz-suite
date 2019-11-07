@@ -436,7 +436,7 @@ public class ExamRankingJDBCTemplateDAO extends BcexBaseDAOImpl implements ExamR
  		Object[] parameters = new Object[6];
  
  		parameters[0] = examRanking.getName();
- 		parameters[1] = examRanking.getAvarta(); 	
+ 		parameters[1] = examRanking.getAvatar(); 	
  		if(examRanking.getPlatform() != null){
  			parameters[2] = examRanking.getPlatform().getId();
  		}
@@ -454,7 +454,7 @@ public class ExamRankingJDBCTemplateDAO extends BcexBaseDAOImpl implements ExamR
 		parameters[0] =  examRanking.getId();
  
  		parameters[1] = examRanking.getName();
- 		parameters[2] = examRanking.getAvarta(); 	
+ 		parameters[2] = examRanking.getAvatar(); 	
  		if(examRanking.getPlatform() != null){
  			parameters[3] = examRanking.getPlatform().getId();
  		

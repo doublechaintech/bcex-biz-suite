@@ -22,7 +22,7 @@ public class BcexNamingServiceDAO extends CommonJDBCTemplateDAO {
 		namingTableMap.put("Platform", new String[]{"platform_data","name"});
 		namingTableMap.put("ChangeRequestType", new String[]{"change_request_type_data","name"});
 		namingTableMap.put("ChangeRequest", new String[]{"change_request_data","name"});
-		namingTableMap.put("Registeration", new String[]{"registeration_data","nick_name"});
+		namingTableMap.put("Registration", new String[]{"registration_data","nick_name"});
 		namingTableMap.put("StartExam", new String[]{"start_exam_data","nick_name"});
 		namingTableMap.put("AnswerQuestion", new String[]{"answer_question_data","nick_name"});
 		namingTableMap.put("ExamStatus", new String[]{"exam_status_data","name"});
@@ -30,6 +30,7 @@ public class BcexNamingServiceDAO extends CommonJDBCTemplateDAO {
 		namingTableMap.put("ExamRanking", new String[]{"exam_ranking_data","name"});
 		namingTableMap.put("Answer", new String[]{"answer_data","title"});
 		namingTableMap.put("WechatUser", new String[]{"wechat_user_data","name"});
+		namingTableMap.put("WechatLoginInfo", new String[]{"wechat_login_info_data","app_id"});
 		namingTableMap.put("Exam", new String[]{"exam_data","name"});
 		namingTableMap.put("UserAnswer", new String[]{"user_answer_data","topic"});
 		namingTableMap.put("FaultAnswer", new String[]{"fault_answer_data","topic"});

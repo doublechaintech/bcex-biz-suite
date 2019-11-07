@@ -16,7 +16,7 @@ import com.doublechaintech.bcex.platform.Platform;
 import com.doublechaintech.bcex.changerequesttype.ChangeRequestType;
 import com.doublechaintech.bcex.answerquestion.AnswerQuestion;
 import com.doublechaintech.bcex.startexam.StartExam;
-import com.doublechaintech.bcex.registeration.Registeration;
+import com.doublechaintech.bcex.registration.Registration;
 
 @JsonSerialize(using = ChangeRequestSerializer.class)
 public class ChangeRequest extends BaseEntity implements  java.io.Serializable{
@@ -30,7 +30,7 @@ public class ChangeRequest extends BaseEntity implements  java.io.Serializable{
 	public static final String PLATFORM_PROPERTY              = "platform"          ;
 	public static final String VERSION_PROPERTY               = "version"           ;
 
-	public static final String REGISTERATION_LIST                       = "registerationList" ;
+	public static final String REGISTRATION_LIST                        = "registrationList"  ;
 	public static final String START_EXAM_LIST                          = "startExamList"     ;
 	public static final String ANSWER_QUESTION_LIST                     = "answerQuestionList";
 
@@ -62,7 +62,7 @@ public class ChangeRequest extends BaseEntity implements  java.io.Serializable{
 	protected		int                 	mVersion            ;
 	
 	
-	protected		SmartList<Registeration>	mRegisterationList  ;
+	protected		SmartList<Registration>	mRegistrationList   ;
 	protected		SmartList<StartExam>	mStartExamList      ;
 	protected		SmartList<AnswerQuestion>	mAnswerQuestionList ;
 	
@@ -96,7 +96,7 @@ public class ChangeRequest extends BaseEntity implements  java.io.Serializable{
 		setRequestType(requestType);
 		setPlatform(platform);
 
-		this.mRegisterationList = new SmartList<Registeration>();
+		this.mRegistrationList = new SmartList<Registration>();
 		this.mStartExamList = new SmartList<StartExam>();
 		this.mAnswerQuestionList = new SmartList<AnswerQuestion>();	
 	}
@@ -184,8 +184,8 @@ public class ChangeRequest extends BaseEntity implements  java.io.Serializable{
 		if(PLATFORM_PROPERTY.equals(property)){
 			return getPlatform();
 		}
-		if(REGISTERATION_LIST.equals(property)){
-			List<BaseEntity> list = getRegisterationList().stream().map(item->item).collect(Collectors.toList());
+		if(REGISTRATION_LIST.equals(property)){
+			List<BaseEntity> list = getRegistrationList().stream().map(item->item).collect(Collectors.toList());
 			return list;
 		}
 		if(START_EXAM_LIST.equals(property)){
@@ -330,107 +330,107 @@ public class ChangeRequest extends BaseEntity implements  java.io.Serializable{
 	
 	
 
-	public  SmartList<Registeration> getRegisterationList(){
-		if(this.mRegisterationList == null){
-			this.mRegisterationList = new SmartList<Registeration>();
-			this.mRegisterationList.setListInternalName (REGISTERATION_LIST );
+	public  SmartList<Registration> getRegistrationList(){
+		if(this.mRegistrationList == null){
+			this.mRegistrationList = new SmartList<Registration>();
+			this.mRegistrationList.setListInternalName (REGISTRATION_LIST );
 			//有名字，便于做权限控制
 		}
 		
-		return this.mRegisterationList;	
+		return this.mRegistrationList;	
 	}
-	public  void setRegisterationList(SmartList<Registeration> registerationList){
-		for( Registeration registeration:registerationList){
-			registeration.setChangeRequest(this);
+	public  void setRegistrationList(SmartList<Registration> registrationList){
+		for( Registration registration:registrationList){
+			registration.setChangeRequest(this);
 		}
 
-		this.mRegisterationList = registerationList;
-		this.mRegisterationList.setListInternalName (REGISTERATION_LIST );
+		this.mRegistrationList = registrationList;
+		this.mRegistrationList.setListInternalName (REGISTRATION_LIST );
 		
 	}
 	
-	public  void addRegisteration(Registeration registeration){
-		registeration.setChangeRequest(this);
-		getRegisterationList().add(registeration);
+	public  void addRegistration(Registration registration){
+		registration.setChangeRequest(this);
+		getRegistrationList().add(registration);
 	}
-	public  void addRegisterationList(SmartList<Registeration> registerationList){
-		for( Registeration registeration:registerationList){
-			registeration.setChangeRequest(this);
+	public  void addRegistrationList(SmartList<Registration> registrationList){
+		for( Registration registration:registrationList){
+			registration.setChangeRequest(this);
 		}
-		getRegisterationList().addAll(registerationList);
+		getRegistrationList().addAll(registrationList);
 	}
-	public  void mergeRegisterationList(SmartList<Registeration> registerationList){
-		if(registerationList==null){
+	public  void mergeRegistrationList(SmartList<Registration> registrationList){
+		if(registrationList==null){
 			return;
 		}
-		if(registerationList.isEmpty()){
+		if(registrationList.isEmpty()){
 			return;
 		}
-		addRegisterationList( registerationList );
+		addRegistrationList( registrationList );
 		
 	}
-	public  Registeration removeRegisteration(Registeration registerationIndex){
+	public  Registration removeRegistration(Registration registrationIndex){
 		
-		int index = getRegisterationList().indexOf(registerationIndex);
+		int index = getRegistrationList().indexOf(registrationIndex);
         if(index < 0){
-        	String message = "Registeration("+registerationIndex.getId()+") with version='"+registerationIndex.getVersion()+"' NOT found!";
+        	String message = "Registration("+registrationIndex.getId()+") with version='"+registrationIndex.getVersion()+"' NOT found!";
             throw new IllegalStateException(message);
         }
-        Registeration registeration = getRegisterationList().get(index);        
-        // registeration.clearChangeRequest(); //disconnect with ChangeRequest
-        registeration.clearFromAll(); //disconnect with ChangeRequest
+        Registration registration = getRegistrationList().get(index);        
+        // registration.clearChangeRequest(); //disconnect with ChangeRequest
+        registration.clearFromAll(); //disconnect with ChangeRequest
 		
-		boolean result = getRegisterationList().planToRemove(registeration);
+		boolean result = getRegistrationList().planToRemove(registration);
         if(!result){
-        	String message = "Registeration("+registerationIndex.getId()+") with version='"+registerationIndex.getVersion()+"' NOT found!";
+        	String message = "Registration("+registrationIndex.getId()+") with version='"+registrationIndex.getVersion()+"' NOT found!";
             throw new IllegalStateException(message);
         }
-        return registeration;
+        return registration;
         
 	
 	}
 	//断舍离
-	public  void breakWithRegisteration(Registeration registeration){
+	public  void breakWithRegistration(Registration registration){
 		
-		if(registeration == null){
+		if(registration == null){
 			return;
 		}
-		registeration.setChangeRequest(null);
-		//getRegisterationList().remove();
+		registration.setChangeRequest(null);
+		//getRegistrationList().remove();
 	
 	}
 	
-	public  boolean hasRegisteration(Registeration registeration){
+	public  boolean hasRegistration(Registration registration){
 	
-		return getRegisterationList().contains(registeration);
+		return getRegistrationList().contains(registration);
   
 	}
 	
-	public void copyRegisterationFrom(Registeration registeration) {
+	public void copyRegistrationFrom(Registration registration) {
 
-		Registeration registerationInList = findTheRegisteration(registeration);
-		Registeration newRegisteration = new Registeration();
-		registerationInList.copyTo(newRegisteration);
-		newRegisteration.setVersion(0);//will trigger copy
-		getRegisterationList().add(newRegisteration);
-		addItemToFlexiableObject(COPIED_CHILD, newRegisteration);
+		Registration registrationInList = findTheRegistration(registration);
+		Registration newRegistration = new Registration();
+		registrationInList.copyTo(newRegistration);
+		newRegistration.setVersion(0);//will trigger copy
+		getRegistrationList().add(newRegistration);
+		addItemToFlexiableObject(COPIED_CHILD, newRegistration);
 	}
 	
-	public  Registeration findTheRegisteration(Registeration registeration){
+	public  Registration findTheRegistration(Registration registration){
 		
-		int index =  getRegisterationList().indexOf(registeration);
+		int index =  getRegistrationList().indexOf(registration);
 		//The input parameter must have the same id and version number.
 		if(index < 0){
- 			String message = "Registeration("+registeration.getId()+") with version='"+registeration.getVersion()+"' NOT found!";
+ 			String message = "Registration("+registration.getId()+") with version='"+registration.getVersion()+"' NOT found!";
 			throw new IllegalStateException(message);
 		}
 		
-		return  getRegisterationList().get(index);
+		return  getRegistrationList().get(index);
 		//Performance issue when using LinkedList, but it is almost an ArrayList for sure!
 	}
 	
-	public  void cleanUpRegisterationList(){
-		getRegisterationList().clear();
+	public  void cleanUpRegistrationList(){
+		getRegistrationList().clear();
 	}
 	
 	
@@ -662,7 +662,7 @@ public class ChangeRequest extends BaseEntity implements  java.io.Serializable{
 	public List<BaseEntity>  collectRefercencesFromLists(String internalType){
 		
 		List<BaseEntity> entityList = new ArrayList<BaseEntity>();
-		collectFromList(this, entityList, getRegisterationList(), internalType);
+		collectFromList(this, entityList, getRegistrationList(), internalType);
 		collectFromList(this, entityList, getStartExamList(), internalType);
 		collectFromList(this, entityList, getAnswerQuestionList(), internalType);
 
@@ -672,7 +672,7 @@ public class ChangeRequest extends BaseEntity implements  java.io.Serializable{
 	public  List<SmartList<?>> getAllRelatedLists() {
 		List<SmartList<?>> listOfList = new ArrayList<SmartList<?>>();
 		
-		listOfList.add( getRegisterationList());
+		listOfList.add( getRegistrationList());
 		listOfList.add( getStartExamList());
 		listOfList.add( getAnswerQuestionList());
 			
@@ -691,10 +691,10 @@ public class ChangeRequest extends BaseEntity implements  java.io.Serializable{
 		appendKeyValuePair(result, REQUEST_TYPE_PROPERTY, getRequestType());
 		appendKeyValuePair(result, PLATFORM_PROPERTY, getPlatform());
 		appendKeyValuePair(result, VERSION_PROPERTY, getVersion());
-		appendKeyValuePair(result, REGISTERATION_LIST, getRegisterationList());
-		if(!getRegisterationList().isEmpty()){
-			appendKeyValuePair(result, "registerationCount", getRegisterationList().getTotalCount());
-			appendKeyValuePair(result, "registerationCurrentPageNumber", getRegisterationList().getCurrentPageNumber());
+		appendKeyValuePair(result, REGISTRATION_LIST, getRegistrationList());
+		if(!getRegistrationList().isEmpty()){
+			appendKeyValuePair(result, "registrationCount", getRegistrationList().getTotalCount());
+			appendKeyValuePair(result, "registrationCurrentPageNumber", getRegistrationList().getCurrentPageNumber());
 		}
 		appendKeyValuePair(result, START_EXAM_LIST, getStartExamList());
 		if(!getStartExamList().isEmpty()){
@@ -727,7 +727,7 @@ public class ChangeRequest extends BaseEntity implements  java.io.Serializable{
 			dest.setRequestType(getRequestType());
 			dest.setPlatform(getPlatform());
 			dest.setVersion(getVersion());
-			dest.setRegisterationList(getRegisterationList());
+			dest.setRegistrationList(getRegistrationList());
 			dest.setStartExamList(getStartExamList());
 			dest.setAnswerQuestionList(getAnswerQuestionList());
 
@@ -750,7 +750,7 @@ public class ChangeRequest extends BaseEntity implements  java.io.Serializable{
 			dest.mergeRequestType(getRequestType());
 			dest.mergePlatform(getPlatform());
 			dest.mergeVersion(getVersion());
-			dest.mergeRegisterationList(getRegisterationList());
+			dest.mergeRegistrationList(getRegistrationList());
 			dest.mergeStartExamList(getStartExamList());
 			dest.mergeAnswerQuestionList(getAnswerQuestionList());
 

@@ -33,6 +33,7 @@ const renderReferenceCell=defaultRenderReferenceCell
 const menuData = {menuName:"微信用户", menuFor: "wechatUser",
   		subItems: [
   {name: 'answerQuestionList', displayName:'回答问题', icon:'question',readPermission: false,createPermission: false,deletePermission: false,updatePermission: false,executionPermission: false, viewGroup: '__no_group'},
+  {name: 'wechatLoginInfoList', displayName:'微信登录信息', icon:'info',readPermission: false,createPermission: false,deletePermission: false,updatePermission: false,executionPermission: false, viewGroup: '__no_group'},
   {name: 'examList', displayName:'考试', icon:'500px',readPermission: false,createPermission: false,deletePermission: false,updatePermission: false,executionPermission: false, viewGroup: '__no_group'},
   {name: 'faultAnswerList', displayName:'错误的答案', icon:'500px',readPermission: false,createPermission: false,deletePermission: false,updatePermission: false,executionPermission: false, viewGroup: '__no_group'},
   

@@ -460,17 +460,17 @@ public class PlatformForm extends BaseForm {
 	}
 
 
-	public PlatformForm avartaFieldForExamRanking(String parameterName, String initValue){
-		FormField field =  avartaFromExamRanking(parameterName, initValue);		
+	public PlatformForm avatarFieldForExamRanking(String parameterName, String initValue){
+		FormField field =  avatarFromExamRanking(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public PlatformForm avartaFieldForExamRanking(String initValue){
-		return avartaFieldForExamRanking("avarta",initValue);
+	public PlatformForm avatarFieldForExamRanking(String initValue){
+		return avatarFieldForExamRanking("avatar",initValue);
 	}
-	public PlatformForm avartaFieldForExamRanking(){
-		return avartaFieldForExamRanking("avarta","");
+	public PlatformForm avatarFieldForExamRanking(){
+		return avatarFieldForExamRanking("avatar","");
 	}
 
 

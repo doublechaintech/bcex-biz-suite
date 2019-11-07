@@ -13,9 +13,9 @@ import com.doublechaintech.bcex.changerequesttype.ChangeRequestTypeTokens;
 import com.doublechaintech.bcex.changerequest.ChangeRequest;
 import com.doublechaintech.bcex.changerequest.ChangeRequestDAO;
 import com.doublechaintech.bcex.changerequest.ChangeRequestTokens;
-import com.doublechaintech.bcex.registeration.Registeration;
-import com.doublechaintech.bcex.registeration.RegisterationDAO;
-import com.doublechaintech.bcex.registeration.RegisterationTokens;
+import com.doublechaintech.bcex.registration.Registration;
+import com.doublechaintech.bcex.registration.RegistrationDAO;
+import com.doublechaintech.bcex.registration.RegistrationTokens;
 import com.doublechaintech.bcex.startexam.StartExam;
 import com.doublechaintech.bcex.startexam.StartExamDAO;
 import com.doublechaintech.bcex.startexam.StartExamTokens;
@@ -37,6 +37,9 @@ import com.doublechaintech.bcex.answer.AnswerTokens;
 import com.doublechaintech.bcex.wechatuser.WechatUser;
 import com.doublechaintech.bcex.wechatuser.WechatUserDAO;
 import com.doublechaintech.bcex.wechatuser.WechatUserTokens;
+import com.doublechaintech.bcex.wechatlogininfo.WechatLoginInfo;
+import com.doublechaintech.bcex.wechatlogininfo.WechatLoginInfoDAO;
+import com.doublechaintech.bcex.wechatlogininfo.WechatLoginInfoTokens;
 import com.doublechaintech.bcex.exam.Exam;
 import com.doublechaintech.bcex.exam.ExamDAO;
 import com.doublechaintech.bcex.exam.ExamTokens;
@@ -103,7 +106,7 @@ public class DAOGroup {
 
 	protected ChangeRequestDAO changeRequestDAO;
 
-	protected RegisterationDAO registerationDAO;
+	protected RegistrationDAO registrationDAO;
 
 	protected StartExamDAO startExamDAO;
 
@@ -118,6 +121,8 @@ public class DAOGroup {
 	protected AnswerDAO answerDAO;
 
 	protected WechatUserDAO wechatUserDAO;
+
+	protected WechatLoginInfoDAO wechatLoginInfoDAO;
 
 	protected ExamDAO examDAO;
 
@@ -183,11 +188,11 @@ public class DAOGroup {
 	}
 
 
-	public RegisterationDAO getRegisterationDAO(){
-		return this.registerationDAO;
+	public RegistrationDAO getRegistrationDAO(){
+		return this.registrationDAO;
 	}
-	public void setRegisterationDAO(RegisterationDAO dao){
-		this.registerationDAO = dao;
+	public void setRegistrationDAO(RegistrationDAO dao){
+		this.registrationDAO = dao;
 	}
 
 
@@ -244,6 +249,14 @@ public class DAOGroup {
 	}
 	public void setWechatUserDAO(WechatUserDAO dao){
 		this.wechatUserDAO = dao;
+	}
+
+
+	public WechatLoginInfoDAO getWechatLoginInfoDAO(){
+		return this.wechatLoginInfoDAO;
+	}
+	public void setWechatLoginInfoDAO(WechatLoginInfoDAO dao){
+		this.wechatLoginInfoDAO = dao;
 	}
 
 
@@ -466,22 +479,22 @@ public class DAOGroup {
 			}
 		});
 
-		internalLoaderMap.put("Registeration", new BasicLoader() {
+		internalLoaderMap.put("Registration", new BasicLoader() {
 			@Override
 			public BaseEntity loadBasicData(DAOGroup daoGoup, String id) throws Exception {
-				return daoGoup.getRegisterationDAO().load(id, RegisterationTokens.withoutLists());
+				return daoGoup.getRegistrationDAO().load(id, RegistrationTokens.withoutLists());
 			}
 			@Override
 			public void enhanceList(DAOGroup daoGoup, List list) throws Exception {
-				daoGoup.getRegisterationDAO().enhanceList((List<Registeration>)list);
+				daoGoup.getRegistrationDAO().enhanceList((List<Registration>)list);
 			}
 			@Override
 			public BaseEntity loadBasicDataWithToken(DAOGroup daoGoup, String id, Map<String, Object> tokens) throws Exception {
-				return daoGoup.getRegisterationDAO().load(id, tokens);
+				return daoGoup.getRegistrationDAO().load(id, tokens);
 			}
 			@Override
 			public BaseEntity present(DAOGroup daoGoup, BaseEntity data, Map<String, Object> tokens) throws Exception {
-				return daoGoup.getRegisterationDAO().present((Registeration)data, tokens);
+				return daoGoup.getRegistrationDAO().present((Registration)data, tokens);
 			}
 		});
 
@@ -615,6 +628,25 @@ public class DAOGroup {
 			@Override
 			public BaseEntity present(DAOGroup daoGoup, BaseEntity data, Map<String, Object> tokens) throws Exception {
 				return daoGoup.getWechatUserDAO().present((WechatUser)data, tokens);
+			}
+		});
+
+		internalLoaderMap.put("WechatLoginInfo", new BasicLoader() {
+			@Override
+			public BaseEntity loadBasicData(DAOGroup daoGoup, String id) throws Exception {
+				return daoGoup.getWechatLoginInfoDAO().load(id, WechatLoginInfoTokens.withoutLists());
+			}
+			@Override
+			public void enhanceList(DAOGroup daoGoup, List list) throws Exception {
+				daoGoup.getWechatLoginInfoDAO().enhanceList((List<WechatLoginInfo>)list);
+			}
+			@Override
+			public BaseEntity loadBasicDataWithToken(DAOGroup daoGoup, String id, Map<String, Object> tokens) throws Exception {
+				return daoGoup.getWechatLoginInfoDAO().load(id, tokens);
+			}
+			@Override
+			public BaseEntity present(DAOGroup daoGoup, BaseEntity data, Map<String, Object> tokens) throws Exception {
+				return daoGoup.getWechatLoginInfoDAO().present((WechatLoginInfo)data, tokens);
 			}
 		});
 

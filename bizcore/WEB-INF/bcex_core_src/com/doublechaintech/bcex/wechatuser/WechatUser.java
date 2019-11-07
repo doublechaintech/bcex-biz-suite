@@ -12,6 +12,7 @@ import com.doublechaintech.bcex.SmartList;
 import com.doublechaintech.bcex.KeyValuePair;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.doublechaintech.bcex.wechatlogininfo.WechatLoginInfo;
 import com.doublechaintech.bcex.platform.Platform;
 import com.doublechaintech.bcex.faultanswer.FaultAnswer;
 import com.doublechaintech.bcex.answerquestion.AnswerQuestion;
@@ -29,6 +30,7 @@ public class WechatUser extends BaseEntity implements  java.io.Serializable{
 	public static final String VERSION_PROPERTY               = "version"           ;
 
 	public static final String ANSWER_QUESTION_LIST                     = "answerQuestionList";
+	public static final String WECHAT_LOGIN_INFO_LIST                   = "wechatLoginInfoList";
 	public static final String EXAM_LIST                                = "examList"          ;
 	public static final String FAULT_ANSWER_LIST                        = "faultAnswerList"   ;
 
@@ -60,6 +62,7 @@ public class WechatUser extends BaseEntity implements  java.io.Serializable{
 	
 	
 	protected		SmartList<AnswerQuestion>	mAnswerQuestionList ;
+	protected		SmartList<WechatLoginInfo>	mWechatLoginInfoList;
 	protected		SmartList<Exam>     	mExamList           ;
 	protected		SmartList<FaultAnswer>	mFaultAnswerList    ;
 	
@@ -92,6 +95,7 @@ public class WechatUser extends BaseEntity implements  java.io.Serializable{
 		setPlatform(platform);
 
 		this.mAnswerQuestionList = new SmartList<AnswerQuestion>();
+		this.mWechatLoginInfoList = new SmartList<WechatLoginInfo>();
 		this.mExamList = new SmartList<Exam>();
 		this.mFaultAnswerList = new SmartList<FaultAnswer>();	
 	}
@@ -178,6 +182,10 @@ public class WechatUser extends BaseEntity implements  java.io.Serializable{
 		}
 		if(ANSWER_QUESTION_LIST.equals(property)){
 			List<BaseEntity> list = getAnswerQuestionList().stream().map(item->item).collect(Collectors.toList());
+			return list;
+		}
+		if(WECHAT_LOGIN_INFO_LIST.equals(property)){
+			List<BaseEntity> list = getWechatLoginInfoList().stream().map(item->item).collect(Collectors.toList());
 			return list;
 		}
 		if(EXAM_LIST.equals(property)){
@@ -402,6 +410,113 @@ public class WechatUser extends BaseEntity implements  java.io.Serializable{
 	
 	public  void cleanUpAnswerQuestionList(){
 		getAnswerQuestionList().clear();
+	}
+	
+	
+	
+
+
+	public  SmartList<WechatLoginInfo> getWechatLoginInfoList(){
+		if(this.mWechatLoginInfoList == null){
+			this.mWechatLoginInfoList = new SmartList<WechatLoginInfo>();
+			this.mWechatLoginInfoList.setListInternalName (WECHAT_LOGIN_INFO_LIST );
+			//有名字，便于做权限控制
+		}
+		
+		return this.mWechatLoginInfoList;	
+	}
+	public  void setWechatLoginInfoList(SmartList<WechatLoginInfo> wechatLoginInfoList){
+		for( WechatLoginInfo wechatLoginInfo:wechatLoginInfoList){
+			wechatLoginInfo.setWechatUser(this);
+		}
+
+		this.mWechatLoginInfoList = wechatLoginInfoList;
+		this.mWechatLoginInfoList.setListInternalName (WECHAT_LOGIN_INFO_LIST );
+		
+	}
+	
+	public  void addWechatLoginInfo(WechatLoginInfo wechatLoginInfo){
+		wechatLoginInfo.setWechatUser(this);
+		getWechatLoginInfoList().add(wechatLoginInfo);
+	}
+	public  void addWechatLoginInfoList(SmartList<WechatLoginInfo> wechatLoginInfoList){
+		for( WechatLoginInfo wechatLoginInfo:wechatLoginInfoList){
+			wechatLoginInfo.setWechatUser(this);
+		}
+		getWechatLoginInfoList().addAll(wechatLoginInfoList);
+	}
+	public  void mergeWechatLoginInfoList(SmartList<WechatLoginInfo> wechatLoginInfoList){
+		if(wechatLoginInfoList==null){
+			return;
+		}
+		if(wechatLoginInfoList.isEmpty()){
+			return;
+		}
+		addWechatLoginInfoList( wechatLoginInfoList );
+		
+	}
+	public  WechatLoginInfo removeWechatLoginInfo(WechatLoginInfo wechatLoginInfoIndex){
+		
+		int index = getWechatLoginInfoList().indexOf(wechatLoginInfoIndex);
+        if(index < 0){
+        	String message = "WechatLoginInfo("+wechatLoginInfoIndex.getId()+") with version='"+wechatLoginInfoIndex.getVersion()+"' NOT found!";
+            throw new IllegalStateException(message);
+        }
+        WechatLoginInfo wechatLoginInfo = getWechatLoginInfoList().get(index);        
+        // wechatLoginInfo.clearWechatUser(); //disconnect with WechatUser
+        wechatLoginInfo.clearFromAll(); //disconnect with WechatUser
+		
+		boolean result = getWechatLoginInfoList().planToRemove(wechatLoginInfo);
+        if(!result){
+        	String message = "WechatLoginInfo("+wechatLoginInfoIndex.getId()+") with version='"+wechatLoginInfoIndex.getVersion()+"' NOT found!";
+            throw new IllegalStateException(message);
+        }
+        return wechatLoginInfo;
+        
+	
+	}
+	//断舍离
+	public  void breakWithWechatLoginInfo(WechatLoginInfo wechatLoginInfo){
+		
+		if(wechatLoginInfo == null){
+			return;
+		}
+		wechatLoginInfo.setWechatUser(null);
+		//getWechatLoginInfoList().remove();
+	
+	}
+	
+	public  boolean hasWechatLoginInfo(WechatLoginInfo wechatLoginInfo){
+	
+		return getWechatLoginInfoList().contains(wechatLoginInfo);
+  
+	}
+	
+	public void copyWechatLoginInfoFrom(WechatLoginInfo wechatLoginInfo) {
+
+		WechatLoginInfo wechatLoginInfoInList = findTheWechatLoginInfo(wechatLoginInfo);
+		WechatLoginInfo newWechatLoginInfo = new WechatLoginInfo();
+		wechatLoginInfoInList.copyTo(newWechatLoginInfo);
+		newWechatLoginInfo.setVersion(0);//will trigger copy
+		getWechatLoginInfoList().add(newWechatLoginInfo);
+		addItemToFlexiableObject(COPIED_CHILD, newWechatLoginInfo);
+	}
+	
+	public  WechatLoginInfo findTheWechatLoginInfo(WechatLoginInfo wechatLoginInfo){
+		
+		int index =  getWechatLoginInfoList().indexOf(wechatLoginInfo);
+		//The input parameter must have the same id and version number.
+		if(index < 0){
+ 			String message = "WechatLoginInfo("+wechatLoginInfo.getId()+") with version='"+wechatLoginInfo.getVersion()+"' NOT found!";
+			throw new IllegalStateException(message);
+		}
+		
+		return  getWechatLoginInfoList().get(index);
+		//Performance issue when using LinkedList, but it is almost an ArrayList for sure!
+	}
+	
+	public  void cleanUpWechatLoginInfoList(){
+		getWechatLoginInfoList().clear();
 	}
 	
 	
@@ -633,6 +748,7 @@ public class WechatUser extends BaseEntity implements  java.io.Serializable{
 		
 		List<BaseEntity> entityList = new ArrayList<BaseEntity>();
 		collectFromList(this, entityList, getAnswerQuestionList(), internalType);
+		collectFromList(this, entityList, getWechatLoginInfoList(), internalType);
 		collectFromList(this, entityList, getExamList(), internalType);
 		collectFromList(this, entityList, getFaultAnswerList(), internalType);
 
@@ -643,6 +759,7 @@ public class WechatUser extends BaseEntity implements  java.io.Serializable{
 		List<SmartList<?>> listOfList = new ArrayList<SmartList<?>>();
 		
 		listOfList.add( getAnswerQuestionList());
+		listOfList.add( getWechatLoginInfoList());
 		listOfList.add( getExamList());
 		listOfList.add( getFaultAnswerList());
 			
@@ -664,6 +781,11 @@ public class WechatUser extends BaseEntity implements  java.io.Serializable{
 		if(!getAnswerQuestionList().isEmpty()){
 			appendKeyValuePair(result, "answerQuestionCount", getAnswerQuestionList().getTotalCount());
 			appendKeyValuePair(result, "answerQuestionCurrentPageNumber", getAnswerQuestionList().getCurrentPageNumber());
+		}
+		appendKeyValuePair(result, WECHAT_LOGIN_INFO_LIST, getWechatLoginInfoList());
+		if(!getWechatLoginInfoList().isEmpty()){
+			appendKeyValuePair(result, "wechatLoginInfoCount", getWechatLoginInfoList().getTotalCount());
+			appendKeyValuePair(result, "wechatLoginInfoCurrentPageNumber", getWechatLoginInfoList().getCurrentPageNumber());
 		}
 		appendKeyValuePair(result, EXAM_LIST, getExamList());
 		if(!getExamList().isEmpty()){
@@ -696,6 +818,7 @@ public class WechatUser extends BaseEntity implements  java.io.Serializable{
 			dest.setPlatform(getPlatform());
 			dest.setVersion(getVersion());
 			dest.setAnswerQuestionList(getAnswerQuestionList());
+			dest.setWechatLoginInfoList(getWechatLoginInfoList());
 			dest.setExamList(getExamList());
 			dest.setFaultAnswerList(getFaultAnswerList());
 
@@ -718,6 +841,7 @@ public class WechatUser extends BaseEntity implements  java.io.Serializable{
 			dest.mergePlatform(getPlatform());
 			dest.mergeVersion(getVersion());
 			dest.mergeAnswerQuestionList(getAnswerQuestionList());
+			dest.mergeWechatLoginInfoList(getWechatLoginInfoList());
 			dest.mergeExamList(getExamList());
 			dest.mergeFaultAnswerList(getFaultAnswerList());
 

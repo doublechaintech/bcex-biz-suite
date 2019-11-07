@@ -52,22 +52,22 @@ const transferToAnotherPlatform = (id, parameters) => {
 
 
 
-const addRegisteration = (targetObjectId, parameters) => {
-  const url = `${PREFIX}changeRequestManager/addRegisteration/changeRequestId/nickName/avarta/tokensExpr/`
+const addRegistration = (targetObjectId, parameters) => {
+  const url = `${PREFIX}changeRequestManager/addRegistration/changeRequestId/nickName/avatar/tokensExpr/`
   const changeRequestId = targetObjectId
   const requestParameters = { ...parameters, changeRequestId, tokensExpr: 'none' }
   return postForm({ url,requestParameters})
 }
 
-const updateRegisteration = (targetObjectId, parameters) => {
-  const url = `${PREFIX}changeRequestManager/updateRegisterationProperties/changeRequestId/id/nickName/avarta/tokensExpr/`
+const updateRegistration = (targetObjectId, parameters) => {
+  const url = `${PREFIX}changeRequestManager/updateRegistrationProperties/changeRequestId/id/nickName/avatar/tokensExpr/`
   const changeRequestId = targetObjectId
   const requestParameters = { ...parameters, changeRequestId, tokensExpr: 'none' }
   return postForm({ url,requestParameters})
 }
 
-const removeRegisterationList = (targetObjectId, parameters) => {
-  const url = `${PREFIX}changeRequestManager/removeRegisterationList/changeRequestId/registerationIds/tokensExpr/`
+const removeRegistrationList = (targetObjectId, parameters) => {
+  const url = `${PREFIX}changeRequestManager/removeRegistrationList/changeRequestId/registrationIds/tokensExpr/`
   const requestParameters = { ...parameters, changeRequestId: targetObjectId, tokensExpr: 'none' }
   return postForm({ url,requestParameters})
 }
@@ -146,13 +146,13 @@ const  processRequest = (data) => {
 
 const ChangeRequestService = { view,
   load,
-  addRegisteration,
+  addRegistration,
   addStartExam,
   addAnswerQuestion,
-  updateRegisteration,
+  updateRegistration,
   updateStartExam,
   updateAnswerQuestion,
-  removeRegisterationList,
+  removeRegistrationList,
   removeStartExamList,
   removeAnswerQuestionList,
   requestCandidateRequestType,

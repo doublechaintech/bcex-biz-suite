@@ -59,6 +59,28 @@ const removeAnswerQuestionList = (targetObjectId, parameters) => {
 
 
 
+const addWechatLoginInfo = (targetObjectId, parameters) => {
+  const url = `${PREFIX}wechatUserManager/addWechatLoginInfo/wechatUserId/appId/openId/sessionKey/tokensExpr/`
+  const wechatUserId = targetObjectId
+  const requestParameters = { ...parameters, wechatUserId, tokensExpr: 'none' }
+  return postForm({ url,requestParameters})
+}
+
+const updateWechatLoginInfo = (targetObjectId, parameters) => {
+  const url = `${PREFIX}wechatUserManager/updateWechatLoginInfoProperties/wechatUserId/id/appId/openId/sessionKey/tokensExpr/`
+  const wechatUserId = targetObjectId
+  const requestParameters = { ...parameters, wechatUserId, tokensExpr: 'none' }
+  return postForm({ url,requestParameters})
+}
+
+const removeWechatLoginInfoList = (targetObjectId, parameters) => {
+  const url = `${PREFIX}wechatUserManager/removeWechatLoginInfoList/wechatUserId/wechatLoginInfoIds/tokensExpr/`
+  const requestParameters = { ...parameters, wechatUserId: targetObjectId, tokensExpr: 'none' }
+  return postForm({ url,requestParameters})
+}
+
+
+
 const addExam = (targetObjectId, parameters) => {
   const url = `${PREFIX}wechatUserManager/addExam/wechatUserId/name/statusId/score/tokensExpr/`
   const wechatUserId = targetObjectId
@@ -132,12 +154,15 @@ const  processRequest = (data) => {
 const WechatUserService = { view,
   load,
   addAnswerQuestion,
+  addWechatLoginInfo,
   addExam,
   addFaultAnswer,
   updateAnswerQuestion,
+  updateWechatLoginInfo,
   updateExam,
   updateFaultAnswer,
   removeAnswerQuestionList,
+  removeWechatLoginInfoList,
   removeExamList,
   removeFaultAnswerList,
   requestCandidatePlatform,

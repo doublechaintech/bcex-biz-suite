@@ -20,6 +20,7 @@ import com.doublechaintech.bcex.MultipleAccessKey;
 import com.doublechaintech.bcex.BcexUserContext;
 
 
+import com.doublechaintech.bcex.wechatlogininfo.WechatLoginInfo;
 import com.doublechaintech.bcex.platform.Platform;
 import com.doublechaintech.bcex.faultanswer.FaultAnswer;
 import com.doublechaintech.bcex.answerquestion.AnswerQuestion;
@@ -28,6 +29,7 @@ import com.doublechaintech.bcex.exam.Exam;
 import com.doublechaintech.bcex.faultanswer.FaultAnswerDAO;
 import com.doublechaintech.bcex.exam.ExamDAO;
 import com.doublechaintech.bcex.platform.PlatformDAO;
+import com.doublechaintech.bcex.wechatlogininfo.WechatLoginInfoDAO;
 import com.doublechaintech.bcex.answerquestion.AnswerQuestionDAO;
 
 
@@ -66,6 +68,25 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
  		}
  		
 	 	return this.answerQuestionDAO;
+ 	}	
+ 	
+			
+		
+	
+  	private  WechatLoginInfoDAO  wechatLoginInfoDAO;
+ 	public void setWechatLoginInfoDAO(WechatLoginInfoDAO pWechatLoginInfoDAO){
+ 	
+ 		if(pWechatLoginInfoDAO == null){
+ 			throw new IllegalStateException("Do not try to set wechatLoginInfoDAO to null.");
+ 		}
+	 	this.wechatLoginInfoDAO = pWechatLoginInfoDAO;
+ 	}
+ 	public WechatLoginInfoDAO getWechatLoginInfoDAO(){
+ 		if(this.wechatLoginInfoDAO == null){
+ 			throw new IllegalStateException("The wechatLoginInfoDAO is not configured yet, please config it some where.");
+ 		}
+ 		
+	 	return this.wechatLoginInfoDAO;
  	}	
  	
 			
@@ -160,6 +181,13 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
  		
  		if(isSaveAnswerQuestionListEnabled(options)){
  			for(AnswerQuestion item: newWechatUser.getAnswerQuestionList()){
+ 				item.setVersion(0);
+ 			}
+ 		}
+		
+ 		
+ 		if(isSaveWechatLoginInfoListEnabled(options)){
+ 			for(WechatLoginInfo item: newWechatUser.getWechatLoginInfoList()){
  				item.setVersion(0);
  			}
  		}
@@ -298,6 +326,20 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
  	
 		
 	
+	protected boolean isExtractWechatLoginInfoListEnabled(Map<String,Object> options){		
+ 		return checkOptions(options,WechatUserTokens.WECHAT_LOGIN_INFO_LIST);
+ 	}
+ 	protected boolean isAnalyzeWechatLoginInfoListEnabled(Map<String,Object> options){		 		
+ 		return WechatUserTokens.of(options).analyzeWechatLoginInfoListEnabled();
+ 	}
+	
+	protected boolean isSaveWechatLoginInfoListEnabled(Map<String,Object> options){
+		return checkOptions(options, WechatUserTokens.WECHAT_LOGIN_INFO_LIST);
+		
+ 	}
+ 	
+		
+	
 	protected boolean isExtractExamListEnabled(Map<String,Object> options){		
  		return checkOptions(options,WechatUserTokens.EXAM_LIST);
  	}
@@ -361,6 +403,14 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
  		}	
  		if(isAnalyzeAnswerQuestionListEnabled(loadOptions)){
 	 		analyzeAnswerQuestionList(wechatUser, loadOptions);
+ 		}
+ 		
+		
+		if(isExtractWechatLoginInfoListEnabled(loadOptions)){
+	 		extractWechatLoginInfoList(wechatUser, loadOptions);
+ 		}	
+ 		if(isAnalyzeWechatLoginInfoListEnabled(loadOptions)){
+	 		analyzeWechatLoginInfoList(wechatUser, loadOptions);
  		}
  		
 		
@@ -448,6 +498,56 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
 		SmartList<AnswerQuestion> answerQuestionList = wechatUser.getAnswerQuestionList();
 		if(answerQuestionList != null){
 			getAnswerQuestionDAO().analyzeAnswerQuestionByUser(answerQuestionList, wechatUser.getId(), options);
+			
+		}
+		
+		return wechatUser;
+	
+	}	
+	
+		
+	protected void enhanceWechatLoginInfoList(SmartList<WechatLoginInfo> wechatLoginInfoList,Map<String,Object> options){
+		//extract multiple list from difference sources
+		//Trying to use a single SQL to extract all data from database and do the work in java side, java is easier to scale to N ndoes;
+	}
+	
+	protected WechatUser extractWechatLoginInfoList(WechatUser wechatUser, Map<String,Object> options){
+		
+		
+		if(wechatUser == null){
+			return null;
+		}
+		if(wechatUser.getId() == null){
+			return wechatUser;
+		}
+
+		
+		
+		SmartList<WechatLoginInfo> wechatLoginInfoList = getWechatLoginInfoDAO().findWechatLoginInfoByWechatUser(wechatUser.getId(),options);
+		if(wechatLoginInfoList != null){
+			enhanceWechatLoginInfoList(wechatLoginInfoList,options);
+			wechatUser.setWechatLoginInfoList(wechatLoginInfoList);
+		}
+		
+		return wechatUser;
+	
+	}	
+	
+	protected WechatUser analyzeWechatLoginInfoList(WechatUser wechatUser, Map<String,Object> options){
+		
+		
+		if(wechatUser == null){
+			return null;
+		}
+		if(wechatUser.getId() == null){
+			return wechatUser;
+		}
+
+		
+		
+		SmartList<WechatLoginInfo> wechatLoginInfoList = wechatUser.getWechatLoginInfoList();
+		if(wechatLoginInfoList != null){
+			getWechatLoginInfoDAO().analyzeWechatLoginInfoByWechatUser(wechatLoginInfoList, wechatUser.getId(), options);
 			
 		}
 		
@@ -798,6 +898,13 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
 	 		
  		}		
 		
+		if(isSaveWechatLoginInfoListEnabled(options)){
+	 		saveWechatLoginInfoList(wechatUser, options);
+	 		//removeWechatLoginInfoList(wechatUser, options);
+	 		//Not delete the record
+	 		
+ 		}		
+		
 		if(isSaveExamListEnabled(options)){
 	 		saveExamList(wechatUser, options);
 	 		//removeExamList(wechatUser, options);
@@ -952,6 +1059,122 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
 		key.put(AnswerQuestion.CHANGE_REQUEST_PROPERTY, changeRequestId);
 		
 		int count = getAnswerQuestionDAO().countAnswerQuestionWithKey(key, options);
+		return count;
+	}
+	
+	public WechatUser planToRemoveWechatLoginInfoList(WechatUser wechatUser, String wechatLoginInfoIds[], Map<String,Object> options)throws Exception{
+	
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(WechatLoginInfo.WECHAT_USER_PROPERTY, wechatUser.getId());
+		key.put(WechatLoginInfo.ID_PROPERTY, wechatLoginInfoIds);
+		
+		SmartList<WechatLoginInfo> externalWechatLoginInfoList = getWechatLoginInfoDAO().
+				findWechatLoginInfoWithKey(key, options);
+		if(externalWechatLoginInfoList == null){
+			return wechatUser;
+		}
+		if(externalWechatLoginInfoList.isEmpty()){
+			return wechatUser;
+		}
+		
+		for(WechatLoginInfo wechatLoginInfoItem: externalWechatLoginInfoList){
+
+			wechatLoginInfoItem.clearFromAll();
+		}
+		
+		
+		SmartList<WechatLoginInfo> wechatLoginInfoList = wechatUser.getWechatLoginInfoList();		
+		wechatLoginInfoList.addAllToRemoveList(externalWechatLoginInfoList);
+		return wechatUser;	
+	
+	}
+
+
+	//disconnect WechatUser with app_id in WechatLoginInfo
+	public WechatUser planToRemoveWechatLoginInfoListWithAppId(WechatUser wechatUser, String appIdId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(WechatLoginInfo.WECHAT_USER_PROPERTY, wechatUser.getId());
+		key.put(WechatLoginInfo.APP_ID_PROPERTY, appIdId);
+		
+		SmartList<WechatLoginInfo> externalWechatLoginInfoList = getWechatLoginInfoDAO().
+				findWechatLoginInfoWithKey(key, options);
+		if(externalWechatLoginInfoList == null){
+			return wechatUser;
+		}
+		if(externalWechatLoginInfoList.isEmpty()){
+			return wechatUser;
+		}
+		
+		for(WechatLoginInfo wechatLoginInfoItem: externalWechatLoginInfoList){
+			wechatLoginInfoItem.clearAppId();
+			wechatLoginInfoItem.clearWechatUser();
+			
+		}
+		
+		
+		SmartList<WechatLoginInfo> wechatLoginInfoList = wechatUser.getWechatLoginInfoList();		
+		wechatLoginInfoList.addAllToRemoveList(externalWechatLoginInfoList);
+		return wechatUser;
+	}
+	
+	public int countWechatLoginInfoListWithAppId(String wechatUserId, String appIdId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(WechatLoginInfo.WECHAT_USER_PROPERTY, wechatUserId);
+		key.put(WechatLoginInfo.APP_ID_PROPERTY, appIdId);
+		
+		int count = getWechatLoginInfoDAO().countWechatLoginInfoWithKey(key, options);
+		return count;
+	}
+	
+	//disconnect WechatUser with open_id in WechatLoginInfo
+	public WechatUser planToRemoveWechatLoginInfoListWithOpenId(WechatUser wechatUser, String openIdId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(WechatLoginInfo.WECHAT_USER_PROPERTY, wechatUser.getId());
+		key.put(WechatLoginInfo.OPEN_ID_PROPERTY, openIdId);
+		
+		SmartList<WechatLoginInfo> externalWechatLoginInfoList = getWechatLoginInfoDAO().
+				findWechatLoginInfoWithKey(key, options);
+		if(externalWechatLoginInfoList == null){
+			return wechatUser;
+		}
+		if(externalWechatLoginInfoList.isEmpty()){
+			return wechatUser;
+		}
+		
+		for(WechatLoginInfo wechatLoginInfoItem: externalWechatLoginInfoList){
+			wechatLoginInfoItem.clearOpenId();
+			wechatLoginInfoItem.clearWechatUser();
+			
+		}
+		
+		
+		SmartList<WechatLoginInfo> wechatLoginInfoList = wechatUser.getWechatLoginInfoList();		
+		wechatLoginInfoList.addAllToRemoveList(externalWechatLoginInfoList);
+		return wechatUser;
+	}
+	
+	public int countWechatLoginInfoListWithOpenId(String wechatUserId, String openIdId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(WechatLoginInfo.WECHAT_USER_PROPERTY, wechatUserId);
+		key.put(WechatLoginInfo.OPEN_ID_PROPERTY, openIdId);
+		
+		int count = getWechatLoginInfoDAO().countWechatLoginInfoWithKey(key, options);
 		return count;
 	}
 	
@@ -1167,6 +1390,72 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
 	
 	
 		
+	protected WechatUser saveWechatLoginInfoList(WechatUser wechatUser, Map<String,Object> options){
+		
+		
+		
+		
+		SmartList<WechatLoginInfo> wechatLoginInfoList = wechatUser.getWechatLoginInfoList();
+		if(wechatLoginInfoList == null){
+			//null list means nothing
+			return wechatUser;
+		}
+		SmartList<WechatLoginInfo> mergedUpdateWechatLoginInfoList = new SmartList<WechatLoginInfo>();
+		
+		
+		mergedUpdateWechatLoginInfoList.addAll(wechatLoginInfoList); 
+		if(wechatLoginInfoList.getToRemoveList() != null){
+			//ensures the toRemoveList is not null
+			mergedUpdateWechatLoginInfoList.addAll(wechatLoginInfoList.getToRemoveList());
+			wechatLoginInfoList.removeAll(wechatLoginInfoList.getToRemoveList());
+			//OK for now, need fix later
+		}
+
+		//adding new size can improve performance
+	
+		getWechatLoginInfoDAO().saveWechatLoginInfoList(mergedUpdateWechatLoginInfoList,options);
+		
+		if(wechatLoginInfoList.getToRemoveList() != null){
+			wechatLoginInfoList.removeAll(wechatLoginInfoList.getToRemoveList());
+		}
+		
+		
+		return wechatUser;
+	
+	}
+	
+	protected WechatUser removeWechatLoginInfoList(WechatUser wechatUser, Map<String,Object> options){
+	
+	
+		SmartList<WechatLoginInfo> wechatLoginInfoList = wechatUser.getWechatLoginInfoList();
+		if(wechatLoginInfoList == null){
+			return wechatUser;
+		}	
+	
+		SmartList<WechatLoginInfo> toRemoveWechatLoginInfoList = wechatLoginInfoList.getToRemoveList();
+		
+		if(toRemoveWechatLoginInfoList == null){
+			return wechatUser;
+		}
+		if(toRemoveWechatLoginInfoList.isEmpty()){
+			return wechatUser;// Does this mean delete all from the parent object?
+		}
+		//Call DAO to remove the list
+		
+		getWechatLoginInfoDAO().removeWechatLoginInfoList(toRemoveWechatLoginInfoList,options);
+		
+		return wechatUser;
+	
+	}
+	
+	
+
+ 	
+ 	
+	
+	
+	
+		
 	protected WechatUser saveExamList(WechatUser wechatUser, Map<String,Object> options){
 		
 		
@@ -1303,6 +1592,7 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
 	public WechatUser present(WechatUser wechatUser,Map<String, Object> options){
 	
 		presentAnswerQuestionList(wechatUser,options);
+		presentWechatLoginInfoList(wechatUser,options);
 		presentExamList(wechatUser,options);
 		presentFaultAnswerList(wechatUser,options);
 
@@ -1325,6 +1615,26 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
 
 		
 		wechatUser.setAnswerQuestionList(newList);
+		
+
+		return wechatUser;
+	}			
+		
+	//Using java8 feature to reduce the code significantly
+ 	protected WechatUser presentWechatLoginInfoList(
+			WechatUser wechatUser,
+			Map<String, Object> options) {
+
+		SmartList<WechatLoginInfo> wechatLoginInfoList = wechatUser.getWechatLoginInfoList();		
+				SmartList<WechatLoginInfo> newList= presentSubList(wechatUser.getId(),
+				wechatLoginInfoList,
+				options,
+				getWechatLoginInfoDAO()::countWechatLoginInfoByWechatUser,
+				getWechatLoginInfoDAO()::findWechatLoginInfoByWechatUser
+				);
+
+		
+		wechatUser.setWechatLoginInfoList(newList);
 		
 
 		return wechatUser;
@@ -1378,6 +1688,12 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
 		return findAllCandidateByFilter(WechatUserTable.COLUMN_NAME, filterKey, pageNo, pageSize, getWechatUserMapper());
     }
 		
+    public SmartList<WechatUser> requestCandidateWechatUserForWechatLoginInfo(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception {
+        // NOTE: by default, ignore owner info, just return all by filter key.
+		// You need override this method if you have different candidate-logic
+		return findAllCandidateByFilter(WechatUserTable.COLUMN_NAME, filterKey, pageNo, pageSize, getWechatUserMapper());
+    }
+		
     public SmartList<WechatUser> requestCandidateWechatUserForExam(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception {
         // NOTE: by default, ignore owner info, just return all by filter key.
 		// You need override this method if you have different candidate-logic
@@ -1421,6 +1737,29 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
 			SmartList<AnswerQuestion> loadedSmartList = new SmartList<>();
 			loadedSmartList.addAll(loadedList);
 			it.setAnswerQuestionList(loadedSmartList);
+		});
+		return loadedObjs;
+	}
+	
+	// 需要一个加载引用我的对象的enhance方法:WechatLoginInfo的wechatUser的WechatLoginInfoList
+	public SmartList<WechatLoginInfo> loadOurWechatLoginInfoList(BcexUserContext userContext, List<WechatUser> us, Map<String,Object> options) throws Exception{
+		if (us == null || us.isEmpty()){
+			return new SmartList<>();
+		}
+		Set<String> ids = us.stream().map(it->it.getId()).collect(Collectors.toSet());
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(WechatLoginInfo.WECHAT_USER_PROPERTY, ids.toArray(new String[ids.size()]));
+		SmartList<WechatLoginInfo> loadedObjs = userContext.getDAOGroup().getWechatLoginInfoDAO().findWechatLoginInfoWithKey(key, options);
+		Map<String, List<WechatLoginInfo>> loadedMap = loadedObjs.stream().collect(Collectors.groupingBy(it->it.getWechatUser().getId()));
+		us.forEach(it->{
+			String id = it.getId();
+			List<WechatLoginInfo> loadedList = loadedMap.get(id);
+			if (loadedList == null || loadedList.isEmpty()) {
+				return;
+			}
+			SmartList<WechatLoginInfo> loadedSmartList = new SmartList<>();
+			loadedSmartList.addAll(loadedList);
+			it.setWechatLoginInfoList(loadedSmartList);
 		});
 		return loadedObjs;
 	}

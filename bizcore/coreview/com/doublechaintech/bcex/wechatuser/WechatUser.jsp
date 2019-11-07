@@ -102,6 +102,7 @@
 	 
 	<% WechatUser result = (WechatUser)request.getAttribute("result");  %>
 			<li><a data-toggle="tab" href="#answerQuestionList" class="disabled"> ${userContext.localeMap['answer_question']}</a></li>
+			<li><a data-toggle="tab" href="#wechatLoginInfoList" class="disabled"> ${userContext.localeMap['wechat_login_info']}</a></li>
 			<li><a data-toggle="tab" href="#examList" class="disabled"> ${userContext.localeMap['exam']}</a></li>
 			<li><a data-toggle="tab" href="#faultAnswerList" class="disabled"> ${userContext.localeMap['fault_answer']}</a></li>
  
@@ -159,6 +160,14 @@
 		<div id="answerQuestionList" class="tab-pane fade sublist" refer-name="user">
 			<sky:include page="com/doublechaintech/bcex/answerquestion/AnswerQuestion$List.jsp"
 					referName="user"/>
+		</div>
+	</c:if>
+	<c:if test='${not empty userContext.accessTokens["wechatLoginInfoList"] or ignoreListAccessControl}'>
+		<c:set var="wechatLoginInfoList" value="${result.wechatLoginInfoList}" scope="request"/>
+		<c:set var="wechatLoginInfoListName" value="wechatLoginInfoList" scope="request"/>
+		<div id="wechatLoginInfoList" class="tab-pane fade sublist" refer-name="wechat_user">
+			<sky:include page="com/doublechaintech/bcex/wechatlogininfo/WechatLoginInfo$List.jsp"
+					referName="wechatUser"/>
 		</div>
 	</c:if>
 	<c:if test='${not empty userContext.accessTokens["examList"] or ignoreListAccessControl}'>

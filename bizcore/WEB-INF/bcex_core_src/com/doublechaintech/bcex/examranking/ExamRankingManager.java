@@ -12,7 +12,7 @@ public interface ExamRankingManager{
 
 		
 
-	public ExamRanking createExamRanking(BcexUserContext userContext, String name, String avarta, String platformId) throws Exception;	
+	public ExamRanking createExamRanking(BcexUserContext userContext, String name, String avatar, String platformId) throws Exception;	
 	public ExamRanking updateExamRanking(BcexUserContext userContext,String examRankingId, int examRankingVersion, String property, String newValueExpr,String [] tokensExpr) throws Exception;
 	public ExamRanking loadExamRanking(BcexUserContext userContext, String examRankingId, String [] tokensExpr) throws Exception;
 	public ExamRanking internalSaveExamRanking(BcexUserContext userContext, ExamRanking examRanking) throws Exception;

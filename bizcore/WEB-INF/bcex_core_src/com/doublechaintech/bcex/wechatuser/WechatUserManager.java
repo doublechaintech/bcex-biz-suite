@@ -38,6 +38,16 @@ public interface WechatUserManager{
 
 	*/
 
+	//public  WechatLoginInfoManager getWechatLoginInfoManager(BcexUserContext userContext, String wechatUserId, String appId, String openId, String sessionKey ,String [] tokensExpr)  throws Exception;
+	
+	public  WechatUser addWechatLoginInfo(BcexUserContext userContext, String wechatUserId, String appId, String openId, String sessionKey , String [] tokensExpr)  throws Exception;
+	public  WechatUser removeWechatLoginInfo(BcexUserContext userContext, String wechatUserId, String wechatLoginInfoId, int wechatLoginInfoVersion,String [] tokensExpr)  throws Exception;
+	public  WechatUser updateWechatLoginInfo(BcexUserContext userContext, String wechatUserId, String wechatLoginInfoId, int wechatLoginInfoVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
+
+	/*
+
+	*/
+
 	//public  ExamManager getExamManager(BcexUserContext userContext, String wechatUserId, String name, String statusId, int score ,String [] tokensExpr)  throws Exception;
 	
 	public  WechatUser addExam(BcexUserContext userContext, String wechatUserId, String name, String statusId, int score , String [] tokensExpr)  throws Exception;

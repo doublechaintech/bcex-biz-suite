@@ -1,7 +1,7 @@
 
 export const SYSTEM_SHORT_NAME = "bcex" //Use for requssting different apps
 export const SYSTEM_LOCAL_NAME = "链问链答考试中台" 
-export const BUILD_TIIME="Thu Nov 07 16:35:12 CST 2019"
+export const BUILD_TIIME="Thu Nov 07 18:57:36 CST 2019"
 export const MEDIA_UPLOAD_URL="https://www.doublechaintech.com/mss/upload.html"
 export const MEDIA_PREFIX="https://www.doublechaintech.com/mss/"
 

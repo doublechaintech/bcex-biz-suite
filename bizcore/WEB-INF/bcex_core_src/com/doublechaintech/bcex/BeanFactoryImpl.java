@@ -5,7 +5,7 @@ import java.util.Map;
 import com.doublechaintech.bcex.platform.Platform;
 import com.doublechaintech.bcex.changerequesttype.ChangeRequestType;
 import com.doublechaintech.bcex.changerequest.ChangeRequest;
-import com.doublechaintech.bcex.registeration.Registeration;
+import com.doublechaintech.bcex.registration.Registration;
 import com.doublechaintech.bcex.startexam.StartExam;
 import com.doublechaintech.bcex.answerquestion.AnswerQuestion;
 import com.doublechaintech.bcex.examstatus.ExamStatus;
@@ -13,6 +13,7 @@ import com.doublechaintech.bcex.question.Question;
 import com.doublechaintech.bcex.examranking.ExamRanking;
 import com.doublechaintech.bcex.answer.Answer;
 import com.doublechaintech.bcex.wechatuser.WechatUser;
+import com.doublechaintech.bcex.wechatlogininfo.WechatLoginInfo;
 import com.doublechaintech.bcex.exam.Exam;
 import com.doublechaintech.bcex.useranswer.UserAnswer;
 import com.doublechaintech.bcex.faultanswer.FaultAnswer;
@@ -51,8 +52,8 @@ public class BeanFactoryImpl{
 	}
 
 
-	public Registeration createRegisteration(Map<String,Object> options){
-		return new Registeration();
+	public Registration createRegistration(Map<String,Object> options){
+		return new Registration();
 	}
 
 
@@ -88,6 +89,11 @@ public class BeanFactoryImpl{
 
 	public WechatUser createWechatUser(Map<String,Object> options){
 		return new WechatUser();
+	}
+
+
+	public WechatLoginInfo createWechatLoginInfo(Map<String,Object> options){
+		return new WechatLoginInfo();
 	}
 
 

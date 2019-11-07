@@ -48,17 +48,17 @@ public class ExamRankingForm extends BaseForm {
 	}
 
 
-	public ExamRankingForm avartaField(String parameterName, String initValue){
-		FormField field = avartaFromExamRanking(parameterName, initValue);		
+	public ExamRankingForm avatarField(String parameterName, String initValue){
+		FormField field = avatarFromExamRanking(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public ExamRankingForm avartaField(String initValue){
-		return avartaField("avarta",initValue);
+	public ExamRankingForm avatarField(String initValue){
+		return avatarField("avatar",initValue);
 	}
-	public ExamRankingForm avartaField(){
-		return avartaField("avarta","");
+	public ExamRankingForm avatarField(){
+		return avatarField("avatar","");
 	}
 
 

@@ -19,7 +19,7 @@ const { TextArea } = Input
 const imageURLPrefix = '//localhost:2090'
 
 const imageKeys = [
-  'avarta',
+  'avatar',
 ]
 
 
@@ -308,10 +308,10 @@ class ExamRankingUpdateForm extends Component {
 
               <Col lg={6} md={12} sm={24}>
                 <ImageComponent
-                  buttonTitle="Avarta"
+                  buttonTitle="头像"
                   handlePreview={this.handlePreview}
-                  handleChange={event => this.handleChange(event, 'avarta')}
-                  fileList={convertedImagesValues.avarta}
+                  handleChange={event => this.handleChange(event, 'avatar')}
+                  fileList={convertedImagesValues.avatar}
                 />
               </Col>
 

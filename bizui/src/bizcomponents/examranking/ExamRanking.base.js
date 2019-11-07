@@ -46,7 +46,7 @@ const settingMenuData = {menuName:"考试排名", menuFor: "examRanking",
 const fieldLabels = {
   id: 'ID',
   name: '名称',
-  avarta: 'Avarta',
+  avatar: '头像',
   platform: '平台',
 
 }
@@ -54,7 +54,7 @@ const fieldLabels = {
 const displayColumns = [
   { title: fieldLabels.id, debugtype: 'string', dataIndex: 'id', width: '8', render: (text, record)=>renderTextCell(text,record,'examRanking') , sorter: true },
   { title: fieldLabels.name, debugtype: 'string', dataIndex: 'name', width: '9',render: (text, record)=>renderTextCell(text,record)},
-  { title: fieldLabels.avarta, dataIndex: 'avarta', render: (text, record) => renderImageCell(text,record,'Avarta') },
+  { title: fieldLabels.avatar, dataIndex: 'avatar', render: (text, record) => renderImageCell(text,record,'头像') },
   { title: fieldLabels.platform, dataIndex: 'platform', render: (text, record) => renderReferenceCell(text, record), sorter:true},
 
 ]

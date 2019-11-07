@@ -20,7 +20,7 @@
 	<bean id="answerHandler" class="com.doublechaintech.bcex.changerequest.AnswerHandler" ></bean>
 
 	<!-- Detail Handler per event -->
-	<bean id="registerationProcessor" class="com.doublechaintech.bcex.changerequestProcessor" ></bean>
+	<bean id="registrationProcessor" class="com.doublechaintech.bcex.changerequestProcessor" ></bean>
 	<bean id="startExamProcessor" class="com.doublechaintech.bcex.changerequestProcessor" ></bean>
 	<bean id="answerQuestionProcessor" class="com.doublechaintech.bcex.changerequestProcessor" ></bean>
 
