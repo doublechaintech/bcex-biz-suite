@@ -6,8 +6,6 @@ import com.doublechaintech.bcex.CustomBcexUserContextImpl;
 import com.doublechaintech.bcex.secuser.SecUser;
 import com.doublechaintech.bcex.utils.BcexConstants;
 import com.doublechaintech.bcex.wechatuser.WechatUser;
-import com.doublechaintech.bcex.wxappservicepageview.HomePage;
-import com.doublechaintech.bcex.wxappservicepageview.MePage;
 import com.terapico.caf.DateTime;
 import com.terapico.caf.baseelement.LoginParam;
 import com.terapico.utils.RandomUtil;
@@ -22,38 +20,22 @@ public class WxappServiceViewBizService extends BasicWxappServiceViewBizService{
 	// 处理请求：默认的客户端登录接口. 返回值：PRC_BY_DEFAULT: ; 
 	@Override
 	protected int processRequestClientLogin(CustomBcexUserContextImpl ctx) throws Exception {
-		// TODO
+		this.processClientLogin(ctx, ctx.getLoginParam());
 		return PRC_BY_DEFAULT;
 	}
 	
 	// 处理请求：查看首页. 返回值：PRC_BY_DEFAULT: ; 
 	@Override
 	protected int processRequestViewHomepage(CustomBcexUserContextImpl ctx) throws Exception {
-		// TODO
 		return PRC_BY_DEFAULT;
 	}
 	
 	// 处理请求：我的. 返回值：PRC_BY_DEFAULT: ; 
 	@Override
 	protected int processRequestCustomerViewDashboard(CustomBcexUserContextImpl ctx) throws Exception {
-		// TODO
 		return PRC_BY_DEFAULT;
 	}
 	
-
-	// 
-	@Override
-	protected MePage assemblerMePage(CustomBcexUserContextImpl ctx, String requestName) throws Exception {
-		// TODO
-		return null;
-	}
-	
-	// 
-	@Override
-	protected HomePage assemblerHomePage(CustomBcexUserContextImpl ctx, String requestName) throws Exception {
-		// TODO
-		return null;
-	}
 
 	@Override
 	protected void commonLog(CustomBcexUserContextImpl ctx, String eventCode, String title, String key1, String key2,

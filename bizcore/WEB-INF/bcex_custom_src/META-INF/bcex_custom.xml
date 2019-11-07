@@ -62,7 +62,7 @@
 			</bean>
 		</property>
 	</bean>
-	
+		
 	<bean id="wxappService"	class="com.doublechain.bcex.wxappservice.WxappserviceViewBizService">
 		<property name="wxMaService" ref="wxMaService"/>
 	</bean>
