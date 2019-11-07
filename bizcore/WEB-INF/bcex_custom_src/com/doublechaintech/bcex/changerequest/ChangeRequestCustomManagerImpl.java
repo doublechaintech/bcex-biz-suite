@@ -15,9 +15,20 @@ package com.doublechaintech.bcex.changerequest;
 import java.util.Date;
 import com.doublechaintech.bcex.BcexUserContext;
 
+import cn.binarywang.wx.miniapp.api.WxMaService;
+
 public class ChangeRequestCustomManagerImpl extends ChangeRequestManagerImpl{
 
+	protected  WxMaService  wxMaService;
 
+	public WxMaService getWxMaService() {
+		return wxMaService;
+	}
+
+	public void setWxMaService(WxMaService wxMaService) {
+		this.wxMaService = wxMaService;
+	}
+	
 
 
 
