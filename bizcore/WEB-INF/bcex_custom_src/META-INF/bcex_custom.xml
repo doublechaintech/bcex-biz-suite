@@ -52,9 +52,9 @@
 	</bean>
 
 
-	<bean id="wxMaService"	class="me.chanjar.weixin.cp.api.impl.WxMaServiceImpl">
+	<bean id="wxMaService"	class="cn.binarywang.wx.miniapp.api.impl.WxMaServiceImpl">
 		<property name="wxMaConfig">
-			<bean class="me.chanjar.weixin.cp.config.impl.WxMaDefaultConfigImpl">
+			<bean class="cn.binarywang.wx.miniapp.api.impl.WxMaDefaultConfigImpl">
 				<property name="appid" value="${app.wx.appId}" />
 				<property name="secret" value="${app.wx.secret}" />
 				<property name="token" value="${app.wx.token}" />
@@ -63,7 +63,7 @@
 		</property>
 	</bean>
 		
-	<bean id="wxappService"	class="com.doublechain.storedev.wxappservice.WxappserviceViewBizService">
+	<bean id="wxappService"	class="com.doublechain.bcex.wxappservice.WxappserviceViewBizService">
 		<property name="wxMaService" ref="wxMaService"/>
 	</bean>
 
