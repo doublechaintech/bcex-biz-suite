@@ -38,11 +38,12 @@ public class AnswerQuestionCustomProcessor extends AnswerQuestionProcessor{
 		// 保存答题结果
 		userAnswer.updateTopic(getSelectionText(question, userAnswerStr.toLowerCase()))
 			.updateUserSelect(userAnswerStr);
+		userAnswerManagerOf(ctx).internalSaveUserAnswer(ctx, userAnswer, EO);
 		Exam exam = examDaoOf(ctx).load(userAnswer.getExam().getId(), EO);
 		ctx.setExam(exam);
 		int score = MiscUtils.calcExamScore(ctx, exam.getId());
 		exam.updateScore(score); // 先加1
-		examManagerOf(ctx).internalSaveExam(ctx, exam, ExamTokens.start().withUserAnswerList().done());
+		examManagerOf(ctx).internalSaveExam(ctx, exam, EO);
 	}
 
 	private String getSelectionText(Question question, String lowerCase) {

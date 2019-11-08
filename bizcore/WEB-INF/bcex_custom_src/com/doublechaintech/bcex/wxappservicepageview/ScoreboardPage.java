@@ -56,9 +56,8 @@ public class ScoreboardPage extends BaseViewPage{
 		
 		List<Object> scoreList = new ArrayList<>();
 		String examId = ctx.getQuizId();
-		if (!TextUtil.isBlank(examId)) {
+		
 			assemblerExamScore(ctx, examId, scoreList);
-		}
 		
 		assemblerWorldRankScore(ctx, scoreList);
 		
@@ -80,22 +79,24 @@ public class ScoreboardPage extends BaseViewPage{
 				"	left join wechat_user_data WU on E.user = WU.id " + 
 				"	group by WU.id" + 
 				"    order by totalScore desc " + 
-				"    limit 5";
-		List<Map<String, Object>> list = ctx.dao().queryAsMapList(sql, new Object[] {});
+				"    limit ?";
+		List<Map<String, Object>> list = ctx.dao().queryAsMapList(sql, new Object[] {5});
 		for(int i = 0;i < 5;i++) {
 			
 			Map<String, Object> data = list.get(i);
-			data.put("wordRanking", scoreList.size()+1+"");
+			data.put("worldRanking", i+1+"");
 			data.put("id", i+1);
+			data.put("totalScore", String.valueOf(data.get("totalScore")));
 			scoreList.add(data);
 		}
 		
 	}
 
 	private void assemblerExamScore(CustomBcexUserContextImpl ctx, String examId, List<Object> scoreList) throws Exception {
-		Exam exam = ctx.getDAOGroup().getExamDAO().load(examId, ExamTokens.empty());
-		set("examScore", exam.getScore());
-		
+		if (!TextUtil.isBlank(examId)) {
+			Exam exam = ctx.getDAOGroup().getExamDAO().load(examId, ExamTokens.empty());
+			set("examScore", exam.getScore()+"");
+		}
 		int totalScore = MiscUtils.calcUserTotalScore(ctx, ctx.getCurrentUserInfo());
 		int wordRanking = MiscUtils.findUserWorldRank(ctx, totalScore);
 		Map<String, Object> data = MapUtil.put("id", scoreList.size()+1)
