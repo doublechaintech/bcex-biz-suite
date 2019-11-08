@@ -22,22 +22,23 @@ import com.terapico.utils.TextUtil;
 public class AnswerSheetPage extends BaseViewPage{
 	private static final long serialVersionUID = 1L;
 	private static BcexViewScope ViewScope = BcexViewScope.getInstance();
-	protected static final SerializeScope SCOPE = SerializeScope.INCLUDE()
-			.field("title")
-			.field("popup")
-			.field("toast", SerializeScope.EXCLUDE())
-			.field("refreshAction")
-			.field("actions", SerializeScope.EXCLUDE())
-			.field("actionList")
-			.field("question",  SerializeScope.INCLUDE()
-					.field(Question.ID_PROPERTY)
-					.field(Question.TOPIC_PROPERTY)
-					.field(Question.LEVEL_PROPERTY)
-					.field(Question.RIGHT_ANSWER_PROPERTY)
-				  )
-			.field("questions", SerializeScope.EXCLUDE())
-			.field("examId")
-			;
+	protected static final SerializeScope SCOPE = SerializeScope.EXCLUDE();
+			//SerializeScope.INCLUDE()
+//			.field("title")
+//			.field("popup")
+//			.field("toast", SerializeScope.EXCLUDE())
+//			.field("refreshAction")
+//			.field("actions", SerializeScope.EXCLUDE())
+//			.field("actionList")
+//			.field("question",  SerializeScope.INCLUDE()
+//					.field(Question.ID_PROPERTY)
+//					.field(Question.TOPIC_PROPERTY)
+//					.field(Question.LEVEL_PROPERTY)
+//					.field(Question.RIGHT_ANSWER_PROPERTY)
+//				  )
+//			.field("questions", SerializeScope.EXCLUDE())
+//			.field("examId")
+//			;
 	private static final java.util.Map<String, Object> EO = null;
 	@Override
 	protected SerializeScope getSerializeScope() {
@@ -66,7 +67,6 @@ public class AnswerSheetPage extends BaseViewPage{
 				addSelection(ctx, selections, userAnswer.getId(), "D", question.getOptionD());
 				addSelection(ctx, selections, userAnswer.getId(), "E", question.getOptionE());
 				Collections.shuffle(selections);
-				set("selections", selections);
 				
 				Map<String, Object> data = MapUtil.put("id", ans.getId())
 					.put("title", question.getTopic())

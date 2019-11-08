@@ -127,8 +127,7 @@ public class WxappServiceViewBizService extends BasicWxappServiceViewBizService{
 //		PopupViewComponent popup = new PopupViewComponent("更新成功","关闭");
 //		ctx.setPopup(popup);
 //		return PRC_BY_DEFAULT;
-		ctx.setResultObject(true);
-		return $PRC_RESULT_OBJECT_WAS_SET;
+		return setAndReturn(ctx, true);
 	}
 	@Override
 	protected int processRequestCustomerStartExam(CustomBcexUserContextImpl ctx) throws Exception {
@@ -150,8 +149,7 @@ public class WxappServiceViewBizService extends BasicWxappServiceViewBizService{
 //			return PRC_ALL_DONE;
 //		}
 //		return PRC_HAS_MORE_QUESTION;
-		ctx.setResultObject(true);
-		return $PRC_RESULT_OBJECT_WAS_SET;
+		return setAndReturn(ctx, true);
 	}
 	@Override
 	protected int processRequestCustomerViewScore(CustomBcexUserContextImpl ctx) throws Exception {

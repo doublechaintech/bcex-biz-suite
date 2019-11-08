@@ -19,6 +19,7 @@ import com.doublechaintech.bcex.SmartList;
 import com.doublechaintech.bcex.secuser.SecUser;
 import com.doublechaintech.bcex.userapp.UserApp;
 import com.doublechaintech.bcex.userapp.UserAppTokens;
+import com.doublechaintech.bcex.BcexException;
 import com.doublechaintech.bcex.wechatuser.WechatUser;
 import com.doublechaintech.bcex.wechatlogininfo.WechatLoginInfo;
 import cn.binarywang.wx.miniapp.api.WxMaService;
@@ -209,8 +210,8 @@ public abstract class BaseWxappServiceViewService extends ChangeRequestCustomMan
         return null;
     }
 
-    protected void throwsExceptionWithMessage(CustomBcexUserContextImpl ctx, String message) throws WxappServiceException {
-    	throw new WxappServiceException(message);
+    protected void throwsExceptionWithMessage(CustomBcexUserContextImpl ctx, String message) throws BcexException {
+    	throw new BcexException(message);
     }
 
     protected SecUser findSecUserByLoginTarget(CustomBcexUserContextImpl ctx, WechatUser loginTarget) {
@@ -289,7 +290,8 @@ public abstract class BaseWxappServiceViewService extends ChangeRequestCustomMan
             default:
         }
         return null;
-    }    @Override
+    }
+    @Override
     public void onAccess(BaseUserContext baseUserContext, String methodName, Object[] parameters) {
         super.onAccess(baseUserContext, methodName, parameters);
         // 当前调用的信息保存在（类似于）session里

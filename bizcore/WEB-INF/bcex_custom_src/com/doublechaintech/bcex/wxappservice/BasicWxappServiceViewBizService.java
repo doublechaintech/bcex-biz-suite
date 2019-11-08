@@ -32,4 +32,9 @@ public abstract class BasicWxappServiceViewBizService extends WxappServiceViewSe
 	public boolean clearTop() {
 		return true;
 	}
+	
+	public int setAndReturn(CustomBcexUserContextImpl ctx, Object data) {
+		ctx.setResultObject(data);
+		return $PRC_RESULT_OBJECT_WAS_SET;
+	}
 }
