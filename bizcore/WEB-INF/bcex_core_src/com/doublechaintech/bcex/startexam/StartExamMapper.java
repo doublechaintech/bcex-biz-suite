@@ -6,6 +6,7 @@ import java.util.Date;
 import java.math.BigDecimal;
 import com.doublechaintech.bcex.BaseRowMapper;
 import com.doublechaintech.bcex.changerequest.ChangeRequest;
+import com.doublechaintech.bcex.wechatuser.WechatUser;
 
 public class StartExamMapper extends BaseRowMapper<StartExam>{
 	
@@ -14,6 +15,7 @@ public class StartExamMapper extends BaseRowMapper<StartExam>{
 		 		
  		setId(startExam, rs, rowNumber); 		
  		setNickName(startExam, rs, rowNumber); 		
+ 		setUser(startExam, rs, rowNumber); 		
  		setChangeRequest(startExam, rs, rowNumber); 		
  		setVersion(startExam, rs, rowNumber);
 
@@ -48,6 +50,24 @@ public class StartExamMapper extends BaseRowMapper<StartExam>{
 		startExam.setNickName(nickName);
 	}
 		 		
+ 	protected void setUser(StartExam startExam, ResultSet rs, int rowNumber) throws SQLException{
+ 		String wechatUserId = rs.getString(StartExamTable.COLUMN_USER);
+ 		if( wechatUserId == null){
+ 			return;
+ 		}
+ 		if( wechatUserId.isEmpty()){
+ 			return;
+ 		}
+ 		WechatUser wechatUser = startExam.getUser();
+ 		if( wechatUser != null ){
+ 			//if the root object 'startExam' already have the property, just set the id for it;
+ 			wechatUser.setId(wechatUserId);
+ 			
+ 			return;
+ 		}
+ 		startExam.setUser(createEmptyUser(wechatUserId));
+ 	}
+ 	 		
  	protected void setChangeRequest(StartExam startExam, ResultSet rs, int rowNumber) throws SQLException{
  		String changeRequestId = rs.getString(StartExamTable.COLUMN_CHANGE_REQUEST);
  		if( changeRequestId == null){
@@ -80,6 +100,13 @@ public class StartExamMapper extends BaseRowMapper<StartExam>{
 		
 		
 
+ 	protected WechatUser  createEmptyUser(String wechatUserId){
+ 		WechatUser wechatUser = new WechatUser();
+ 		wechatUser.setId(wechatUserId);
+ 		wechatUser.setVersion(Integer.MAX_VALUE);
+ 		return wechatUser;
+ 	}
+ 	
  	protected ChangeRequest  createEmptyChangeRequest(String changeRequestId){
  		ChangeRequest changeRequest = new ChangeRequest();
  		changeRequest.setId(changeRequestId);

@@ -24,12 +24,14 @@ import com.doublechaintech.bcex.wechatlogininfo.WechatLoginInfo;
 import com.doublechaintech.bcex.platform.Platform;
 import com.doublechaintech.bcex.faultanswer.FaultAnswer;
 import com.doublechaintech.bcex.answerquestion.AnswerQuestion;
+import com.doublechaintech.bcex.startexam.StartExam;
 import com.doublechaintech.bcex.exam.Exam;
 
 import com.doublechaintech.bcex.faultanswer.FaultAnswerDAO;
 import com.doublechaintech.bcex.exam.ExamDAO;
 import com.doublechaintech.bcex.platform.PlatformDAO;
 import com.doublechaintech.bcex.wechatlogininfo.WechatLoginInfoDAO;
+import com.doublechaintech.bcex.startexam.StartExamDAO;
 import com.doublechaintech.bcex.answerquestion.AnswerQuestionDAO;
 
 
@@ -51,6 +53,25 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
  	}
 
 
+			
+		
+	
+  	private  StartExamDAO  startExamDAO;
+ 	public void setStartExamDAO(StartExamDAO pStartExamDAO){
+ 	
+ 		if(pStartExamDAO == null){
+ 			throw new IllegalStateException("Do not try to set startExamDAO to null.");
+ 		}
+	 	this.startExamDAO = pStartExamDAO;
+ 	}
+ 	public StartExamDAO getStartExamDAO(){
+ 		if(this.startExamDAO == null){
+ 			throw new IllegalStateException("The startExamDAO is not configured yet, please config it some where.");
+ 		}
+ 		
+	 	return this.startExamDAO;
+ 	}	
+ 	
 			
 		
 	
@@ -177,6 +198,13 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
 		WechatUser newWechatUser = loadInternalWechatUser(accessKey, options);
 		newWechatUser.setVersion(0);
 		
+		
+ 		
+ 		if(isSaveStartExamListEnabled(options)){
+ 			for(StartExam item: newWechatUser.getStartExamList()){
+ 				item.setVersion(0);
+ 			}
+ 		}
 		
  		
  		if(isSaveAnswerQuestionListEnabled(options)){
@@ -312,6 +340,20 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
  
 		
 	
+	protected boolean isExtractStartExamListEnabled(Map<String,Object> options){		
+ 		return checkOptions(options,WechatUserTokens.START_EXAM_LIST);
+ 	}
+ 	protected boolean isAnalyzeStartExamListEnabled(Map<String,Object> options){		 		
+ 		return WechatUserTokens.of(options).analyzeStartExamListEnabled();
+ 	}
+	
+	protected boolean isSaveStartExamListEnabled(Map<String,Object> options){
+		return checkOptions(options, WechatUserTokens.START_EXAM_LIST);
+		
+ 	}
+ 	
+		
+	
 	protected boolean isExtractAnswerQuestionListEnabled(Map<String,Object> options){		
  		return checkOptions(options,WechatUserTokens.ANSWER_QUESTION_LIST);
  	}
@@ -398,6 +440,14 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
  		}
  
 		
+		if(isExtractStartExamListEnabled(loadOptions)){
+	 		extractStartExamList(wechatUser, loadOptions);
+ 		}	
+ 		if(isAnalyzeStartExamListEnabled(loadOptions)){
+	 		analyzeStartExamList(wechatUser, loadOptions);
+ 		}
+ 		
+		
 		if(isExtractAnswerQuestionListEnabled(loadOptions)){
 	 		extractAnswerQuestionList(wechatUser, loadOptions);
  		}	
@@ -455,6 +505,56 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
  	}
  		
  
+		
+	protected void enhanceStartExamList(SmartList<StartExam> startExamList,Map<String,Object> options){
+		//extract multiple list from difference sources
+		//Trying to use a single SQL to extract all data from database and do the work in java side, java is easier to scale to N ndoes;
+	}
+	
+	protected WechatUser extractStartExamList(WechatUser wechatUser, Map<String,Object> options){
+		
+		
+		if(wechatUser == null){
+			return null;
+		}
+		if(wechatUser.getId() == null){
+			return wechatUser;
+		}
+
+		
+		
+		SmartList<StartExam> startExamList = getStartExamDAO().findStartExamByUser(wechatUser.getId(),options);
+		if(startExamList != null){
+			enhanceStartExamList(startExamList,options);
+			wechatUser.setStartExamList(startExamList);
+		}
+		
+		return wechatUser;
+	
+	}	
+	
+	protected WechatUser analyzeStartExamList(WechatUser wechatUser, Map<String,Object> options){
+		
+		
+		if(wechatUser == null){
+			return null;
+		}
+		if(wechatUser.getId() == null){
+			return wechatUser;
+		}
+
+		
+		
+		SmartList<StartExam> startExamList = wechatUser.getStartExamList();
+		if(startExamList != null){
+			getStartExamDAO().analyzeStartExamByUser(startExamList, wechatUser.getId(), options);
+			
+		}
+		
+		return wechatUser;
+	
+	}	
+	
 		
 	protected void enhanceAnswerQuestionList(SmartList<AnswerQuestion> answerQuestionList,Map<String,Object> options){
 		//extract multiple list from difference sources
@@ -849,32 +949,34 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
  		return prepareWechatUserCreateParameters(wechatUser);
  	}
  	protected Object[] prepareWechatUserUpdateParameters(WechatUser wechatUser){
- 		Object[] parameters = new Object[7];
+ 		Object[] parameters = new Object[8];
  
  		parameters[0] = wechatUser.getName();
  		parameters[1] = wechatUser.getAvarta();
- 		parameters[2] = wechatUser.getCreateTime(); 	
+ 		parameters[2] = wechatUser.getCreateTime();
+ 		parameters[3] = wechatUser.getUserType(); 	
  		if(wechatUser.getPlatform() != null){
- 			parameters[3] = wechatUser.getPlatform().getId();
+ 			parameters[4] = wechatUser.getPlatform().getId();
  		}
  		
- 		parameters[4] = wechatUser.nextVersion();
- 		parameters[5] = wechatUser.getId();
- 		parameters[6] = wechatUser.getVersion();
+ 		parameters[5] = wechatUser.nextVersion();
+ 		parameters[6] = wechatUser.getId();
+ 		parameters[7] = wechatUser.getVersion();
  				
  		return parameters;
  	}
  	protected Object[] prepareWechatUserCreateParameters(WechatUser wechatUser){
-		Object[] parameters = new Object[5];
+		Object[] parameters = new Object[6];
 		String newWechatUserId=getNextId();
 		wechatUser.setId(newWechatUserId);
 		parameters[0] =  wechatUser.getId();
  
  		parameters[1] = wechatUser.getName();
  		parameters[2] = wechatUser.getAvarta();
- 		parameters[3] = wechatUser.getCreateTime(); 	
+ 		parameters[3] = wechatUser.getCreateTime();
+ 		parameters[4] = wechatUser.getUserType(); 	
  		if(wechatUser.getPlatform() != null){
- 			parameters[4] = wechatUser.getPlatform().getId();
+ 			parameters[5] = wechatUser.getPlatform().getId();
  		
  		}
  				
@@ -890,6 +992,13 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
 	 		savePlatform(wechatUser, options);
  		}
  
+		
+		if(isSaveStartExamListEnabled(options)){
+	 		saveStartExamList(wechatUser, options);
+	 		//removeStartExamList(wechatUser, options);
+	 		//Not delete the record
+	 		
+ 		}		
 		
 		if(isSaveAnswerQuestionListEnabled(options)){
 	 		saveAnswerQuestionList(wechatUser, options);
@@ -946,6 +1055,78 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
  
 
 	
+	public WechatUser planToRemoveStartExamList(WechatUser wechatUser, String startExamIds[], Map<String,Object> options)throws Exception{
+	
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(StartExam.USER_PROPERTY, wechatUser.getId());
+		key.put(StartExam.ID_PROPERTY, startExamIds);
+		
+		SmartList<StartExam> externalStartExamList = getStartExamDAO().
+				findStartExamWithKey(key, options);
+		if(externalStartExamList == null){
+			return wechatUser;
+		}
+		if(externalStartExamList.isEmpty()){
+			return wechatUser;
+		}
+		
+		for(StartExam startExamItem: externalStartExamList){
+
+			startExamItem.clearFromAll();
+		}
+		
+		
+		SmartList<StartExam> startExamList = wechatUser.getStartExamList();		
+		startExamList.addAllToRemoveList(externalStartExamList);
+		return wechatUser;	
+	
+	}
+
+
+	//disconnect WechatUser with change_request in StartExam
+	public WechatUser planToRemoveStartExamListWithChangeRequest(WechatUser wechatUser, String changeRequestId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(StartExam.USER_PROPERTY, wechatUser.getId());
+		key.put(StartExam.CHANGE_REQUEST_PROPERTY, changeRequestId);
+		
+		SmartList<StartExam> externalStartExamList = getStartExamDAO().
+				findStartExamWithKey(key, options);
+		if(externalStartExamList == null){
+			return wechatUser;
+		}
+		if(externalStartExamList.isEmpty()){
+			return wechatUser;
+		}
+		
+		for(StartExam startExamItem: externalStartExamList){
+			startExamItem.clearChangeRequest();
+			startExamItem.clearUser();
+			
+		}
+		
+		
+		SmartList<StartExam> startExamList = wechatUser.getStartExamList();		
+		startExamList.addAllToRemoveList(externalStartExamList);
+		return wechatUser;
+	}
+	
+	public int countStartExamListWithChangeRequest(String wechatUserId, String changeRequestId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(StartExam.USER_PROPERTY, wechatUserId);
+		key.put(StartExam.CHANGE_REQUEST_PROPERTY, changeRequestId);
+		
+		int count = getStartExamDAO().countStartExamWithKey(key, options);
+		return count;
+	}
+	
 	public WechatUser planToRemoveAnswerQuestionList(WechatUser wechatUser, String answerQuestionIds[], Map<String,Object> options)throws Exception{
 	
 		MultipleAccessKey key = new MultipleAccessKey();
@@ -974,15 +1155,15 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
 	}
 
 
-	//disconnect WechatUser with question in AnswerQuestion
-	public WechatUser planToRemoveAnswerQuestionListWithQuestion(WechatUser wechatUser, String questionId, Map<String,Object> options)throws Exception{
+	//disconnect WechatUser with user_answer in AnswerQuestion
+	public WechatUser planToRemoveAnswerQuestionListWithUserAnswer(WechatUser wechatUser, String userAnswerId, Map<String,Object> options)throws Exception{
 				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
 		//the list will not be null here, empty, maybe
 		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
 		
 		MultipleAccessKey key = new MultipleAccessKey();
 		key.put(AnswerQuestion.USER_PROPERTY, wechatUser.getId());
-		key.put(AnswerQuestion.QUESTION_PROPERTY, questionId);
+		key.put(AnswerQuestion.USER_ANSWER_PROPERTY, userAnswerId);
 		
 		SmartList<AnswerQuestion> externalAnswerQuestionList = getAnswerQuestionDAO().
 				findAnswerQuestionWithKey(key, options);
@@ -994,7 +1175,7 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
 		}
 		
 		for(AnswerQuestion answerQuestionItem: externalAnswerQuestionList){
-			answerQuestionItem.clearQuestion();
+			answerQuestionItem.clearUserAnswer();
 			answerQuestionItem.clearUser();
 			
 		}
@@ -1005,14 +1186,14 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
 		return wechatUser;
 	}
 	
-	public int countAnswerQuestionListWithQuestion(String wechatUserId, String questionId, Map<String,Object> options)throws Exception{
+	public int countAnswerQuestionListWithUserAnswer(String wechatUserId, String userAnswerId, Map<String,Object> options)throws Exception{
 				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
 		//the list will not be null here, empty, maybe
 		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
 
 		MultipleAccessKey key = new MultipleAccessKey();
 		key.put(AnswerQuestion.USER_PROPERTY, wechatUserId);
-		key.put(AnswerQuestion.QUESTION_PROPERTY, questionId);
+		key.put(AnswerQuestion.USER_ANSWER_PROPERTY, userAnswerId);
 		
 		int count = getAnswerQuestionDAO().countAnswerQuestionWithKey(key, options);
 		return count;
@@ -1324,6 +1505,72 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
 	
 
 		
+	protected WechatUser saveStartExamList(WechatUser wechatUser, Map<String,Object> options){
+		
+		
+		
+		
+		SmartList<StartExam> startExamList = wechatUser.getStartExamList();
+		if(startExamList == null){
+			//null list means nothing
+			return wechatUser;
+		}
+		SmartList<StartExam> mergedUpdateStartExamList = new SmartList<StartExam>();
+		
+		
+		mergedUpdateStartExamList.addAll(startExamList); 
+		if(startExamList.getToRemoveList() != null){
+			//ensures the toRemoveList is not null
+			mergedUpdateStartExamList.addAll(startExamList.getToRemoveList());
+			startExamList.removeAll(startExamList.getToRemoveList());
+			//OK for now, need fix later
+		}
+
+		//adding new size can improve performance
+	
+		getStartExamDAO().saveStartExamList(mergedUpdateStartExamList,options);
+		
+		if(startExamList.getToRemoveList() != null){
+			startExamList.removeAll(startExamList.getToRemoveList());
+		}
+		
+		
+		return wechatUser;
+	
+	}
+	
+	protected WechatUser removeStartExamList(WechatUser wechatUser, Map<String,Object> options){
+	
+	
+		SmartList<StartExam> startExamList = wechatUser.getStartExamList();
+		if(startExamList == null){
+			return wechatUser;
+		}	
+	
+		SmartList<StartExam> toRemoveStartExamList = startExamList.getToRemoveList();
+		
+		if(toRemoveStartExamList == null){
+			return wechatUser;
+		}
+		if(toRemoveStartExamList.isEmpty()){
+			return wechatUser;// Does this mean delete all from the parent object?
+		}
+		//Call DAO to remove the list
+		
+		getStartExamDAO().removeStartExamList(toRemoveStartExamList,options);
+		
+		return wechatUser;
+	
+	}
+	
+	
+
+ 	
+ 	
+	
+	
+	
+		
 	protected WechatUser saveAnswerQuestionList(WechatUser wechatUser, Map<String,Object> options){
 		
 		
@@ -1591,6 +1838,7 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
 
 	public WechatUser present(WechatUser wechatUser,Map<String, Object> options){
 	
+		presentStartExamList(wechatUser,options);
 		presentAnswerQuestionList(wechatUser,options);
 		presentWechatLoginInfoList(wechatUser,options);
 		presentExamList(wechatUser,options);
@@ -1599,6 +1847,26 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
 		return wechatUser;
 	
 	}
+		
+	//Using java8 feature to reduce the code significantly
+ 	protected WechatUser presentStartExamList(
+			WechatUser wechatUser,
+			Map<String, Object> options) {
+
+		SmartList<StartExam> startExamList = wechatUser.getStartExamList();		
+				SmartList<StartExam> newList= presentSubList(wechatUser.getId(),
+				startExamList,
+				options,
+				getStartExamDAO()::countStartExamByUser,
+				getStartExamDAO()::findStartExamByUser
+				);
+
+		
+		wechatUser.setStartExamList(newList);
+		
+
+		return wechatUser;
+	}			
 		
 	//Using java8 feature to reduce the code significantly
  	protected WechatUser presentAnswerQuestionList(
@@ -1682,6 +1950,12 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
 		
 
 	
+    public SmartList<WechatUser> requestCandidateWechatUserForStartExam(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception {
+        // NOTE: by default, ignore owner info, just return all by filter key.
+		// You need override this method if you have different candidate-logic
+		return findAllCandidateByFilter(WechatUserTable.COLUMN_NAME, filterKey, pageNo, pageSize, getWechatUserMapper());
+    }
+		
     public SmartList<WechatUser> requestCandidateWechatUserForAnswerQuestion(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception {
         // NOTE: by default, ignore owner info, just return all by filter key.
 		// You need override this method if you have different candidate-logic
@@ -1717,6 +1991,29 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
 		this.enhanceListInternal(wechatUserList, this.getWechatUserMapper());
 	}
 	
+	
+	// 需要一个加载引用我的对象的enhance方法:StartExam的user的StartExamList
+	public SmartList<StartExam> loadOurStartExamList(BcexUserContext userContext, List<WechatUser> us, Map<String,Object> options) throws Exception{
+		if (us == null || us.isEmpty()){
+			return new SmartList<>();
+		}
+		Set<String> ids = us.stream().map(it->it.getId()).collect(Collectors.toSet());
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(StartExam.USER_PROPERTY, ids.toArray(new String[ids.size()]));
+		SmartList<StartExam> loadedObjs = userContext.getDAOGroup().getStartExamDAO().findStartExamWithKey(key, options);
+		Map<String, List<StartExam>> loadedMap = loadedObjs.stream().collect(Collectors.groupingBy(it->it.getUser().getId()));
+		us.forEach(it->{
+			String id = it.getId();
+			List<StartExam> loadedList = loadedMap.get(id);
+			if (loadedList == null || loadedList.isEmpty()) {
+				return;
+			}
+			SmartList<StartExam> loadedSmartList = new SmartList<>();
+			loadedSmartList.addAll(loadedList);
+			it.setStartExamList(loadedSmartList);
+		});
+		return loadedObjs;
+	}
 	
 	// 需要一个加载引用我的对象的enhance方法:AnswerQuestion的user的AnswerQuestionList
 	public SmartList<AnswerQuestion> loadOurAnswerQuestionList(BcexUserContext userContext, List<WechatUser> us, Map<String,Object> options) throws Exception{

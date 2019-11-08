@@ -19,14 +19,15 @@ public class StartExamTable{
 	public static final String TABLE_NAME="start_exam_data";
 	static final String COLUMN_ID = "id";
 	static final String COLUMN_NICK_NAME = "nick_name";
+	static final String COLUMN_USER = "user";
 	static final String COLUMN_CHANGE_REQUEST = "change_request";
 	static final String COLUMN_VERSION = "version";
  
 	public static final String []ALL_CLOUMNS = {COLUMN_ID, 
-		COLUMN_NICK_NAME, COLUMN_CHANGE_REQUEST, 
+		COLUMN_NICK_NAME, COLUMN_USER, COLUMN_CHANGE_REQUEST, 
 		COLUMN_VERSION};
 	public static final String []NORMAL_CLOUMNS = {
-		COLUMN_NICK_NAME, COLUMN_CHANGE_REQUEST
+		COLUMN_NICK_NAME, COLUMN_USER, COLUMN_CHANGE_REQUEST
 		};
 	
 	

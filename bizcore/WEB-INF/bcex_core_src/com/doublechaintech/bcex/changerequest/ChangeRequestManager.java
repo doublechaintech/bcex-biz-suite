@@ -39,9 +39,9 @@ public interface ChangeRequestManager{
 
 	*/
 
-	//public  StartExamManager getStartExamManager(BcexUserContext userContext, String changeRequestId, String nickName ,String [] tokensExpr)  throws Exception;
+	//public  StartExamManager getStartExamManager(BcexUserContext userContext, String changeRequestId, String nickName, String userId ,String [] tokensExpr)  throws Exception;
 	
-	public  ChangeRequest addStartExam(BcexUserContext userContext, String changeRequestId, String nickName , String [] tokensExpr)  throws Exception;
+	public  ChangeRequest addStartExam(BcexUserContext userContext, String changeRequestId, String nickName, String userId , String [] tokensExpr)  throws Exception;
 	public  ChangeRequest removeStartExam(BcexUserContext userContext, String changeRequestId, String startExamId, int startExamVersion,String [] tokensExpr)  throws Exception;
 	public  ChangeRequest updateStartExam(BcexUserContext userContext, String changeRequestId, String startExamId, int startExamVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
 
@@ -49,9 +49,9 @@ public interface ChangeRequestManager{
 
 	*/
 
-	//public  AnswerQuestionManager getAnswerQuestionManager(BcexUserContext userContext, String changeRequestId, String nickName, String userId, String questionId, String answer ,String [] tokensExpr)  throws Exception;
+	//public  AnswerQuestionManager getAnswerQuestionManager(BcexUserContext userContext, String changeRequestId, String nickName, String userId, String userAnswerId, String answer ,String [] tokensExpr)  throws Exception;
 	
-	public  ChangeRequest addAnswerQuestion(BcexUserContext userContext, String changeRequestId, String nickName, String userId, String questionId, String answer , String [] tokensExpr)  throws Exception;
+	public  ChangeRequest addAnswerQuestion(BcexUserContext userContext, String changeRequestId, String nickName, String userId, String userAnswerId, String answer , String [] tokensExpr)  throws Exception;
 	public  ChangeRequest removeAnswerQuestion(BcexUserContext userContext, String changeRequestId, String answerQuestionId, int answerQuestionVersion,String [] tokensExpr)  throws Exception;
 	public  ChangeRequest updateAnswerQuestion(BcexUserContext userContext, String changeRequestId, String answerQuestionId, int answerQuestionVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
 

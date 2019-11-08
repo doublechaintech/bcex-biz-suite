@@ -12,6 +12,7 @@ import com.doublechaintech.bcex.SmartList;
 import com.doublechaintech.bcex.KeyValuePair;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.doublechaintech.bcex.answerquestion.AnswerQuestion;
 import com.doublechaintech.bcex.question.Question;
 import com.doublechaintech.bcex.exam.Exam;
 
@@ -26,6 +27,7 @@ public class UserAnswer extends BaseEntity implements  java.io.Serializable{
 	public static final String EXAM_PROPERTY                  = "exam"              ;
 	public static final String VERSION_PROPERTY               = "version"           ;
 
+	public static final String ANSWER_QUESTION_LIST                     = "answerQuestionList";
 
 	public static final String INTERNAL_TYPE="UserAnswer";
 	public String getInternalType(){
@@ -54,6 +56,7 @@ public class UserAnswer extends BaseEntity implements  java.io.Serializable{
 	protected		int                 	mVersion            ;
 	
 	
+	protected		SmartList<AnswerQuestion>	mAnswerQuestionList ;
 	
 		
 	public 	UserAnswer(){
@@ -83,7 +86,8 @@ public class UserAnswer extends BaseEntity implements  java.io.Serializable{
 		setUserSelect(userSelect);
 		setQuestion(question);
 		setExam(exam);
-	
+
+		this.mAnswerQuestionList = new SmartList<AnswerQuestion>();	
 	}
 	
 	//Support for changing the property
@@ -147,6 +151,10 @@ public class UserAnswer extends BaseEntity implements  java.io.Serializable{
 		}
 		if(EXAM_PROPERTY.equals(property)){
 			return getExam();
+		}
+		if(ANSWER_QUESTION_LIST.equals(property)){
+			List<BaseEntity> list = getAnswerQuestionList().stream().map(item->item).collect(Collectors.toList());
+			return list;
 		}
 
     		//other property not include here
@@ -266,6 +274,113 @@ public class UserAnswer extends BaseEntity implements  java.io.Serializable{
 	
 	
 
+	public  SmartList<AnswerQuestion> getAnswerQuestionList(){
+		if(this.mAnswerQuestionList == null){
+			this.mAnswerQuestionList = new SmartList<AnswerQuestion>();
+			this.mAnswerQuestionList.setListInternalName (ANSWER_QUESTION_LIST );
+			//有名字，便于做权限控制
+		}
+		
+		return this.mAnswerQuestionList;	
+	}
+	public  void setAnswerQuestionList(SmartList<AnswerQuestion> answerQuestionList){
+		for( AnswerQuestion answerQuestion:answerQuestionList){
+			answerQuestion.setUserAnswer(this);
+		}
+
+		this.mAnswerQuestionList = answerQuestionList;
+		this.mAnswerQuestionList.setListInternalName (ANSWER_QUESTION_LIST );
+		
+	}
+	
+	public  void addAnswerQuestion(AnswerQuestion answerQuestion){
+		answerQuestion.setUserAnswer(this);
+		getAnswerQuestionList().add(answerQuestion);
+	}
+	public  void addAnswerQuestionList(SmartList<AnswerQuestion> answerQuestionList){
+		for( AnswerQuestion answerQuestion:answerQuestionList){
+			answerQuestion.setUserAnswer(this);
+		}
+		getAnswerQuestionList().addAll(answerQuestionList);
+	}
+	public  void mergeAnswerQuestionList(SmartList<AnswerQuestion> answerQuestionList){
+		if(answerQuestionList==null){
+			return;
+		}
+		if(answerQuestionList.isEmpty()){
+			return;
+		}
+		addAnswerQuestionList( answerQuestionList );
+		
+	}
+	public  AnswerQuestion removeAnswerQuestion(AnswerQuestion answerQuestionIndex){
+		
+		int index = getAnswerQuestionList().indexOf(answerQuestionIndex);
+        if(index < 0){
+        	String message = "AnswerQuestion("+answerQuestionIndex.getId()+") with version='"+answerQuestionIndex.getVersion()+"' NOT found!";
+            throw new IllegalStateException(message);
+        }
+        AnswerQuestion answerQuestion = getAnswerQuestionList().get(index);        
+        // answerQuestion.clearUserAnswer(); //disconnect with UserAnswer
+        answerQuestion.clearFromAll(); //disconnect with UserAnswer
+		
+		boolean result = getAnswerQuestionList().planToRemove(answerQuestion);
+        if(!result){
+        	String message = "AnswerQuestion("+answerQuestionIndex.getId()+") with version='"+answerQuestionIndex.getVersion()+"' NOT found!";
+            throw new IllegalStateException(message);
+        }
+        return answerQuestion;
+        
+	
+	}
+	//断舍离
+	public  void breakWithAnswerQuestion(AnswerQuestion answerQuestion){
+		
+		if(answerQuestion == null){
+			return;
+		}
+		answerQuestion.setUserAnswer(null);
+		//getAnswerQuestionList().remove();
+	
+	}
+	
+	public  boolean hasAnswerQuestion(AnswerQuestion answerQuestion){
+	
+		return getAnswerQuestionList().contains(answerQuestion);
+  
+	}
+	
+	public void copyAnswerQuestionFrom(AnswerQuestion answerQuestion) {
+
+		AnswerQuestion answerQuestionInList = findTheAnswerQuestion(answerQuestion);
+		AnswerQuestion newAnswerQuestion = new AnswerQuestion();
+		answerQuestionInList.copyTo(newAnswerQuestion);
+		newAnswerQuestion.setVersion(0);//will trigger copy
+		getAnswerQuestionList().add(newAnswerQuestion);
+		addItemToFlexiableObject(COPIED_CHILD, newAnswerQuestion);
+	}
+	
+	public  AnswerQuestion findTheAnswerQuestion(AnswerQuestion answerQuestion){
+		
+		int index =  getAnswerQuestionList().indexOf(answerQuestion);
+		//The input parameter must have the same id and version number.
+		if(index < 0){
+ 			String message = "AnswerQuestion("+answerQuestion.getId()+") with version='"+answerQuestion.getVersion()+"' NOT found!";
+			throw new IllegalStateException(message);
+		}
+		
+		return  getAnswerQuestionList().get(index);
+		//Performance issue when using LinkedList, but it is almost an ArrayList for sure!
+	}
+	
+	public  void cleanUpAnswerQuestionList(){
+		getAnswerQuestionList().clear();
+	}
+	
+	
+	
+
+
 	public void collectRefercences(BaseEntity owner, List<BaseEntity> entityList, String internalType){
 
 		addToEntityList(this, entityList, getQuestion(), internalType);
@@ -277,6 +392,7 @@ public class UserAnswer extends BaseEntity implements  java.io.Serializable{
 	public List<BaseEntity>  collectRefercencesFromLists(String internalType){
 		
 		List<BaseEntity> entityList = new ArrayList<BaseEntity>();
+		collectFromList(this, entityList, getAnswerQuestionList(), internalType);
 
 		return entityList;
 	}
@@ -284,6 +400,7 @@ public class UserAnswer extends BaseEntity implements  java.io.Serializable{
 	public  List<SmartList<?>> getAllRelatedLists() {
 		List<SmartList<?>> listOfList = new ArrayList<SmartList<?>>();
 		
+		listOfList.add( getAnswerQuestionList());
 			
 
 		return listOfList;
@@ -299,6 +416,11 @@ public class UserAnswer extends BaseEntity implements  java.io.Serializable{
 		appendKeyValuePair(result, QUESTION_PROPERTY, getQuestion());
 		appendKeyValuePair(result, EXAM_PROPERTY, getExam());
 		appendKeyValuePair(result, VERSION_PROPERTY, getVersion());
+		appendKeyValuePair(result, ANSWER_QUESTION_LIST, getAnswerQuestionList());
+		if(!getAnswerQuestionList().isEmpty()){
+			appendKeyValuePair(result, "answerQuestionCount", getAnswerQuestionList().getTotalCount());
+			appendKeyValuePair(result, "answerQuestionCurrentPageNumber", getAnswerQuestionList().getCurrentPageNumber());
+		}
 
 		
 		return result;
@@ -319,6 +441,7 @@ public class UserAnswer extends BaseEntity implements  java.io.Serializable{
 			dest.setQuestion(getQuestion());
 			dest.setExam(getExam());
 			dest.setVersion(getVersion());
+			dest.setAnswerQuestionList(getAnswerQuestionList());
 
 		}
 		super.copyTo(baseDest);
@@ -338,6 +461,7 @@ public class UserAnswer extends BaseEntity implements  java.io.Serializable{
 			dest.mergeQuestion(getQuestion());
 			dest.mergeExam(getExam());
 			dest.mergeVersion(getVersion());
+			dest.mergeAnswerQuestionList(getAnswerQuestionList());
 
 		}
 		super.copyTo(baseDest);

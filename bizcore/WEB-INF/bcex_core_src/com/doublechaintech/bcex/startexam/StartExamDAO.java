@@ -9,8 +9,10 @@ import com.doublechaintech.bcex.MultipleAccessKey;
 import com.doublechaintech.bcex.BcexUserContext;
 
 import com.doublechaintech.bcex.changerequest.ChangeRequest;
+import com.doublechaintech.bcex.wechatuser.WechatUser;
 
 import com.doublechaintech.bcex.changerequest.ChangeRequestDAO;
+import com.doublechaintech.bcex.wechatuser.WechatUserDAO;
 
 
 public interface StartExamDAO{
@@ -47,6 +49,14 @@ public interface StartExamDAO{
 	public SmartList<StartExam> queryList(String sql, Object ... parmeters);
 	public int count(String sql, Object ... parmeters);
  
+ 	public SmartList<StartExam> findStartExamByUser(String wechatUserId, Map<String,Object> options);
+ 	public int countStartExamByUser(String wechatUserId, Map<String,Object> options);
+ 	public Map<String, Integer> countStartExamByUserIds(String[] ids, Map<String,Object> options);
+ 	public SmartList<StartExam> findStartExamByUser(String wechatUserId, int start, int count, Map<String,Object> options);
+ 	public void analyzeStartExamByUser(SmartList<StartExam> resultList, String wechatUserId, Map<String,Object> options);
+
+ 
+  
  	public SmartList<StartExam> findStartExamByChangeRequest(String changeRequestId, Map<String,Object> options);
  	public int countStartExamByChangeRequest(String changeRequestId, Map<String,Object> options);
  	public Map<String, Integer> countStartExamByChangeRequestIds(String[] ids, Map<String,Object> options);

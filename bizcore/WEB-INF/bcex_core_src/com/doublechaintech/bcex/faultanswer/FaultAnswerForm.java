@@ -177,6 +177,20 @@ public class FaultAnswerForm extends BaseForm {
 	}
 
 
+	public FaultAnswerForm userTypeFieldOfWechatUser(String parameterName, String initValue){
+		FormField field =  userTypeFromWechatUser(parameterName, initValue);
+		this.addFormField(field);	
+		return this;
+	}
+	
+	public FaultAnswerForm userTypeFieldOfWechatUser(String initValue){
+		return userTypeFieldOfWechatUser("userType",initValue);
+	}
+	public FaultAnswerForm userTypeFieldOfWechatUser(){
+		return userTypeFieldOfWechatUser("userType","");
+	}
+
+
 	public FaultAnswerForm platformIdFieldOfWechatUser(String parameterName, String initValue){
 		FormField field =  platformIdFromWechatUser(parameterName, initValue);
 		this.addFormField(field);	

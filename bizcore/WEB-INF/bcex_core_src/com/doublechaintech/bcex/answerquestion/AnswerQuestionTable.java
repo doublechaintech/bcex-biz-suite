@@ -20,16 +20,16 @@ public class AnswerQuestionTable{
 	static final String COLUMN_ID = "id";
 	static final String COLUMN_NICK_NAME = "nick_name";
 	static final String COLUMN_USER = "user";
-	static final String COLUMN_QUESTION = "question";
+	static final String COLUMN_USER_ANSWER = "user_answer";
 	static final String COLUMN_ANSWER = "answer";
 	static final String COLUMN_CHANGE_REQUEST = "change_request";
 	static final String COLUMN_VERSION = "version";
  
 	public static final String []ALL_CLOUMNS = {COLUMN_ID, 
-		COLUMN_NICK_NAME, COLUMN_USER, COLUMN_QUESTION, COLUMN_ANSWER, COLUMN_CHANGE_REQUEST, 
+		COLUMN_NICK_NAME, COLUMN_USER, COLUMN_USER_ANSWER, COLUMN_ANSWER, COLUMN_CHANGE_REQUEST, 
 		COLUMN_VERSION};
 	public static final String []NORMAL_CLOUMNS = {
-		COLUMN_NICK_NAME, COLUMN_USER, COLUMN_QUESTION, COLUMN_ANSWER, COLUMN_CHANGE_REQUEST
+		COLUMN_NICK_NAME, COLUMN_USER, COLUMN_USER_ANSWER, COLUMN_ANSWER, COLUMN_CHANGE_REQUEST
 		};
 	
 	

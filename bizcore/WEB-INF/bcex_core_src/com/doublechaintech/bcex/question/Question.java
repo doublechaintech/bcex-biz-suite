@@ -14,7 +14,6 @@ import com.doublechaintech.bcex.KeyValuePair;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.doublechaintech.bcex.answer.Answer;
 import com.doublechaintech.bcex.platform.Platform;
-import com.doublechaintech.bcex.answerquestion.AnswerQuestion;
 import com.doublechaintech.bcex.useranswer.UserAnswer;
 
 @JsonSerialize(using = QuestionSerializer.class)
@@ -33,7 +32,6 @@ public class Question extends BaseEntity implements  java.io.Serializable{
 	public static final String PLATFORM_PROPERTY              = "platform"          ;
 	public static final String VERSION_PROPERTY               = "version"           ;
 
-	public static final String ANSWER_QUESTION_LIST                     = "answerQuestionList";
 	public static final String ANSWER_LIST                              = "answerList"        ;
 	public static final String USER_ANSWER_LIST                         = "userAnswerList"    ;
 
@@ -69,7 +67,6 @@ public class Question extends BaseEntity implements  java.io.Serializable{
 	protected		int                 	mVersion            ;
 	
 	
-	protected		SmartList<AnswerQuestion>	mAnswerQuestionList ;
 	protected		SmartList<Answer>   	mAnswerList         ;
 	protected		SmartList<UserAnswer>	mUserAnswerList     ;
 	
@@ -106,7 +103,6 @@ public class Question extends BaseEntity implements  java.io.Serializable{
 		setRightAnswer(rightAnswer);
 		setPlatform(platform);
 
-		this.mAnswerQuestionList = new SmartList<AnswerQuestion>();
 		this.mAnswerList = new SmartList<Answer>();
 		this.mUserAnswerList = new SmartList<UserAnswer>();	
 	}
@@ -295,10 +291,6 @@ public class Question extends BaseEntity implements  java.io.Serializable{
 		}
 		if(PLATFORM_PROPERTY.equals(property)){
 			return getPlatform();
-		}
-		if(ANSWER_QUESTION_LIST.equals(property)){
-			List<BaseEntity> list = getAnswerQuestionList().stream().map(item->item).collect(Collectors.toList());
-			return list;
 		}
 		if(ANSWER_LIST.equals(property)){
 			List<BaseEntity> list = getAnswerList().stream().map(item->item).collect(Collectors.toList());
@@ -500,113 +492,6 @@ public class Question extends BaseEntity implements  java.io.Serializable{
 	}
 	
 	
-
-	public  SmartList<AnswerQuestion> getAnswerQuestionList(){
-		if(this.mAnswerQuestionList == null){
-			this.mAnswerQuestionList = new SmartList<AnswerQuestion>();
-			this.mAnswerQuestionList.setListInternalName (ANSWER_QUESTION_LIST );
-			//有名字，便于做权限控制
-		}
-		
-		return this.mAnswerQuestionList;	
-	}
-	public  void setAnswerQuestionList(SmartList<AnswerQuestion> answerQuestionList){
-		for( AnswerQuestion answerQuestion:answerQuestionList){
-			answerQuestion.setQuestion(this);
-		}
-
-		this.mAnswerQuestionList = answerQuestionList;
-		this.mAnswerQuestionList.setListInternalName (ANSWER_QUESTION_LIST );
-		
-	}
-	
-	public  void addAnswerQuestion(AnswerQuestion answerQuestion){
-		answerQuestion.setQuestion(this);
-		getAnswerQuestionList().add(answerQuestion);
-	}
-	public  void addAnswerQuestionList(SmartList<AnswerQuestion> answerQuestionList){
-		for( AnswerQuestion answerQuestion:answerQuestionList){
-			answerQuestion.setQuestion(this);
-		}
-		getAnswerQuestionList().addAll(answerQuestionList);
-	}
-	public  void mergeAnswerQuestionList(SmartList<AnswerQuestion> answerQuestionList){
-		if(answerQuestionList==null){
-			return;
-		}
-		if(answerQuestionList.isEmpty()){
-			return;
-		}
-		addAnswerQuestionList( answerQuestionList );
-		
-	}
-	public  AnswerQuestion removeAnswerQuestion(AnswerQuestion answerQuestionIndex){
-		
-		int index = getAnswerQuestionList().indexOf(answerQuestionIndex);
-        if(index < 0){
-        	String message = "AnswerQuestion("+answerQuestionIndex.getId()+") with version='"+answerQuestionIndex.getVersion()+"' NOT found!";
-            throw new IllegalStateException(message);
-        }
-        AnswerQuestion answerQuestion = getAnswerQuestionList().get(index);        
-        // answerQuestion.clearQuestion(); //disconnect with Question
-        answerQuestion.clearFromAll(); //disconnect with Question
-		
-		boolean result = getAnswerQuestionList().planToRemove(answerQuestion);
-        if(!result){
-        	String message = "AnswerQuestion("+answerQuestionIndex.getId()+") with version='"+answerQuestionIndex.getVersion()+"' NOT found!";
-            throw new IllegalStateException(message);
-        }
-        return answerQuestion;
-        
-	
-	}
-	//断舍离
-	public  void breakWithAnswerQuestion(AnswerQuestion answerQuestion){
-		
-		if(answerQuestion == null){
-			return;
-		}
-		answerQuestion.setQuestion(null);
-		//getAnswerQuestionList().remove();
-	
-	}
-	
-	public  boolean hasAnswerQuestion(AnswerQuestion answerQuestion){
-	
-		return getAnswerQuestionList().contains(answerQuestion);
-  
-	}
-	
-	public void copyAnswerQuestionFrom(AnswerQuestion answerQuestion) {
-
-		AnswerQuestion answerQuestionInList = findTheAnswerQuestion(answerQuestion);
-		AnswerQuestion newAnswerQuestion = new AnswerQuestion();
-		answerQuestionInList.copyTo(newAnswerQuestion);
-		newAnswerQuestion.setVersion(0);//will trigger copy
-		getAnswerQuestionList().add(newAnswerQuestion);
-		addItemToFlexiableObject(COPIED_CHILD, newAnswerQuestion);
-	}
-	
-	public  AnswerQuestion findTheAnswerQuestion(AnswerQuestion answerQuestion){
-		
-		int index =  getAnswerQuestionList().indexOf(answerQuestion);
-		//The input parameter must have the same id and version number.
-		if(index < 0){
- 			String message = "AnswerQuestion("+answerQuestion.getId()+") with version='"+answerQuestion.getVersion()+"' NOT found!";
-			throw new IllegalStateException(message);
-		}
-		
-		return  getAnswerQuestionList().get(index);
-		//Performance issue when using LinkedList, but it is almost an ArrayList for sure!
-	}
-	
-	public  void cleanUpAnswerQuestionList(){
-		getAnswerQuestionList().clear();
-	}
-	
-	
-	
-
 
 	public  SmartList<Answer> getAnswerList(){
 		if(this.mAnswerList == null){
@@ -832,7 +717,6 @@ public class Question extends BaseEntity implements  java.io.Serializable{
 	public List<BaseEntity>  collectRefercencesFromLists(String internalType){
 		
 		List<BaseEntity> entityList = new ArrayList<BaseEntity>();
-		collectFromList(this, entityList, getAnswerQuestionList(), internalType);
 		collectFromList(this, entityList, getAnswerList(), internalType);
 		collectFromList(this, entityList, getUserAnswerList(), internalType);
 
@@ -842,7 +726,6 @@ public class Question extends BaseEntity implements  java.io.Serializable{
 	public  List<SmartList<?>> getAllRelatedLists() {
 		List<SmartList<?>> listOfList = new ArrayList<SmartList<?>>();
 		
-		listOfList.add( getAnswerQuestionList());
 		listOfList.add( getAnswerList());
 		listOfList.add( getUserAnswerList());
 			
@@ -865,11 +748,6 @@ public class Question extends BaseEntity implements  java.io.Serializable{
 		appendKeyValuePair(result, RIGHT_ANSWER_PROPERTY, getRightAnswer());
 		appendKeyValuePair(result, PLATFORM_PROPERTY, getPlatform());
 		appendKeyValuePair(result, VERSION_PROPERTY, getVersion());
-		appendKeyValuePair(result, ANSWER_QUESTION_LIST, getAnswerQuestionList());
-		if(!getAnswerQuestionList().isEmpty()){
-			appendKeyValuePair(result, "answerQuestionCount", getAnswerQuestionList().getTotalCount());
-			appendKeyValuePair(result, "answerQuestionCurrentPageNumber", getAnswerQuestionList().getCurrentPageNumber());
-		}
 		appendKeyValuePair(result, ANSWER_LIST, getAnswerList());
 		if(!getAnswerList().isEmpty()){
 			appendKeyValuePair(result, "answerCount", getAnswerList().getTotalCount());
@@ -905,7 +783,6 @@ public class Question extends BaseEntity implements  java.io.Serializable{
 			dest.setRightAnswer(getRightAnswer());
 			dest.setPlatform(getPlatform());
 			dest.setVersion(getVersion());
-			dest.setAnswerQuestionList(getAnswerQuestionList());
 			dest.setAnswerList(getAnswerList());
 			dest.setUserAnswerList(getUserAnswerList());
 
@@ -932,7 +809,6 @@ public class Question extends BaseEntity implements  java.io.Serializable{
 			dest.mergeRightAnswer(getRightAnswer());
 			dest.mergePlatform(getPlatform());
 			dest.mergeVersion(getVersion());
-			dest.mergeAnswerQuestionList(getAnswerQuestionList());
 			dest.mergeAnswerList(getAnswerList());
 			dest.mergeUserAnswerList(getUserAnswerList());
 

@@ -30,8 +30,8 @@ import com.doublechaintech.bcex.platform.CandidatePlatform;
 import com.doublechaintech.bcex.changerequesttype.CandidateChangeRequestType;
 
 import com.doublechaintech.bcex.changerequest.ChangeRequest;
+import com.doublechaintech.bcex.useranswer.UserAnswer;
 import com.doublechaintech.bcex.wechatuser.WechatUser;
-import com.doublechaintech.bcex.question.Question;
 
 
 
@@ -542,6 +542,24 @@ public class ChangeRequestManagerImpl extends CustomBcexCheckerManager implement
 	}
 
 
+	//disconnect ChangeRequest with user in StartExam
+	protected ChangeRequest breakWithStartExamByUser(BcexUserContext userContext, String changeRequestId, String userId,  String [] tokensExpr)
+		 throws Exception{
+			
+			//TODO add check code here
+			
+			ChangeRequest changeRequest = loadChangeRequest(userContext, changeRequestId, allTokens());
+
+			synchronized(changeRequest){ 
+				//Will be good when the thread loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				
+				changeRequestDaoOf(userContext).planToRemoveStartExamListWithUser(changeRequest, userId, this.emptyOptions());
+
+				changeRequest = saveChangeRequest(userContext, changeRequest, tokens().withStartExamList().done());
+				return changeRequest;
+			}
+	}
 	//disconnect ChangeRequest with user in AnswerQuestion
 	protected ChangeRequest breakWithAnswerQuestionByUser(BcexUserContext userContext, String changeRequestId, String userId,  String [] tokensExpr)
 		 throws Exception{
@@ -560,8 +578,8 @@ public class ChangeRequestManagerImpl extends CustomBcexCheckerManager implement
 				return changeRequest;
 			}
 	}
-	//disconnect ChangeRequest with question in AnswerQuestion
-	protected ChangeRequest breakWithAnswerQuestionByQuestion(BcexUserContext userContext, String changeRequestId, String questionId,  String [] tokensExpr)
+	//disconnect ChangeRequest with user_answer in AnswerQuestion
+	protected ChangeRequest breakWithAnswerQuestionByUserAnswer(BcexUserContext userContext, String changeRequestId, String userAnswerId,  String [] tokensExpr)
 		 throws Exception{
 			
 			//TODO add check code here
@@ -572,7 +590,7 @@ public class ChangeRequestManagerImpl extends CustomBcexCheckerManager implement
 				//Will be good when the thread loaded from this JVM process cache.
 				//Also good when there is a RAM based DAO implementation
 				
-				changeRequestDaoOf(userContext).planToRemoveAnswerQuestionListWithQuestion(changeRequest, questionId, this.emptyOptions());
+				changeRequestDaoOf(userContext).planToRemoveAnswerQuestionListWithUserAnswer(changeRequest, userAnswerId, this.emptyOptions());
 
 				changeRequest = saveChangeRequest(userContext, changeRequest, tokens().withAnswerQuestionList().done());
 				return changeRequest;
@@ -823,23 +841,25 @@ public class ChangeRequestManagerImpl extends CustomBcexCheckerManager implement
 
 
 
-	protected void checkParamsForAddingStartExam(BcexUserContext userContext, String changeRequestId, String nickName,String [] tokensExpr) throws Exception{
+	protected void checkParamsForAddingStartExam(BcexUserContext userContext, String changeRequestId, String nickName, String userId,String [] tokensExpr) throws Exception{
 		
 				checkerOf(userContext).checkIdOfChangeRequest(changeRequestId);
 
 		
 		checkerOf(userContext).checkNickNameOfStartExam(nickName);
+		
+		checkerOf(userContext).checkUserIdOfStartExam(userId);
 	
 		checkerOf(userContext).throwExceptionIfHasErrors(ChangeRequestManagerException.class);
 
 	
 	}
-	public  ChangeRequest addStartExam(BcexUserContext userContext, String changeRequestId, String nickName, String [] tokensExpr) throws Exception
+	public  ChangeRequest addStartExam(BcexUserContext userContext, String changeRequestId, String nickName, String userId, String [] tokensExpr) throws Exception
 	{	
 		
-		checkParamsForAddingStartExam(userContext,changeRequestId,nickName,tokensExpr);
+		checkParamsForAddingStartExam(userContext,changeRequestId,nickName, userId,tokensExpr);
 		
-		StartExam startExam = createStartExam(userContext,nickName);
+		StartExam startExam = createStartExam(userContext,nickName, userId);
 		
 		ChangeRequest changeRequest = loadChangeRequest(userContext, changeRequestId, allTokens());
 		synchronized(changeRequest){ 
@@ -890,12 +910,15 @@ public class ChangeRequestManagerImpl extends CustomBcexCheckerManager implement
 	}
 	
 	
-	protected StartExam createStartExam(BcexUserContext userContext, String nickName) throws Exception{
+	protected StartExam createStartExam(BcexUserContext userContext, String nickName, String userId) throws Exception{
 
 		StartExam startExam = new StartExam();
 		
 		
-		startExam.setNickName(nickName);
+		startExam.setNickName(nickName);		
+		WechatUser  user = new WechatUser();
+		user.setId(userId);		
+		startExam.setUser(user);
 	
 		
 		return startExam;
@@ -1053,7 +1076,7 @@ public class ChangeRequestManagerImpl extends CustomBcexCheckerManager implement
 
 
 
-	protected void checkParamsForAddingAnswerQuestion(BcexUserContext userContext, String changeRequestId, String nickName, String userId, String questionId, String answer,String [] tokensExpr) throws Exception{
+	protected void checkParamsForAddingAnswerQuestion(BcexUserContext userContext, String changeRequestId, String nickName, String userId, String userAnswerId, String answer,String [] tokensExpr) throws Exception{
 		
 				checkerOf(userContext).checkIdOfChangeRequest(changeRequestId);
 
@@ -1062,7 +1085,7 @@ public class ChangeRequestManagerImpl extends CustomBcexCheckerManager implement
 		
 		checkerOf(userContext).checkUserIdOfAnswerQuestion(userId);
 		
-		checkerOf(userContext).checkQuestionIdOfAnswerQuestion(questionId);
+		checkerOf(userContext).checkUserAnswerIdOfAnswerQuestion(userAnswerId);
 		
 		checkerOf(userContext).checkAnswerOfAnswerQuestion(answer);
 	
@@ -1070,12 +1093,12 @@ public class ChangeRequestManagerImpl extends CustomBcexCheckerManager implement
 
 	
 	}
-	public  ChangeRequest addAnswerQuestion(BcexUserContext userContext, String changeRequestId, String nickName, String userId, String questionId, String answer, String [] tokensExpr) throws Exception
+	public  ChangeRequest addAnswerQuestion(BcexUserContext userContext, String changeRequestId, String nickName, String userId, String userAnswerId, String answer, String [] tokensExpr) throws Exception
 	{	
 		
-		checkParamsForAddingAnswerQuestion(userContext,changeRequestId,nickName, userId, questionId, answer,tokensExpr);
+		checkParamsForAddingAnswerQuestion(userContext,changeRequestId,nickName, userId, userAnswerId, answer,tokensExpr);
 		
-		AnswerQuestion answerQuestion = createAnswerQuestion(userContext,nickName, userId, questionId, answer);
+		AnswerQuestion answerQuestion = createAnswerQuestion(userContext,nickName, userId, userAnswerId, answer);
 		
 		ChangeRequest changeRequest = loadChangeRequest(userContext, changeRequestId, allTokens());
 		synchronized(changeRequest){ 
@@ -1128,7 +1151,7 @@ public class ChangeRequestManagerImpl extends CustomBcexCheckerManager implement
 	}
 	
 	
-	protected AnswerQuestion createAnswerQuestion(BcexUserContext userContext, String nickName, String userId, String questionId, String answer) throws Exception{
+	protected AnswerQuestion createAnswerQuestion(BcexUserContext userContext, String nickName, String userId, String userAnswerId, String answer) throws Exception{
 
 		AnswerQuestion answerQuestion = new AnswerQuestion();
 		
@@ -1137,9 +1160,9 @@ public class ChangeRequestManagerImpl extends CustomBcexCheckerManager implement
 		WechatUser  user = new WechatUser();
 		user.setId(userId);		
 		answerQuestion.setUser(user);		
-		Question  question = new Question();
-		question.setId(questionId);		
-		answerQuestion.setQuestion(question);		
+		UserAnswer  userAnswer = new UserAnswer();
+		userAnswer.setId(userAnswerId);		
+		answerQuestion.setUserAnswer(userAnswer);		
 		answerQuestion.setAnswer(answer);
 	
 		

@@ -60,6 +60,8 @@ public abstract class BaseWxappServiceViewService extends ChangeRequestCustomMan
 	}
 	public static final int $PRC_RESULT_OBJECT_WAS_SET = -1;
 	public static final int PRC_BY_DEFAULT = 0;
+	public static final int PRC_HAS_MORE_QUESTION = 1;
+	public static final int PRC_ALL_DONE = 2;
 	protected boolean returnRightNow(int resultCode) {
 		return $PRC_RESULT_OBJECT_WAS_SET == resultCode;
 	}
@@ -458,6 +460,22 @@ public abstract class BaseWxappServiceViewService extends ChangeRequestCustomMan
 	public static String makeViewDashboardUrl(CustomBcexUserContextImpl ctx){
 		return makeUrl("customerViewDashboard");
 	}
+	// 处理请求：更新个人信息
+	public static String makeUpdateProfileUrl(CustomBcexUserContextImpl ctx, String name , String avantar , String userType){
+		return makeUrl("customerUpdateProfile", name , avantar , userType);
+	}
+	// 处理请求：开始考试
+	public static String makeStartExamUrl(CustomBcexUserContextImpl ctx){
+		return makeUrl("customerStartExam");
+	}
+	// 处理请求：答题
+	public static String makeAnswerQuestionUrl(CustomBcexUserContextImpl ctx, String quizId , String answer){
+		return makeUrl("customerAnswerQuestion", quizId , answer);
+	}
+	// 处理请求：查看成绩
+	public static String makeViewScoreUrl(CustomBcexUserContextImpl ctx, String quizId){
+		return makeUrl("customerViewScore", quizId);
+	}
 
 	/** 处理请求：默认的客户端登录接口. 返回值：PRC_BY_DEFAULT: ;  */
 	protected abstract int processRequestClientLogin(CustomBcexUserContextImpl ctx) throws Exception;
@@ -465,9 +483,37 @@ public abstract class BaseWxappServiceViewService extends ChangeRequestCustomMan
 	protected abstract int processRequestViewHomepage(CustomBcexUserContextImpl ctx) throws Exception;
 	/** 处理请求：我的. 返回值：PRC_BY_DEFAULT: ;  */
 	protected abstract int processRequestCustomerViewDashboard(CustomBcexUserContextImpl ctx) throws Exception;
+	/** 处理请求：更新个人信息. 返回值：PRC_BY_DEFAULT: ;  */
+	protected abstract int processRequestCustomerUpdateProfile(CustomBcexUserContextImpl ctx) throws Exception;
+	/** 处理请求：开始考试. 返回值：PRC_BY_DEFAULT: ;  */
+	protected abstract int processRequestCustomerStartExam(CustomBcexUserContextImpl ctx) throws Exception;
+	/** 处理请求：答题. 返回值：PRC_HAS_MORE_QUESTION: 还有题目; PRC_ALL_DONE: 全部答完;  */
+	protected abstract int processRequestCustomerAnswerQuestion(CustomBcexUserContextImpl ctx) throws Exception;
+	/** 处理请求：查看成绩. 返回值：PRC_BY_DEFAULT: ;  */
+	protected abstract int processRequestCustomerViewScore(CustomBcexUserContextImpl ctx) throws Exception;
 
+	protected SimplePopupPage assemblerSimplePopupPage(CustomBcexUserContextImpl ctx, String requestName)throws Exception {
+		SimplePopupPage page = new SimplePopupPage();
+		page.assemblerContent(ctx, requestName);
+		return page;
+	}
+	protected AnswerSheetPage assemblerAnswerSheetPage(CustomBcexUserContextImpl ctx, String requestName)throws Exception {
+		AnswerSheetPage page = new AnswerSheetPage();
+		page.assemblerContent(ctx, requestName);
+		return page;
+	}
+	protected ExamResultPage assemblerExamResultPage(CustomBcexUserContextImpl ctx, String requestName)throws Exception {
+		ExamResultPage page = new ExamResultPage();
+		page.assemblerContent(ctx, requestName);
+		return page;
+	}
 	protected MePage assemblerMePage(CustomBcexUserContextImpl ctx, String requestName)throws Exception {
 		MePage page = new MePage();
+		page.assemblerContent(ctx, requestName);
+		return page;
+	}
+	protected ScoreboardPage assemblerScoreboardPage(CustomBcexUserContextImpl ctx, String requestName)throws Exception {
+		ScoreboardPage page = new ScoreboardPage();
 		page.assemblerContent(ctx, requestName);
 		return page;
 	}

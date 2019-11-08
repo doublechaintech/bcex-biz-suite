@@ -22,13 +22,11 @@ import com.doublechaintech.bcex.BcexUserContext;
 
 import com.doublechaintech.bcex.answer.Answer;
 import com.doublechaintech.bcex.platform.Platform;
-import com.doublechaintech.bcex.answerquestion.AnswerQuestion;
 import com.doublechaintech.bcex.useranswer.UserAnswer;
 
 import com.doublechaintech.bcex.useranswer.UserAnswerDAO;
 import com.doublechaintech.bcex.platform.PlatformDAO;
 import com.doublechaintech.bcex.answer.AnswerDAO;
-import com.doublechaintech.bcex.answerquestion.AnswerQuestionDAO;
 
 
 
@@ -49,25 +47,6 @@ public class QuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements Question
  	}
 
 
-			
-		
-	
-  	private  AnswerQuestionDAO  answerQuestionDAO;
- 	public void setAnswerQuestionDAO(AnswerQuestionDAO pAnswerQuestionDAO){
- 	
- 		if(pAnswerQuestionDAO == null){
- 			throw new IllegalStateException("Do not try to set answerQuestionDAO to null.");
- 		}
-	 	this.answerQuestionDAO = pAnswerQuestionDAO;
- 	}
- 	public AnswerQuestionDAO getAnswerQuestionDAO(){
- 		if(this.answerQuestionDAO == null){
- 			throw new IllegalStateException("The answerQuestionDAO is not configured yet, please config it some where.");
- 		}
- 		
-	 	return this.answerQuestionDAO;
- 	}	
- 	
 			
 		
 	
@@ -156,13 +135,6 @@ public class QuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements Question
 		Question newQuestion = loadInternalQuestion(accessKey, options);
 		newQuestion.setVersion(0);
 		
-		
- 		
- 		if(isSaveAnswerQuestionListEnabled(options)){
- 			for(AnswerQuestion item: newQuestion.getAnswerQuestionList()){
- 				item.setVersion(0);
- 			}
- 		}
 		
  		
  		if(isSaveAnswerListEnabled(options)){
@@ -284,20 +256,6 @@ public class QuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements Question
  
 		
 	
-	protected boolean isExtractAnswerQuestionListEnabled(Map<String,Object> options){		
- 		return checkOptions(options,QuestionTokens.ANSWER_QUESTION_LIST);
- 	}
- 	protected boolean isAnalyzeAnswerQuestionListEnabled(Map<String,Object> options){		 		
- 		return QuestionTokens.of(options).analyzeAnswerQuestionListEnabled();
- 	}
-	
-	protected boolean isSaveAnswerQuestionListEnabled(Map<String,Object> options){
-		return checkOptions(options, QuestionTokens.ANSWER_QUESTION_LIST);
-		
- 	}
- 	
-		
-	
 	protected boolean isExtractAnswerListEnabled(Map<String,Object> options){		
  		return checkOptions(options,QuestionTokens.ANSWER_LIST);
  	}
@@ -356,14 +314,6 @@ public class QuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements Question
  		}
  
 		
-		if(isExtractAnswerQuestionListEnabled(loadOptions)){
-	 		extractAnswerQuestionList(question, loadOptions);
- 		}	
- 		if(isAnalyzeAnswerQuestionListEnabled(loadOptions)){
-	 		analyzeAnswerQuestionList(question, loadOptions);
- 		}
- 		
-		
 		if(isExtractAnswerListEnabled(loadOptions)){
 	 		extractAnswerList(question, loadOptions);
  		}	
@@ -405,56 +355,6 @@ public class QuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements Question
  	}
  		
  
-		
-	protected void enhanceAnswerQuestionList(SmartList<AnswerQuestion> answerQuestionList,Map<String,Object> options){
-		//extract multiple list from difference sources
-		//Trying to use a single SQL to extract all data from database and do the work in java side, java is easier to scale to N ndoes;
-	}
-	
-	protected Question extractAnswerQuestionList(Question question, Map<String,Object> options){
-		
-		
-		if(question == null){
-			return null;
-		}
-		if(question.getId() == null){
-			return question;
-		}
-
-		
-		
-		SmartList<AnswerQuestion> answerQuestionList = getAnswerQuestionDAO().findAnswerQuestionByQuestion(question.getId(),options);
-		if(answerQuestionList != null){
-			enhanceAnswerQuestionList(answerQuestionList,options);
-			question.setAnswerQuestionList(answerQuestionList);
-		}
-		
-		return question;
-	
-	}	
-	
-	protected Question analyzeAnswerQuestionList(Question question, Map<String,Object> options){
-		
-		
-		if(question == null){
-			return null;
-		}
-		if(question.getId() == null){
-			return question;
-		}
-
-		
-		
-		SmartList<AnswerQuestion> answerQuestionList = question.getAnswerQuestionList();
-		if(answerQuestionList != null){
-			getAnswerQuestionDAO().analyzeAnswerQuestionByQuestion(answerQuestionList, question.getId(), options);
-			
-		}
-		
-		return question;
-	
-	}	
-	
 		
 	protected void enhanceAnswerList(SmartList<Answer> answerList,Map<String,Object> options){
 		//extract multiple list from difference sources
@@ -785,13 +685,6 @@ public class QuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements Question
  		}
  
 		
-		if(isSaveAnswerQuestionListEnabled(options)){
-	 		saveAnswerQuestionList(question, options);
-	 		//removeAnswerQuestionList(question, options);
-	 		//Not delete the record
-	 		
- 		}		
-		
 		if(isSaveAnswerListEnabled(options)){
 	 		saveAnswerList(question, options);
 	 		//removeAnswerList(question, options);
@@ -832,122 +725,6 @@ public class QuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements Question
 	
  
 
-	
-	public Question planToRemoveAnswerQuestionList(Question question, String answerQuestionIds[], Map<String,Object> options)throws Exception{
-	
-		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(AnswerQuestion.QUESTION_PROPERTY, question.getId());
-		key.put(AnswerQuestion.ID_PROPERTY, answerQuestionIds);
-		
-		SmartList<AnswerQuestion> externalAnswerQuestionList = getAnswerQuestionDAO().
-				findAnswerQuestionWithKey(key, options);
-		if(externalAnswerQuestionList == null){
-			return question;
-		}
-		if(externalAnswerQuestionList.isEmpty()){
-			return question;
-		}
-		
-		for(AnswerQuestion answerQuestionItem: externalAnswerQuestionList){
-
-			answerQuestionItem.clearFromAll();
-		}
-		
-		
-		SmartList<AnswerQuestion> answerQuestionList = question.getAnswerQuestionList();		
-		answerQuestionList.addAllToRemoveList(externalAnswerQuestionList);
-		return question;	
-	
-	}
-
-
-	//disconnect Question with user in AnswerQuestion
-	public Question planToRemoveAnswerQuestionListWithUser(Question question, String userId, Map<String,Object> options)throws Exception{
-				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
-		//the list will not be null here, empty, maybe
-		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
-		
-		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(AnswerQuestion.QUESTION_PROPERTY, question.getId());
-		key.put(AnswerQuestion.USER_PROPERTY, userId);
-		
-		SmartList<AnswerQuestion> externalAnswerQuestionList = getAnswerQuestionDAO().
-				findAnswerQuestionWithKey(key, options);
-		if(externalAnswerQuestionList == null){
-			return question;
-		}
-		if(externalAnswerQuestionList.isEmpty()){
-			return question;
-		}
-		
-		for(AnswerQuestion answerQuestionItem: externalAnswerQuestionList){
-			answerQuestionItem.clearUser();
-			answerQuestionItem.clearQuestion();
-			
-		}
-		
-		
-		SmartList<AnswerQuestion> answerQuestionList = question.getAnswerQuestionList();		
-		answerQuestionList.addAllToRemoveList(externalAnswerQuestionList);
-		return question;
-	}
-	
-	public int countAnswerQuestionListWithUser(String questionId, String userId, Map<String,Object> options)throws Exception{
-				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
-		//the list will not be null here, empty, maybe
-		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
-
-		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(AnswerQuestion.QUESTION_PROPERTY, questionId);
-		key.put(AnswerQuestion.USER_PROPERTY, userId);
-		
-		int count = getAnswerQuestionDAO().countAnswerQuestionWithKey(key, options);
-		return count;
-	}
-	
-	//disconnect Question with change_request in AnswerQuestion
-	public Question planToRemoveAnswerQuestionListWithChangeRequest(Question question, String changeRequestId, Map<String,Object> options)throws Exception{
-				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
-		//the list will not be null here, empty, maybe
-		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
-		
-		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(AnswerQuestion.QUESTION_PROPERTY, question.getId());
-		key.put(AnswerQuestion.CHANGE_REQUEST_PROPERTY, changeRequestId);
-		
-		SmartList<AnswerQuestion> externalAnswerQuestionList = getAnswerQuestionDAO().
-				findAnswerQuestionWithKey(key, options);
-		if(externalAnswerQuestionList == null){
-			return question;
-		}
-		if(externalAnswerQuestionList.isEmpty()){
-			return question;
-		}
-		
-		for(AnswerQuestion answerQuestionItem: externalAnswerQuestionList){
-			answerQuestionItem.clearChangeRequest();
-			answerQuestionItem.clearQuestion();
-			
-		}
-		
-		
-		SmartList<AnswerQuestion> answerQuestionList = question.getAnswerQuestionList();		
-		answerQuestionList.addAllToRemoveList(externalAnswerQuestionList);
-		return question;
-	}
-	
-	public int countAnswerQuestionListWithChangeRequest(String questionId, String changeRequestId, Map<String,Object> options)throws Exception{
-				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
-		//the list will not be null here, empty, maybe
-		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
-
-		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(AnswerQuestion.QUESTION_PROPERTY, questionId);
-		key.put(AnswerQuestion.CHANGE_REQUEST_PROPERTY, changeRequestId);
-		
-		int count = getAnswerQuestionDAO().countAnswerQuestionWithKey(key, options);
-		return count;
-	}
 	
 	public Question planToRemoveAnswerList(Question question, String answerIds[], Map<String,Object> options)throws Exception{
 	
@@ -1050,72 +827,6 @@ public class QuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements Question
 	}
 	
 
-		
-	protected Question saveAnswerQuestionList(Question question, Map<String,Object> options){
-		
-		
-		
-		
-		SmartList<AnswerQuestion> answerQuestionList = question.getAnswerQuestionList();
-		if(answerQuestionList == null){
-			//null list means nothing
-			return question;
-		}
-		SmartList<AnswerQuestion> mergedUpdateAnswerQuestionList = new SmartList<AnswerQuestion>();
-		
-		
-		mergedUpdateAnswerQuestionList.addAll(answerQuestionList); 
-		if(answerQuestionList.getToRemoveList() != null){
-			//ensures the toRemoveList is not null
-			mergedUpdateAnswerQuestionList.addAll(answerQuestionList.getToRemoveList());
-			answerQuestionList.removeAll(answerQuestionList.getToRemoveList());
-			//OK for now, need fix later
-		}
-
-		//adding new size can improve performance
-	
-		getAnswerQuestionDAO().saveAnswerQuestionList(mergedUpdateAnswerQuestionList,options);
-		
-		if(answerQuestionList.getToRemoveList() != null){
-			answerQuestionList.removeAll(answerQuestionList.getToRemoveList());
-		}
-		
-		
-		return question;
-	
-	}
-	
-	protected Question removeAnswerQuestionList(Question question, Map<String,Object> options){
-	
-	
-		SmartList<AnswerQuestion> answerQuestionList = question.getAnswerQuestionList();
-		if(answerQuestionList == null){
-			return question;
-		}	
-	
-		SmartList<AnswerQuestion> toRemoveAnswerQuestionList = answerQuestionList.getToRemoveList();
-		
-		if(toRemoveAnswerQuestionList == null){
-			return question;
-		}
-		if(toRemoveAnswerQuestionList.isEmpty()){
-			return question;// Does this mean delete all from the parent object?
-		}
-		//Call DAO to remove the list
-		
-		getAnswerQuestionDAO().removeAnswerQuestionList(toRemoveAnswerQuestionList,options);
-		
-		return question;
-	
-	}
-	
-	
-
- 	
- 	
-	
-	
-	
 		
 	protected Question saveAnswerList(Question question, Map<String,Object> options){
 		
@@ -1252,33 +963,12 @@ public class QuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements Question
 
 	public Question present(Question question,Map<String, Object> options){
 	
-		presentAnswerQuestionList(question,options);
 		presentAnswerList(question,options);
 		presentUserAnswerList(question,options);
 
 		return question;
 	
 	}
-		
-	//Using java8 feature to reduce the code significantly
- 	protected Question presentAnswerQuestionList(
-			Question question,
-			Map<String, Object> options) {
-
-		SmartList<AnswerQuestion> answerQuestionList = question.getAnswerQuestionList();		
-				SmartList<AnswerQuestion> newList= presentSubList(question.getId(),
-				answerQuestionList,
-				options,
-				getAnswerQuestionDAO()::countAnswerQuestionByQuestion,
-				getAnswerQuestionDAO()::findAnswerQuestionByQuestion
-				);
-
-		
-		question.setAnswerQuestionList(newList);
-		
-
-		return question;
-	}			
 		
 	//Using java8 feature to reduce the code significantly
  	protected Question presentAnswerList(
@@ -1322,12 +1012,6 @@ public class QuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements Question
 		
 
 	
-    public SmartList<Question> requestCandidateQuestionForAnswerQuestion(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception {
-        // NOTE: by default, ignore owner info, just return all by filter key.
-		// You need override this method if you have different candidate-logic
-		return findAllCandidateByFilter(QuestionTable.COLUMN_TOPIC, filterKey, pageNo, pageSize, getQuestionMapper());
-    }
-		
     public SmartList<Question> requestCandidateQuestionForAnswer(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception {
         // NOTE: by default, ignore owner info, just return all by filter key.
 		// You need override this method if you have different candidate-logic
@@ -1351,29 +1035,6 @@ public class QuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements Question
 		this.enhanceListInternal(questionList, this.getQuestionMapper());
 	}
 	
-	
-	// 需要一个加载引用我的对象的enhance方法:AnswerQuestion的question的AnswerQuestionList
-	public SmartList<AnswerQuestion> loadOurAnswerQuestionList(BcexUserContext userContext, List<Question> us, Map<String,Object> options) throws Exception{
-		if (us == null || us.isEmpty()){
-			return new SmartList<>();
-		}
-		Set<String> ids = us.stream().map(it->it.getId()).collect(Collectors.toSet());
-		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(AnswerQuestion.QUESTION_PROPERTY, ids.toArray(new String[ids.size()]));
-		SmartList<AnswerQuestion> loadedObjs = userContext.getDAOGroup().getAnswerQuestionDAO().findAnswerQuestionWithKey(key, options);
-		Map<String, List<AnswerQuestion>> loadedMap = loadedObjs.stream().collect(Collectors.groupingBy(it->it.getQuestion().getId()));
-		us.forEach(it->{
-			String id = it.getId();
-			List<AnswerQuestion> loadedList = loadedMap.get(id);
-			if (loadedList == null || loadedList.isEmpty()) {
-				return;
-			}
-			SmartList<AnswerQuestion> loadedSmartList = new SmartList<>();
-			loadedSmartList.addAll(loadedList);
-			it.setAnswerQuestionList(loadedSmartList);
-		});
-		return loadedObjs;
-	}
 	
 	// 需要一个加载引用我的对象的enhance方法:Answer的question的AnswerList
 	public SmartList<Answer> loadOurAnswerList(BcexUserContext userContext, List<Question> us, Map<String,Object> options) throws Exception{

@@ -131,9 +131,9 @@
 <c:set var="referName" value="(user)" scope="request" />
 <sky:include page="com/doublechaintech/bcex/wechatuser/WechatUser$Info.jsp" />
 
-<c:set var="question" value="${ result.question}" scope="request" />
+<c:set var="userAnswer" value="${ result.userAnswer}" scope="request" />
 <c:set var="referName" value="" scope="request" />
-<sky:include page="com/doublechaintech/bcex/question/Question$Info.jsp" />
+<sky:include page="com/doublechaintech/bcex/useranswer/UserAnswer$Info.jsp" />
 
 <c:set var="changeRequest" value="${ result.changeRequest}" scope="request" />
 <c:set var="referName" value="" scope="request" />

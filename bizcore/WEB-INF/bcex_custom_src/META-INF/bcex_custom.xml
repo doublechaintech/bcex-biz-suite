@@ -53,6 +53,7 @@
 
 	</bean>
 
+	<!-- 微信小程序 -->
 	<bean id="wxMaService"	class="cn.binarywang.wx.miniapp.api.impl.WxMaServiceImpl">
 		<property name="wxMaConfig">
 			<bean class="cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl">
@@ -80,7 +81,10 @@
 		
 	<bean id="wxappService"	class="com.doublechaintech.bcex.wxappservice.WxappServiceViewBizService">
 		<property name="wxMaService" ref="wxMaService"/>
+		<property name="changeRequestService" ref="changeRequestService"/>
 	</bean>
+
+
 </beans>
 
 

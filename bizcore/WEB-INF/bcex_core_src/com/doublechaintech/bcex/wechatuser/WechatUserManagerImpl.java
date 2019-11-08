@@ -24,14 +24,15 @@ import com.doublechaintech.bcex.wechatlogininfo.WechatLoginInfo;
 import com.doublechaintech.bcex.platform.Platform;
 import com.doublechaintech.bcex.faultanswer.FaultAnswer;
 import com.doublechaintech.bcex.answerquestion.AnswerQuestion;
+import com.doublechaintech.bcex.startexam.StartExam;
 import com.doublechaintech.bcex.exam.Exam;
 
 import com.doublechaintech.bcex.platform.CandidatePlatform;
 
 import com.doublechaintech.bcex.examstatus.ExamStatus;
 import com.doublechaintech.bcex.changerequest.ChangeRequest;
+import com.doublechaintech.bcex.useranswer.UserAnswer;
 import com.doublechaintech.bcex.wechatuser.WechatUser;
-import com.doublechaintech.bcex.question.Question;
 import com.doublechaintech.bcex.exam.Exam;
 
 
@@ -158,6 +159,10 @@ public class WechatUserManagerImpl extends CustomBcexCheckerManager implements W
 		addAction(userContext, wechatUser, tokens,"@copy","cloneWechatUser","cloneWechatUser/"+wechatUser.getId()+"/","main","primary");
 		
 		addAction(userContext, wechatUser, tokens,"wechat_user.transfer_to_platform","transferToAnotherPlatform","transferToAnotherPlatform/"+wechatUser.getId()+"/","main","primary");
+		addAction(userContext, wechatUser, tokens,"wechat_user.addStartExam","addStartExam","addStartExam/"+wechatUser.getId()+"/","startExamList","primary");
+		addAction(userContext, wechatUser, tokens,"wechat_user.removeStartExam","removeStartExam","removeStartExam/"+wechatUser.getId()+"/","startExamList","primary");
+		addAction(userContext, wechatUser, tokens,"wechat_user.updateStartExam","updateStartExam","updateStartExam/"+wechatUser.getId()+"/","startExamList","primary");
+		addAction(userContext, wechatUser, tokens,"wechat_user.copyStartExamFrom","copyStartExamFrom","copyStartExamFrom/"+wechatUser.getId()+"/","startExamList","primary");
 		addAction(userContext, wechatUser, tokens,"wechat_user.addAnswerQuestion","addAnswerQuestion","addAnswerQuestion/"+wechatUser.getId()+"/","answerQuestionList","primary");
 		addAction(userContext, wechatUser, tokens,"wechat_user.removeAnswerQuestion","removeAnswerQuestion","removeAnswerQuestion/"+wechatUser.getId()+"/","answerQuestionList","primary");
 		addAction(userContext, wechatUser, tokens,"wechat_user.updateAnswerQuestion","updateAnswerQuestion","updateAnswerQuestion/"+wechatUser.getId()+"/","answerQuestionList","primary");
@@ -186,7 +191,7 @@ public class WechatUserManagerImpl extends CustomBcexCheckerManager implements W
  	
 
 
-	public WechatUser createWechatUser(BcexUserContext userContext,String name, String avarta, String platformId) throws Exception
+	public WechatUser createWechatUser(BcexUserContext userContext,String name, String avarta, String userType, String platformId) throws Exception
 	{
 		
 		
@@ -195,6 +200,7 @@ public class WechatUserManagerImpl extends CustomBcexCheckerManager implements W
 
 		checkerOf(userContext).checkNameOfWechatUser(name);
 		checkerOf(userContext).checkAvartaOfWechatUser(avarta);
+		checkerOf(userContext).checkUserTypeOfWechatUser(userType);
 	
 		checkerOf(userContext).throwExceptionIfHasErrors(WechatUserManagerException.class);
 
@@ -204,6 +210,7 @@ public class WechatUserManagerImpl extends CustomBcexCheckerManager implements W
 		wechatUser.setName(name);
 		wechatUser.setAvarta(avarta);
 		wechatUser.setCreateTime(userContext.now());
+		wechatUser.setUserType(userType);
 			
 		Platform platform = loadPlatform(userContext, platformId,emptyOptions());
 		wechatUser.setPlatform(platform);
@@ -238,6 +245,9 @@ public class WechatUserManagerImpl extends CustomBcexCheckerManager implements W
 		}
 		if(WechatUser.AVARTA_PROPERTY.equals(property)){
 			checkerOf(userContext).checkAvartaOfWechatUser(parseString(newValueExpr));
+		}
+		if(WechatUser.USER_TYPE_PROPERTY.equals(property)){
+			checkerOf(userContext).checkUserTypeOfWechatUser(parseString(newValueExpr));
 		}		
 
 		
@@ -339,6 +349,7 @@ public class WechatUserManagerImpl extends CustomBcexCheckerManager implements W
 	}
 	protected Map<String,Object> viewTokens(){
 		return tokens().allTokens()
+		.sortStartExamListWith("id","desc")
 		.sortAnswerQuestionListWith("id","desc")
 		.sortWechatLoginInfoListWith("id","desc")
 		.sortExamListWith("id","desc")
@@ -451,8 +462,8 @@ public class WechatUserManagerImpl extends CustomBcexCheckerManager implements W
 	}
 
 
-	//disconnect WechatUser with question in AnswerQuestion
-	protected WechatUser breakWithAnswerQuestionByQuestion(BcexUserContext userContext, String wechatUserId, String questionId,  String [] tokensExpr)
+	//disconnect WechatUser with change_request in StartExam
+	protected WechatUser breakWithStartExamByChangeRequest(BcexUserContext userContext, String wechatUserId, String changeRequestId,  String [] tokensExpr)
 		 throws Exception{
 			
 			//TODO add check code here
@@ -463,7 +474,25 @@ public class WechatUserManagerImpl extends CustomBcexCheckerManager implements W
 				//Will be good when the thread loaded from this JVM process cache.
 				//Also good when there is a RAM based DAO implementation
 				
-				wechatUserDaoOf(userContext).planToRemoveAnswerQuestionListWithQuestion(wechatUser, questionId, this.emptyOptions());
+				wechatUserDaoOf(userContext).planToRemoveStartExamListWithChangeRequest(wechatUser, changeRequestId, this.emptyOptions());
+
+				wechatUser = saveWechatUser(userContext, wechatUser, tokens().withStartExamList().done());
+				return wechatUser;
+			}
+	}
+	//disconnect WechatUser with user_answer in AnswerQuestion
+	protected WechatUser breakWithAnswerQuestionByUserAnswer(BcexUserContext userContext, String wechatUserId, String userAnswerId,  String [] tokensExpr)
+		 throws Exception{
+			
+			//TODO add check code here
+			
+			WechatUser wechatUser = loadWechatUser(userContext, wechatUserId, allTokens());
+
+			synchronized(wechatUser){ 
+				//Will be good when the thread loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				
+				wechatUserDaoOf(userContext).planToRemoveAnswerQuestionListWithUserAnswer(wechatUser, userAnswerId, this.emptyOptions());
 
 				wechatUser = saveWechatUser(userContext, wechatUser, tokens().withAnswerQuestionList().done());
 				return wechatUser;
@@ -565,14 +594,249 @@ public class WechatUserManagerImpl extends CustomBcexCheckerManager implements W
 	
 	
 
-	protected void checkParamsForAddingAnswerQuestion(BcexUserContext userContext, String wechatUserId, String nickName, String questionId, String answer, String changeRequestId,String [] tokensExpr) throws Exception{
+	protected void checkParamsForAddingStartExam(BcexUserContext userContext, String wechatUserId, String nickName, String changeRequestId,String [] tokensExpr) throws Exception{
+		
+				checkerOf(userContext).checkIdOfWechatUser(wechatUserId);
+
+		
+		checkerOf(userContext).checkNickNameOfStartExam(nickName);
+		
+		checkerOf(userContext).checkChangeRequestIdOfStartExam(changeRequestId);
+	
+		checkerOf(userContext).throwExceptionIfHasErrors(WechatUserManagerException.class);
+
+	
+	}
+	public  WechatUser addStartExam(BcexUserContext userContext, String wechatUserId, String nickName, String changeRequestId, String [] tokensExpr) throws Exception
+	{	
+		
+		checkParamsForAddingStartExam(userContext,wechatUserId,nickName, changeRequestId,tokensExpr);
+		
+		StartExam startExam = createStartExam(userContext,nickName, changeRequestId);
+		
+		WechatUser wechatUser = loadWechatUser(userContext, wechatUserId, allTokens());
+		synchronized(wechatUser){ 
+			//Will be good when the wechatUser loaded from this JVM process cache.
+			//Also good when there is a RAM based DAO implementation
+			wechatUser.addStartExam( startExam );		
+			wechatUser = saveWechatUser(userContext, wechatUser, tokens().withStartExamList().done());
+			
+			userContext.getManagerGroup().getStartExamManager().onNewInstanceCreated(userContext, startExam);
+			return present(userContext,wechatUser, mergedAllTokens(tokensExpr));
+		}
+	}
+	protected void checkParamsForUpdatingStartExamProperties(BcexUserContext userContext, String wechatUserId,String id,String nickName,String [] tokensExpr) throws Exception {
+		
+		checkerOf(userContext).checkIdOfWechatUser(wechatUserId);
+		checkerOf(userContext).checkIdOfStartExam(id);
+		
+		checkerOf(userContext).checkNickNameOfStartExam( nickName);
+
+		checkerOf(userContext).throwExceptionIfHasErrors(WechatUserManagerException.class);
+		
+	}
+	public  WechatUser updateStartExamProperties(BcexUserContext userContext, String wechatUserId, String id,String nickName, String [] tokensExpr) throws Exception
+	{	
+		checkParamsForUpdatingStartExamProperties(userContext,wechatUserId,id,nickName,tokensExpr);
+
+		Map<String, Object> options = tokens()
+				.allTokens()
+				//.withStartExamListList()
+				.searchStartExamListWith(StartExam.ID_PROPERTY, "is", id).done();
+		
+		WechatUser wechatUserToUpdate = loadWechatUser(userContext, wechatUserId, options);
+		
+		if(wechatUserToUpdate.getStartExamList().isEmpty()){
+			throw new WechatUserManagerException("StartExam is NOT FOUND with id: '"+id+"'");
+		}
+		
+		StartExam item = wechatUserToUpdate.getStartExamList().first();
+		
+		item.updateNickName( nickName );
+
+		
+		//checkParamsForAddingStartExam(userContext,wechatUserId,name, code, used,tokensExpr);
+		WechatUser wechatUser = saveWechatUser(userContext, wechatUserToUpdate, tokens().withStartExamList().done());
+		synchronized(wechatUser){ 
+			return present(userContext,wechatUser, mergedAllTokens(tokensExpr));
+		}
+	}
+	
+	
+	protected StartExam createStartExam(BcexUserContext userContext, String nickName, String changeRequestId) throws Exception{
+
+		StartExam startExam = new StartExam();
+		
+		
+		startExam.setNickName(nickName);		
+		ChangeRequest  changeRequest = new ChangeRequest();
+		changeRequest.setId(changeRequestId);		
+		startExam.setChangeRequest(changeRequest);
+	
+		
+		return startExam;
+	
+		
+	}
+	
+	protected StartExam createIndexedStartExam(String id, int version){
+
+		StartExam startExam = new StartExam();
+		startExam.setId(id);
+		startExam.setVersion(version);
+		return startExam;			
+		
+	}
+	
+	protected void checkParamsForRemovingStartExamList(BcexUserContext userContext, String wechatUserId, 
+			String startExamIds[],String [] tokensExpr) throws Exception {
+		
+		checkerOf(userContext).checkIdOfWechatUser(wechatUserId);
+		for(String startExamIdItem: startExamIds){
+			checkerOf(userContext).checkIdOfStartExam(startExamIdItem);
+		}
+		
+		checkerOf(userContext).throwExceptionIfHasErrors(WechatUserManagerException.class);
+		
+	}
+	public  WechatUser removeStartExamList(BcexUserContext userContext, String wechatUserId, 
+			String startExamIds[],String [] tokensExpr) throws Exception{
+			
+			checkParamsForRemovingStartExamList(userContext, wechatUserId,  startExamIds, tokensExpr);
+			
+			
+			WechatUser wechatUser = loadWechatUser(userContext, wechatUserId, allTokens());
+			synchronized(wechatUser){ 
+				//Will be good when the wechatUser loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				wechatUserDaoOf(userContext).planToRemoveStartExamList(wechatUser, startExamIds, allTokens());
+				wechatUser = saveWechatUser(userContext, wechatUser, tokens().withStartExamList().done());
+				deleteRelationListInGraph(userContext, wechatUser.getStartExamList());
+				return present(userContext,wechatUser, mergedAllTokens(tokensExpr));
+			}
+	}
+	
+	protected void checkParamsForRemovingStartExam(BcexUserContext userContext, String wechatUserId, 
+		String startExamId, int startExamVersion,String [] tokensExpr) throws Exception{
+		
+		checkerOf(userContext).checkIdOfWechatUser( wechatUserId);
+		checkerOf(userContext).checkIdOfStartExam(startExamId);
+		checkerOf(userContext).checkVersionOfStartExam(startExamVersion);
+		checkerOf(userContext).throwExceptionIfHasErrors(WechatUserManagerException.class);
+	
+	}
+	public  WechatUser removeStartExam(BcexUserContext userContext, String wechatUserId, 
+		String startExamId, int startExamVersion,String [] tokensExpr) throws Exception{
+		
+		checkParamsForRemovingStartExam(userContext,wechatUserId, startExamId, startExamVersion,tokensExpr);
+		
+		StartExam startExam = createIndexedStartExam(startExamId, startExamVersion);
+		WechatUser wechatUser = loadWechatUser(userContext, wechatUserId, allTokens());
+		synchronized(wechatUser){ 
+			//Will be good when the wechatUser loaded from this JVM process cache.
+			//Also good when there is a RAM based DAO implementation
+			wechatUser.removeStartExam( startExam );		
+			wechatUser = saveWechatUser(userContext, wechatUser, tokens().withStartExamList().done());
+			deleteRelationInGraph(userContext, startExam);
+			return present(userContext,wechatUser, mergedAllTokens(tokensExpr));
+		}
+		
+		
+	}
+	protected void checkParamsForCopyingStartExam(BcexUserContext userContext, String wechatUserId, 
+		String startExamId, int startExamVersion,String [] tokensExpr) throws Exception{
+		
+		checkerOf(userContext).checkIdOfWechatUser( wechatUserId);
+		checkerOf(userContext).checkIdOfStartExam(startExamId);
+		checkerOf(userContext).checkVersionOfStartExam(startExamVersion);
+		checkerOf(userContext).throwExceptionIfHasErrors(WechatUserManagerException.class);
+	
+	}
+	public  WechatUser copyStartExamFrom(BcexUserContext userContext, String wechatUserId, 
+		String startExamId, int startExamVersion,String [] tokensExpr) throws Exception{
+		
+		checkParamsForCopyingStartExam(userContext,wechatUserId, startExamId, startExamVersion,tokensExpr);
+		
+		StartExam startExam = createIndexedStartExam(startExamId, startExamVersion);
+		WechatUser wechatUser = loadWechatUser(userContext, wechatUserId, allTokens());
+		synchronized(wechatUser){ 
+			//Will be good when the wechatUser loaded from this JVM process cache.
+			//Also good when there is a RAM based DAO implementation
+			
+			
+			
+			wechatUser.copyStartExamFrom( startExam );		
+			wechatUser = saveWechatUser(userContext, wechatUser, tokens().withStartExamList().done());
+			
+			userContext.getManagerGroup().getStartExamManager().onNewInstanceCreated(userContext, (StartExam)wechatUser.getFlexiableObjects().get(BaseEntity.COPIED_CHILD));
+			return present(userContext,wechatUser, mergedAllTokens(tokensExpr));
+		}
+		
+	}
+	
+	protected void checkParamsForUpdatingStartExam(BcexUserContext userContext, String wechatUserId, String startExamId, int startExamVersion, String property, String newValueExpr,String [] tokensExpr) throws Exception{
+		
+
+		
+		checkerOf(userContext).checkIdOfWechatUser(wechatUserId);
+		checkerOf(userContext).checkIdOfStartExam(startExamId);
+		checkerOf(userContext).checkVersionOfStartExam(startExamVersion);
+		
+
+		if(StartExam.NICK_NAME_PROPERTY.equals(property)){
+			checkerOf(userContext).checkNickNameOfStartExam(parseString(newValueExpr));
+		}
+		
+	
+		checkerOf(userContext).throwExceptionIfHasErrors(WechatUserManagerException.class);
+	
+	}
+	
+	public  WechatUser updateStartExam(BcexUserContext userContext, String wechatUserId, String startExamId, int startExamVersion, String property, String newValueExpr,String [] tokensExpr)
+			throws Exception{
+		
+		checkParamsForUpdatingStartExam(userContext, wechatUserId, startExamId, startExamVersion, property, newValueExpr,  tokensExpr);
+		
+		Map<String,Object> loadTokens = this.tokens().withStartExamList().searchStartExamListWith(StartExam.ID_PROPERTY, "eq", startExamId).done();
+		
+		
+		
+		WechatUser wechatUser = loadWechatUser(userContext, wechatUserId, loadTokens);
+		
+		synchronized(wechatUser){ 
+			//Will be good when the wechatUser loaded from this JVM process cache.
+			//Also good when there is a RAM based DAO implementation
+			//wechatUser.removeStartExam( startExam );	
+			//make changes to AcceleraterAccount.
+			StartExam startExamIndex = createIndexedStartExam(startExamId, startExamVersion);
+		
+			StartExam startExam = wechatUser.findTheStartExam(startExamIndex);
+			if(startExam == null){
+				throw new WechatUserManagerException(startExam+" is NOT FOUND" );
+			}
+			
+			startExam.changeProperty(property, newValueExpr);
+			
+			wechatUser = saveWechatUser(userContext, wechatUser, tokens().withStartExamList().done());
+			return present(userContext,wechatUser, mergedAllTokens(tokensExpr));
+		}
+
+	}
+	/*
+
+	*/
+	
+
+
+
+	protected void checkParamsForAddingAnswerQuestion(BcexUserContext userContext, String wechatUserId, String nickName, String userAnswerId, String answer, String changeRequestId,String [] tokensExpr) throws Exception{
 		
 				checkerOf(userContext).checkIdOfWechatUser(wechatUserId);
 
 		
 		checkerOf(userContext).checkNickNameOfAnswerQuestion(nickName);
 		
-		checkerOf(userContext).checkQuestionIdOfAnswerQuestion(questionId);
+		checkerOf(userContext).checkUserAnswerIdOfAnswerQuestion(userAnswerId);
 		
 		checkerOf(userContext).checkAnswerOfAnswerQuestion(answer);
 		
@@ -582,12 +846,12 @@ public class WechatUserManagerImpl extends CustomBcexCheckerManager implements W
 
 	
 	}
-	public  WechatUser addAnswerQuestion(BcexUserContext userContext, String wechatUserId, String nickName, String questionId, String answer, String changeRequestId, String [] tokensExpr) throws Exception
+	public  WechatUser addAnswerQuestion(BcexUserContext userContext, String wechatUserId, String nickName, String userAnswerId, String answer, String changeRequestId, String [] tokensExpr) throws Exception
 	{	
 		
-		checkParamsForAddingAnswerQuestion(userContext,wechatUserId,nickName, questionId, answer, changeRequestId,tokensExpr);
+		checkParamsForAddingAnswerQuestion(userContext,wechatUserId,nickName, userAnswerId, answer, changeRequestId,tokensExpr);
 		
-		AnswerQuestion answerQuestion = createAnswerQuestion(userContext,nickName, questionId, answer, changeRequestId);
+		AnswerQuestion answerQuestion = createAnswerQuestion(userContext,nickName, userAnswerId, answer, changeRequestId);
 		
 		WechatUser wechatUser = loadWechatUser(userContext, wechatUserId, allTokens());
 		synchronized(wechatUser){ 
@@ -640,15 +904,15 @@ public class WechatUserManagerImpl extends CustomBcexCheckerManager implements W
 	}
 	
 	
-	protected AnswerQuestion createAnswerQuestion(BcexUserContext userContext, String nickName, String questionId, String answer, String changeRequestId) throws Exception{
+	protected AnswerQuestion createAnswerQuestion(BcexUserContext userContext, String nickName, String userAnswerId, String answer, String changeRequestId) throws Exception{
 
 		AnswerQuestion answerQuestion = new AnswerQuestion();
 		
 		
 		answerQuestion.setNickName(nickName);		
-		Question  question = new Question();
-		question.setId(questionId);		
-		answerQuestion.setQuestion(question);		
+		UserAnswer  userAnswer = new UserAnswer();
+		userAnswer.setId(userAnswerId);		
+		answerQuestion.setUserAnswer(userAnswer);		
 		answerQuestion.setAnswer(answer);		
 		ChangeRequest  changeRequest = new ChangeRequest();
 		changeRequest.setId(changeRequestId);		

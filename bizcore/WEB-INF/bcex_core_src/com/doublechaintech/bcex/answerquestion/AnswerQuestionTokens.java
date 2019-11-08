@@ -73,7 +73,7 @@ public class AnswerQuestionTokens extends CommonTokens{
 		
 		return start()
 			.withUser()
-			.withQuestion()
+			.withUserAnswer()
 			.withChangeRequest();
 	
 	}
@@ -81,7 +81,7 @@ public class AnswerQuestionTokens extends CommonTokens{
 		
 		return start()
 			.withUser()
-			.withQuestion()
+			.withUserAnswer()
 			.withChangeRequest();
 	
 	}
@@ -111,12 +111,12 @@ public class AnswerQuestionTokens extends CommonTokens{
 	}
 	
 	
-	protected static final String QUESTION = "question";
-	public String getQuestion(){
-		return QUESTION;
+	protected static final String USERANSWER = "userAnswer";
+	public String getUserAnswer(){
+		return USERANSWER;
 	}
-	public AnswerQuestionTokens withQuestion(){		
-		addSimpleOptions(QUESTION);
+	public AnswerQuestionTokens withUserAnswer(){		
+		addSimpleOptions(USERANSWER);
 		return this;
 	}
 	

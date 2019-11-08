@@ -471,7 +471,7 @@ public class PlatformTokens extends CommonTokens{
 	}
 	
 	public PlatformTokens searchAllTextOfWechatUserList(String verb, String value){	
-		String field = "id|name";
+		String field = "id|name|userType";
 		addSearchMoreOptions(WECHAT_USER_LIST,wechatUserListSearchCounter++, field, verb, value);
 		return this;
 	}

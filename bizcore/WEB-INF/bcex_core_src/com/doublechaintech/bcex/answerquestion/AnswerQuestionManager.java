@@ -12,14 +12,14 @@ public interface AnswerQuestionManager{
 
 		
 
-	public AnswerQuestion createAnswerQuestion(BcexUserContext userContext, String nickName, String userId, String questionId, String answer, String changeRequestId) throws Exception;	
+	public AnswerQuestion createAnswerQuestion(BcexUserContext userContext, String nickName, String userId, String userAnswerId, String answer, String changeRequestId) throws Exception;	
 	public AnswerQuestion updateAnswerQuestion(BcexUserContext userContext,String answerQuestionId, int answerQuestionVersion, String property, String newValueExpr,String [] tokensExpr) throws Exception;
 	public AnswerQuestion loadAnswerQuestion(BcexUserContext userContext, String answerQuestionId, String [] tokensExpr) throws Exception;
 	public AnswerQuestion internalSaveAnswerQuestion(BcexUserContext userContext, AnswerQuestion answerQuestion) throws Exception;
 	public AnswerQuestion internalSaveAnswerQuestion(BcexUserContext userContext, AnswerQuestion answerQuestion,Map<String,Object>option) throws Exception;
 	
 	public AnswerQuestion transferToAnotherUser(BcexUserContext userContext, String answerQuestionId, String anotherUserId)  throws Exception;
- 	public AnswerQuestion transferToAnotherQuestion(BcexUserContext userContext, String answerQuestionId, String anotherQuestionId)  throws Exception;
+ 	public AnswerQuestion transferToAnotherUserAnswer(BcexUserContext userContext, String answerQuestionId, String anotherUserAnswerId)  throws Exception;
  	public AnswerQuestion transferToAnotherChangeRequest(BcexUserContext userContext, String answerQuestionId, String anotherChangeRequestId)  throws Exception;
  
 

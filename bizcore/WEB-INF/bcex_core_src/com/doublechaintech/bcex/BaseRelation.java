@@ -118,10 +118,10 @@ public class BaseRelation{
 		String [] registrationRelatedObjectNames = {"change_request:ChangeRequest"};
 		addRelationIndex("Registration",registrationRelatedObjectNames);
 
-		String [] startExamRelatedObjectNames = {"change_request:ChangeRequest"};
+		String [] startExamRelatedObjectNames = {"user:WechatUser","change_request:ChangeRequest"};
 		addRelationIndex("StartExam",startExamRelatedObjectNames);
 
-		String [] answerQuestionRelatedObjectNames = {"user:WechatUser","question:Question","change_request:ChangeRequest"};
+		String [] answerQuestionRelatedObjectNames = {"user:WechatUser","user_answer:UserAnswer","change_request:ChangeRequest"};
 		addRelationIndex("AnswerQuestion",answerQuestionRelatedObjectNames);
 
 		String [] examStatusRelatedObjectNames = {"platform:Platform"};
@@ -211,9 +211,10 @@ public class BaseRelation{
 		addGenericRelation("ChangeRequest"                         ,TRUST_CHAIN_READ,"requestType");
 		addGenericRelation("ChangeRequest"                         ,TRUST_CHAIN_READ,"platform");
 		addGenericRelation("Registration"                          ,TRUST_CHAIN_READ,"changeRequest");
+		addGenericRelation("StartExam"                             ,TRUST_CHAIN_READ,"user");
 		addGenericRelation("StartExam"                             ,TRUST_CHAIN_READ,"changeRequest");
 		addGenericRelation("AnswerQuestion"                        ,TRUST_CHAIN_READ,"user");
-		addGenericRelation("AnswerQuestion"                        ,TRUST_CHAIN_READ,"question");
+		addGenericRelation("AnswerQuestion"                        ,TRUST_CHAIN_READ,"userAnswer");
 		addGenericRelation("AnswerQuestion"                        ,TRUST_CHAIN_READ,"changeRequest");
 		addGenericRelation("ExamStatus"                            ,TRUST_CHAIN_READ,"platform");
 		addGenericRelation("Question"                              ,TRUST_CHAIN_READ,"platform");

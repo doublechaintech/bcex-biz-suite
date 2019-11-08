@@ -162,6 +162,7 @@ public class BcexBaseViewScope {
 		.field(WechatUser.NAME_PROPERTY)
 		.field(WechatUser.AVARTA_PROPERTY)
 		.field(WechatUser.CREATE_TIME_PROPERTY)
+		.field(WechatUser.USER_TYPE_PROPERTY)
 		;
 	/** 用于WechatUser的子对象的详情页时需要序列化的属性列表 */
 	public static SerializeScope getWechatUserSummaryScope() {
@@ -566,6 +567,7 @@ public class BcexBaseViewScope {
 		.field(WechatUser.NAME_PROPERTY)
 		.field(WechatUser.AVARTA_PROPERTY)
 		.field(WechatUser.CREATE_TIME_PROPERTY)
+		.field(WechatUser.USER_TYPE_PROPERTY)
 		;
 	/** 用于WechatUser的父对象的列表时需要序列化的属性列表 */
 	public static SerializeScope getWechatUserSecondaryListItemScope() {
@@ -911,6 +913,7 @@ public class BcexBaseViewScope {
 		.field(BcexBaseConstants.X_LINK_TO_URL)
 		.field(StartExam.ID_PROPERTY)
 		.field(StartExam.NICK_NAME_PROPERTY)
+		.field(StartExam.USER_PROPERTY, getWechatUserSummaryScope())
 		.field(StartExam.CHANGE_REQUEST_PROPERTY, getChangeRequestSummaryScope())
 		;
 	/** 用于StartExam对象的列表时需要序列化的属性列表 */
@@ -923,7 +926,7 @@ public class BcexBaseViewScope {
 		.field(AnswerQuestion.ID_PROPERTY)
 		.field(AnswerQuestion.NICK_NAME_PROPERTY)
 		.field(AnswerQuestion.USER_PROPERTY, getWechatUserSummaryScope())
-		.field(AnswerQuestion.QUESTION_PROPERTY, getQuestionSummaryScope())
+		.field(AnswerQuestion.USER_ANSWER_PROPERTY, getUserAnswerSummaryScope())
 		.field(AnswerQuestion.ANSWER_PROPERTY)
 		.field(AnswerQuestion.CHANGE_REQUEST_PROPERTY, getChangeRequestSummaryScope())
 		;
@@ -957,7 +960,6 @@ public class BcexBaseViewScope {
 		.field(Question.OPTION_E_PROPERTY)
 		.field(Question.RIGHT_ANSWER_PROPERTY)
 		.field(Question.PLATFORM_PROPERTY, getPlatformSummaryScope())
-		.field(Question.ANSWER_QUESTION_LIST, getAnswerQuestionSecondaryListItemScope())
 		.field(Question.ANSWER_LIST, getAnswerSecondaryListItemScope())
 		.field(Question.USER_ANSWER_LIST, getUserAnswerSecondaryListItemScope())
 		;
@@ -996,7 +998,9 @@ public class BcexBaseViewScope {
 		.field(WechatUser.NAME_PROPERTY)
 		.field(WechatUser.AVARTA_PROPERTY)
 		.field(WechatUser.CREATE_TIME_PROPERTY)
+		.field(WechatUser.USER_TYPE_PROPERTY)
 		.field(WechatUser.PLATFORM_PROPERTY, getPlatformSummaryScope())
+		.field(WechatUser.START_EXAM_LIST, getStartExamSecondaryListItemScope())
 		.field(WechatUser.ANSWER_QUESTION_LIST, getAnswerQuestionSecondaryListItemScope())
 		.field(WechatUser.WECHAT_LOGIN_INFO_LIST, getWechatLoginInfoSecondaryListItemScope())
 		.field(WechatUser.EXAM_LIST, getExamSecondaryListItemScope())
@@ -1044,6 +1048,7 @@ public class BcexBaseViewScope {
 		.field(UserAnswer.USER_SELECT_PROPERTY)
 		.field(UserAnswer.QUESTION_PROPERTY, getQuestionSummaryScope())
 		.field(UserAnswer.EXAM_PROPERTY, getExamSummaryScope())
+		.field(UserAnswer.ANSWER_QUESTION_LIST, getAnswerQuestionSecondaryListItemScope())
 		;
 	/** 用于UserAnswer对象的列表时需要序列化的属性列表 */
 	public static SerializeScope getUserAnswerListItemScope() {
@@ -1381,6 +1386,7 @@ public class BcexBaseViewScope {
 		.field(BcexBaseConstants.X_LINK_TO_URL)
 		.field(StartExam.ID_PROPERTY)
 		.field(StartExam.NICK_NAME_PROPERTY)
+		.field(StartExam.USER_PROPERTY, getWechatUserSummaryScope())
 		.field(StartExam.CHANGE_REQUEST_PROPERTY, getChangeRequestSummaryScope())
 		;
 	/** 用于StartExam对象的详情页时需要序列化的属性列表 */
@@ -1393,7 +1399,7 @@ public class BcexBaseViewScope {
 		.field(AnswerQuestion.ID_PROPERTY)
 		.field(AnswerQuestion.NICK_NAME_PROPERTY)
 		.field(AnswerQuestion.USER_PROPERTY, getWechatUserSummaryScope())
-		.field(AnswerQuestion.QUESTION_PROPERTY, getQuestionSummaryScope())
+		.field(AnswerQuestion.USER_ANSWER_PROPERTY, getUserAnswerSummaryScope())
 		.field(AnswerQuestion.ANSWER_PROPERTY)
 		.field(AnswerQuestion.CHANGE_REQUEST_PROPERTY, getChangeRequestSummaryScope())
 		;
@@ -1427,7 +1433,6 @@ public class BcexBaseViewScope {
 		.field(Question.OPTION_E_PROPERTY)
 		.field(Question.RIGHT_ANSWER_PROPERTY)
 		.field(Question.PLATFORM_PROPERTY, getPlatformSummaryScope())
-		.field(Question.ANSWER_QUESTION_LIST, getAnswerQuestionListItemScope())
 		.field(Question.ANSWER_LIST, getAnswerListItemScope())
 		.field(Question.USER_ANSWER_LIST, getUserAnswerListItemScope())
 		;
@@ -1466,7 +1471,9 @@ public class BcexBaseViewScope {
 		.field(WechatUser.NAME_PROPERTY)
 		.field(WechatUser.AVARTA_PROPERTY)
 		.field(WechatUser.CREATE_TIME_PROPERTY)
+		.field(WechatUser.USER_TYPE_PROPERTY)
 		.field(WechatUser.PLATFORM_PROPERTY, getPlatformSummaryScope())
+		.field(WechatUser.START_EXAM_LIST, getStartExamListItemScope())
 		.field(WechatUser.ANSWER_QUESTION_LIST, getAnswerQuestionListItemScope())
 		.field(WechatUser.WECHAT_LOGIN_INFO_LIST, getWechatLoginInfoListItemScope())
 		.field(WechatUser.EXAM_LIST, getExamListItemScope())
@@ -1514,6 +1521,7 @@ public class BcexBaseViewScope {
 		.field(UserAnswer.USER_SELECT_PROPERTY)
 		.field(UserAnswer.QUESTION_PROPERTY, getQuestionSummaryScope())
 		.field(UserAnswer.EXAM_PROPERTY, getExamSummaryScope())
+		.field(UserAnswer.ANSWER_QUESTION_LIST, getAnswerQuestionListItemScope())
 		;
 	/** 用于UserAnswer对象的详情页时需要序列化的属性列表 */
 	public static SerializeScope getUserAnswerDetailScope() {

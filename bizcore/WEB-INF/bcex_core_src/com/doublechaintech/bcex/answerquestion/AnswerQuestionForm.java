@@ -62,17 +62,17 @@ public class AnswerQuestionForm extends BaseForm {
 	}
 
 
-	public AnswerQuestionForm questionIdField(String parameterName, String initValue){
-		FormField field = questionIdFromAnswerQuestion(parameterName, initValue);		
+	public AnswerQuestionForm userAnswerIdField(String parameterName, String initValue){
+		FormField field = userAnswerIdFromAnswerQuestion(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public AnswerQuestionForm questionIdField(String initValue){
-		return questionIdField("questionId",initValue);
+	public AnswerQuestionForm userAnswerIdField(String initValue){
+		return userAnswerIdField("userAnswerId",initValue);
 	}
-	public AnswerQuestionForm questionIdField(){
-		return questionIdField("questionId","");
+	public AnswerQuestionForm userAnswerIdField(){
+		return userAnswerIdField("userAnswerId","");
 	}
 
 
@@ -163,6 +163,20 @@ public class AnswerQuestionForm extends BaseForm {
 	}
 
 
+	public AnswerQuestionForm userTypeFieldOfWechatUser(String parameterName, String initValue){
+		FormField field =  userTypeFromWechatUser(parameterName, initValue);
+		this.addFormField(field);	
+		return this;
+	}
+	
+	public AnswerQuestionForm userTypeFieldOfWechatUser(String initValue){
+		return userTypeFieldOfWechatUser("userType",initValue);
+	}
+	public AnswerQuestionForm userTypeFieldOfWechatUser(){
+		return userTypeFieldOfWechatUser("userType","");
+	}
+
+
 	public AnswerQuestionForm platformIdFieldOfWechatUser(String parameterName, String initValue){
 		FormField field =  platformIdFromWechatUser(parameterName, initValue);
 		this.addFormField(field);	
@@ -177,143 +191,73 @@ public class AnswerQuestionForm extends BaseForm {
 	}
 
 
-	public AnswerQuestionForm questionIdFieldOfQuestion(String parameterName, String initValue){
-		FormField field =  idFromQuestion(parameterName, initValue);
+	public AnswerQuestionForm userAnswerIdFieldOfUserAnswer(String parameterName, String initValue){
+		FormField field =  idFromUserAnswer(parameterName, initValue);
 		this.addFormField(field);	
 		return this;
 	}
 	
-	public AnswerQuestionForm questionIdFieldOfQuestion(String initValue){
-		return questionIdFieldOfQuestion("questionId",initValue);
+	public AnswerQuestionForm userAnswerIdFieldOfUserAnswer(String initValue){
+		return userAnswerIdFieldOfUserAnswer("userAnswerId",initValue);
 	}
-	public AnswerQuestionForm questionIdFieldOfQuestion(){
-		return questionIdFieldOfQuestion("questionId","");
+	public AnswerQuestionForm userAnswerIdFieldOfUserAnswer(){
+		return userAnswerIdFieldOfUserAnswer("userAnswerId","");
 	}
 
 
-	public AnswerQuestionForm topicFieldOfQuestion(String parameterName, String initValue){
-		FormField field =  topicFromQuestion(parameterName, initValue);
+	public AnswerQuestionForm topicFieldOfUserAnswer(String parameterName, String initValue){
+		FormField field =  topicFromUserAnswer(parameterName, initValue);
 		this.addFormField(field);	
 		return this;
 	}
 	
-	public AnswerQuestionForm topicFieldOfQuestion(String initValue){
-		return topicFieldOfQuestion("topic",initValue);
+	public AnswerQuestionForm topicFieldOfUserAnswer(String initValue){
+		return topicFieldOfUserAnswer("topic",initValue);
 	}
-	public AnswerQuestionForm topicFieldOfQuestion(){
-		return topicFieldOfQuestion("topic","");
+	public AnswerQuestionForm topicFieldOfUserAnswer(){
+		return topicFieldOfUserAnswer("topic","");
 	}
 
 
-	public AnswerQuestionForm levelFieldOfQuestion(String parameterName, String initValue){
-		FormField field =  levelFromQuestion(parameterName, initValue);
+	public AnswerQuestionForm userSelectFieldOfUserAnswer(String parameterName, String initValue){
+		FormField field =  userSelectFromUserAnswer(parameterName, initValue);
 		this.addFormField(field);	
 		return this;
 	}
 	
-	public AnswerQuestionForm levelFieldOfQuestion(String initValue){
-		return levelFieldOfQuestion("level",initValue);
+	public AnswerQuestionForm userSelectFieldOfUserAnswer(String initValue){
+		return userSelectFieldOfUserAnswer("userSelect",initValue);
 	}
-	public AnswerQuestionForm levelFieldOfQuestion(){
-		return levelFieldOfQuestion("level","");
+	public AnswerQuestionForm userSelectFieldOfUserAnswer(){
+		return userSelectFieldOfUserAnswer("userSelect","");
 	}
 
 
-	public AnswerQuestionForm optionAFieldOfQuestion(String parameterName, String initValue){
-		FormField field =  optionAFromQuestion(parameterName, initValue);
+	public AnswerQuestionForm questionIdFieldOfUserAnswer(String parameterName, String initValue){
+		FormField field =  questionIdFromUserAnswer(parameterName, initValue);
 		this.addFormField(field);	
 		return this;
 	}
 	
-	public AnswerQuestionForm optionAFieldOfQuestion(String initValue){
-		return optionAFieldOfQuestion("optionA",initValue);
+	public AnswerQuestionForm questionIdFieldOfUserAnswer(String initValue){
+		return questionIdFieldOfUserAnswer("questionId",initValue);
 	}
-	public AnswerQuestionForm optionAFieldOfQuestion(){
-		return optionAFieldOfQuestion("optionA","");
+	public AnswerQuestionForm questionIdFieldOfUserAnswer(){
+		return questionIdFieldOfUserAnswer("questionId","");
 	}
 
 
-	public AnswerQuestionForm optionBFieldOfQuestion(String parameterName, String initValue){
-		FormField field =  optionBFromQuestion(parameterName, initValue);
+	public AnswerQuestionForm examIdFieldOfUserAnswer(String parameterName, String initValue){
+		FormField field =  examIdFromUserAnswer(parameterName, initValue);
 		this.addFormField(field);	
 		return this;
 	}
 	
-	public AnswerQuestionForm optionBFieldOfQuestion(String initValue){
-		return optionBFieldOfQuestion("optionB",initValue);
+	public AnswerQuestionForm examIdFieldOfUserAnswer(String initValue){
+		return examIdFieldOfUserAnswer("examId",initValue);
 	}
-	public AnswerQuestionForm optionBFieldOfQuestion(){
-		return optionBFieldOfQuestion("optionB","");
-	}
-
-
-	public AnswerQuestionForm optionCFieldOfQuestion(String parameterName, String initValue){
-		FormField field =  optionCFromQuestion(parameterName, initValue);
-		this.addFormField(field);	
-		return this;
-	}
-	
-	public AnswerQuestionForm optionCFieldOfQuestion(String initValue){
-		return optionCFieldOfQuestion("optionC",initValue);
-	}
-	public AnswerQuestionForm optionCFieldOfQuestion(){
-		return optionCFieldOfQuestion("optionC","");
-	}
-
-
-	public AnswerQuestionForm optionDFieldOfQuestion(String parameterName, String initValue){
-		FormField field =  optionDFromQuestion(parameterName, initValue);
-		this.addFormField(field);	
-		return this;
-	}
-	
-	public AnswerQuestionForm optionDFieldOfQuestion(String initValue){
-		return optionDFieldOfQuestion("optionD",initValue);
-	}
-	public AnswerQuestionForm optionDFieldOfQuestion(){
-		return optionDFieldOfQuestion("optionD","");
-	}
-
-
-	public AnswerQuestionForm optionEFieldOfQuestion(String parameterName, String initValue){
-		FormField field =  optionEFromQuestion(parameterName, initValue);
-		this.addFormField(field);	
-		return this;
-	}
-	
-	public AnswerQuestionForm optionEFieldOfQuestion(String initValue){
-		return optionEFieldOfQuestion("optionE",initValue);
-	}
-	public AnswerQuestionForm optionEFieldOfQuestion(){
-		return optionEFieldOfQuestion("optionE","");
-	}
-
-
-	public AnswerQuestionForm rightAnswerFieldOfQuestion(String parameterName, String initValue){
-		FormField field =  rightAnswerFromQuestion(parameterName, initValue);
-		this.addFormField(field);	
-		return this;
-	}
-	
-	public AnswerQuestionForm rightAnswerFieldOfQuestion(String initValue){
-		return rightAnswerFieldOfQuestion("rightAnswer",initValue);
-	}
-	public AnswerQuestionForm rightAnswerFieldOfQuestion(){
-		return rightAnswerFieldOfQuestion("rightAnswer","");
-	}
-
-
-	public AnswerQuestionForm platformIdFieldOfQuestion(String parameterName, String initValue){
-		FormField field =  platformIdFromQuestion(parameterName, initValue);
-		this.addFormField(field);	
-		return this;
-	}
-	
-	public AnswerQuestionForm platformIdFieldOfQuestion(String initValue){
-		return platformIdFieldOfQuestion("platformId",initValue);
-	}
-	public AnswerQuestionForm platformIdFieldOfQuestion(){
-		return platformIdFieldOfQuestion("platformId","");
+	public AnswerQuestionForm examIdFieldOfUserAnswer(){
+		return examIdFieldOfUserAnswer("examId","");
 	}
 
 
@@ -416,11 +360,11 @@ public class AnswerQuestionForm extends BaseForm {
 	}
 
  	
- 	public AnswerQuestionForm transferToAnotherQuestionAction(){
+ 	public AnswerQuestionForm transferToAnotherUserAnswerAction(){
 		FormAction action = new FormAction();
 		action.setLabel("显示");
 		action.setLocaleKey("show");
-		action.setUrl("transferToAnotherQuestion/answerQuestionId/");
+		action.setUrl("transferToAnotherUserAnswer/answerQuestionId/");
 		this.addFormAction(action);
 		return this;
 	}

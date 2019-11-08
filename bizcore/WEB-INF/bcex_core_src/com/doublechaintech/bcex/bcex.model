@@ -41,7 +41,7 @@
 	
 	<start_exam
 		nick_name="豆豆鬼参与考试|[1,200]"
-		
+		user="$(wechat_user)"
 		change_request="$(change_request)"
 		_features="event"
 	/>
@@ -49,8 +49,8 @@
 	<answer_question
 		nick_name="豆豆鬼参与考试|[1,200]"
 		user="$(wechat_user)"
-		question="$(question)"
-		answer="A|B|C|[1,20]"
+		user_answer="$(user_answer)"
+		answer="A|B|C|[0,20]"
 		change_request="$(change_request)"
 		_features="event"
 	/>
@@ -102,6 +102,7 @@
 		name="张三|李四|王五|[1,200]"
 		avarta="wechat.jpg"
 		create_time="createTime()"
+		user_type="公务员|学生|自由职业者|农民"
 		platform="$(platform)"
 		_features="merchant"
 	/>
@@ -143,6 +144,12 @@
 	
 	
 </root>
+
+
+
+
+
+
 
 
 

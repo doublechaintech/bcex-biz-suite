@@ -48,6 +48,10 @@
 <span class="summary-label">${userContext.localeMap['wechat_user.create_time']}</span>
 <span ><fmt:formatDate pattern="yyyy-MM-dd" value="${result.createTime}" /></span>
 </div>
+<div class="col-xs-12 col-md-3 summary-section">
+<span class="summary-label">${userContext.localeMap['wechat_user.user_type']}</span>
+<span >${result.userType}</span>
+</div>
 
 	</div>
 	

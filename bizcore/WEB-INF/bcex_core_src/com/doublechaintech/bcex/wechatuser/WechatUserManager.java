@@ -12,7 +12,7 @@ public interface WechatUserManager{
 
 		
 
-	public WechatUser createWechatUser(BcexUserContext userContext, String name, String avarta, String platformId) throws Exception;	
+	public WechatUser createWechatUser(BcexUserContext userContext, String name, String avarta, String userType, String platformId) throws Exception;	
 	public WechatUser updateWechatUser(BcexUserContext userContext,String wechatUserId, int wechatUserVersion, String property, String newValueExpr,String [] tokensExpr) throws Exception;
 	public WechatUser loadWechatUser(BcexUserContext userContext, String wechatUserId, String [] tokensExpr) throws Exception;
 	public WechatUser internalSaveWechatUser(BcexUserContext userContext, WechatUser wechatUser) throws Exception;
@@ -28,9 +28,19 @@ public interface WechatUserManager{
 	/*======================================================DATA MAINTENANCE===========================================================*/
 	
 
-	//public  AnswerQuestionManager getAnswerQuestionManager(BcexUserContext userContext, String wechatUserId, String nickName, String questionId, String answer, String changeRequestId ,String [] tokensExpr)  throws Exception;
+	//public  StartExamManager getStartExamManager(BcexUserContext userContext, String wechatUserId, String nickName, String changeRequestId ,String [] tokensExpr)  throws Exception;
 	
-	public  WechatUser addAnswerQuestion(BcexUserContext userContext, String wechatUserId, String nickName, String questionId, String answer, String changeRequestId , String [] tokensExpr)  throws Exception;
+	public  WechatUser addStartExam(BcexUserContext userContext, String wechatUserId, String nickName, String changeRequestId , String [] tokensExpr)  throws Exception;
+	public  WechatUser removeStartExam(BcexUserContext userContext, String wechatUserId, String startExamId, int startExamVersion,String [] tokensExpr)  throws Exception;
+	public  WechatUser updateStartExam(BcexUserContext userContext, String wechatUserId, String startExamId, int startExamVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
+
+	/*
+
+	*/
+
+	//public  AnswerQuestionManager getAnswerQuestionManager(BcexUserContext userContext, String wechatUserId, String nickName, String userAnswerId, String answer, String changeRequestId ,String [] tokensExpr)  throws Exception;
+	
+	public  WechatUser addAnswerQuestion(BcexUserContext userContext, String wechatUserId, String nickName, String userAnswerId, String answer, String changeRequestId , String [] tokensExpr)  throws Exception;
 	public  WechatUser removeAnswerQuestion(BcexUserContext userContext, String wechatUserId, String answerQuestionId, int answerQuestionVersion,String [] tokensExpr)  throws Exception;
 	public  WechatUser updateAnswerQuestion(BcexUserContext userContext, String wechatUserId, String answerQuestionId, int answerQuestionVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
 

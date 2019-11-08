@@ -352,6 +352,19 @@ public class BaseForm extends GenericForm{
 		return field;
 	}
 
+	protected FormField userIdFromStartExam(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("用户");
+		field.setLocaleKey("start_exam.user");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("WechatUser");
+		field.setRequired(true);
+		field.setPlaceholder("请填写用户");
+		return field;
+	}
+
 	protected FormField changeRequestIdFromStartExam(String parameterName, String initValue){
 		FormField field = new FormField();
 		field.setLabel("变更请求");
@@ -404,16 +417,16 @@ public class BaseForm extends GenericForm{
 		return field;
 	}
 
-	protected FormField questionIdFromAnswerQuestion(String parameterName, String initValue){
+	protected FormField userAnswerIdFromAnswerQuestion(String parameterName, String initValue){
 		FormField field = new FormField();
-		field.setLabel("检查问题");
-		field.setLocaleKey("answer_question.question");
+		field.setLabel("用户的答案");
+		field.setLocaleKey("answer_question.user_answer");
 		field.setParameterName(parameterName);
 		field.setDefaultValue(initValue);
 		field.setFieldGroup("基本信息");
-		field.setType("Question");
+		field.setType("UserAnswer");
 		field.setRequired(true);
-		field.setPlaceholder("请填写检查问题");
+		field.setPlaceholder("请填写用户的答案");
 		return field;
 	}
 
@@ -778,6 +791,19 @@ public class BaseForm extends GenericForm{
 		field.setType("date_time");
 		field.setRequired(true);
 		field.setPlaceholder("请填写创建时间");
+		return field;
+	}
+
+	protected FormField userTypeFromWechatUser(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("用户类型");
+		field.setLocaleKey("wechat_user.user_type");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("text");
+		field.setRequired(true);
+		field.setPlaceholder("请填写用户类型");
 		return field;
 	}
 

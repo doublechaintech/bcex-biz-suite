@@ -6,8 +6,8 @@ import java.util.Date;
 import java.math.BigDecimal;
 import com.doublechaintech.bcex.BaseRowMapper;
 import com.doublechaintech.bcex.changerequest.ChangeRequest;
+import com.doublechaintech.bcex.useranswer.UserAnswer;
 import com.doublechaintech.bcex.wechatuser.WechatUser;
-import com.doublechaintech.bcex.question.Question;
 
 public class AnswerQuestionMapper extends BaseRowMapper<AnswerQuestion>{
 	
@@ -17,7 +17,7 @@ public class AnswerQuestionMapper extends BaseRowMapper<AnswerQuestion>{
  		setId(answerQuestion, rs, rowNumber); 		
  		setNickName(answerQuestion, rs, rowNumber); 		
  		setUser(answerQuestion, rs, rowNumber); 		
- 		setQuestion(answerQuestion, rs, rowNumber); 		
+ 		setUserAnswer(answerQuestion, rs, rowNumber); 		
  		setAnswer(answerQuestion, rs, rowNumber); 		
  		setChangeRequest(answerQuestion, rs, rowNumber); 		
  		setVersion(answerQuestion, rs, rowNumber);
@@ -71,22 +71,22 @@ public class AnswerQuestionMapper extends BaseRowMapper<AnswerQuestion>{
  		answerQuestion.setUser(createEmptyUser(wechatUserId));
  	}
  	 		
- 	protected void setQuestion(AnswerQuestion answerQuestion, ResultSet rs, int rowNumber) throws SQLException{
- 		String questionId = rs.getString(AnswerQuestionTable.COLUMN_QUESTION);
- 		if( questionId == null){
+ 	protected void setUserAnswer(AnswerQuestion answerQuestion, ResultSet rs, int rowNumber) throws SQLException{
+ 		String userAnswerId = rs.getString(AnswerQuestionTable.COLUMN_USER_ANSWER);
+ 		if( userAnswerId == null){
  			return;
  		}
- 		if( questionId.isEmpty()){
+ 		if( userAnswerId.isEmpty()){
  			return;
  		}
- 		Question question = answerQuestion.getQuestion();
- 		if( question != null ){
+ 		UserAnswer userAnswer = answerQuestion.getUserAnswer();
+ 		if( userAnswer != null ){
  			//if the root object 'answerQuestion' already have the property, just set the id for it;
- 			question.setId(questionId);
+ 			userAnswer.setId(userAnswerId);
  			
  			return;
  		}
- 		answerQuestion.setQuestion(createEmptyQuestion(questionId));
+ 		answerQuestion.setUserAnswer(createEmptyUserAnswer(userAnswerId));
  	}
  	
 	protected void setAnswer(AnswerQuestion answerQuestion, ResultSet rs, int rowNumber) throws SQLException{
@@ -140,11 +140,11 @@ public class AnswerQuestionMapper extends BaseRowMapper<AnswerQuestion>{
  		return wechatUser;
  	}
  	
- 	protected Question  createEmptyQuestion(String questionId){
- 		Question question = new Question();
- 		question.setId(questionId);
- 		question.setVersion(Integer.MAX_VALUE);
- 		return question;
+ 	protected UserAnswer  createEmptyUserAnswer(String userAnswerId){
+ 		UserAnswer userAnswer = new UserAnswer();
+ 		userAnswer.setId(userAnswerId);
+ 		userAnswer.setVersion(Integer.MAX_VALUE);
+ 		return userAnswer;
  	}
  	
  	protected ChangeRequest  createEmptyChangeRequest(String changeRequestId){

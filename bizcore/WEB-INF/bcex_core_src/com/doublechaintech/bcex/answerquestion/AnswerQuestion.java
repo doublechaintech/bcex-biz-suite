@@ -13,8 +13,8 @@ import com.doublechaintech.bcex.KeyValuePair;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.doublechaintech.bcex.changerequest.ChangeRequest;
+import com.doublechaintech.bcex.useranswer.UserAnswer;
 import com.doublechaintech.bcex.wechatuser.WechatUser;
-import com.doublechaintech.bcex.question.Question;
 
 @JsonSerialize(using = AnswerQuestionSerializer.class)
 public class AnswerQuestion extends BaseEntity implements  java.io.Serializable{
@@ -23,7 +23,7 @@ public class AnswerQuestion extends BaseEntity implements  java.io.Serializable{
 	public static final String ID_PROPERTY                    = "id"                ;
 	public static final String NICK_NAME_PROPERTY             = "nickName"          ;
 	public static final String USER_PROPERTY                  = "user"              ;
-	public static final String QUESTION_PROPERTY              = "question"          ;
+	public static final String USER_ANSWER_PROPERTY           = "userAnswer"        ;
 	public static final String ANSWER_PROPERTY                = "answer"            ;
 	public static final String CHANGE_REQUEST_PROPERTY        = "changeRequest"     ;
 	public static final String VERSION_PROPERTY               = "version"           ;
@@ -51,7 +51,7 @@ public class AnswerQuestion extends BaseEntity implements  java.io.Serializable{
 	protected		String              	mId                 ;
 	protected		String              	mNickName           ;
 	protected		WechatUser          	mUser               ;
-	protected		Question            	mQuestion           ;
+	protected		UserAnswer          	mUserAnswer         ;
 	protected		String              	mAnswer             ;
 	protected		ChangeRequest       	mChangeRequest      ;
 	protected		int                 	mVersion            ;
@@ -75,17 +75,17 @@ public class AnswerQuestion extends BaseEntity implements  java.io.Serializable{
 	// disconnect from all, 中文就是一了百了，跟所有一切尘世断绝往来藏身于茫茫数据海洋
 	public 	void clearFromAll(){
 		setUser( null );
-		setQuestion( null );
+		setUserAnswer( null );
 		setChangeRequest( null );
 
 		this.changed = true;
 	}
 	
-	public 	AnswerQuestion(String nickName, WechatUser user, Question question, String answer, ChangeRequest changeRequest)
+	public 	AnswerQuestion(String nickName, WechatUser user, UserAnswer userAnswer, String answer, ChangeRequest changeRequest)
 	{
 		setNickName(nickName);
 		setUser(user);
-		setQuestion(question);
+		setUserAnswer(userAnswer);
 		setAnswer(answer);
 		setChangeRequest(changeRequest);
 	
@@ -147,8 +147,8 @@ public class AnswerQuestion extends BaseEntity implements  java.io.Serializable{
 		if(USER_PROPERTY.equals(property)){
 			return getUser();
 		}
-		if(QUESTION_PROPERTY.equals(property)){
-			return getQuestion();
+		if(USER_ANSWER_PROPERTY.equals(property)){
+			return getUserAnswer();
 		}
 		if(ANSWER_PROPERTY.equals(property)){
 			return getAnswer();
@@ -220,24 +220,24 @@ public class AnswerQuestion extends BaseEntity implements  java.io.Serializable{
 		this.changed = true;
 	}
 	
-	public void setQuestion(Question question){
-		this.mQuestion = question;;
+	public void setUserAnswer(UserAnswer userAnswer){
+		this.mUserAnswer = userAnswer;;
 	}
-	public Question getQuestion(){
-		return this.mQuestion;
+	public UserAnswer getUserAnswer(){
+		return this.mUserAnswer;
 	}
-	public AnswerQuestion updateQuestion(Question question){
-		this.mQuestion = question;;
+	public AnswerQuestion updateUserAnswer(UserAnswer userAnswer){
+		this.mUserAnswer = userAnswer;;
 		this.changed = true;
 		return this;
 	}
-	public void mergeQuestion(Question question){
-		if(question != null) { setQuestion(question);}
+	public void mergeUserAnswer(UserAnswer userAnswer){
+		if(userAnswer != null) { setUserAnswer(userAnswer);}
 	}
 	
 	
-	public void clearQuestion(){
-		setQuestion ( null );
+	public void clearUserAnswer(){
+		setUserAnswer ( null );
 		this.changed = true;
 	}
 	
@@ -298,7 +298,7 @@ public class AnswerQuestion extends BaseEntity implements  java.io.Serializable{
 	public void collectRefercences(BaseEntity owner, List<BaseEntity> entityList, String internalType){
 
 		addToEntityList(this, entityList, getUser(), internalType);
-		addToEntityList(this, entityList, getQuestion(), internalType);
+		addToEntityList(this, entityList, getUserAnswer(), internalType);
 		addToEntityList(this, entityList, getChangeRequest(), internalType);
 
 		
@@ -326,7 +326,7 @@ public class AnswerQuestion extends BaseEntity implements  java.io.Serializable{
 		appendKeyValuePair(result, ID_PROPERTY, getId());
 		appendKeyValuePair(result, NICK_NAME_PROPERTY, getNickName());
 		appendKeyValuePair(result, USER_PROPERTY, getUser());
-		appendKeyValuePair(result, QUESTION_PROPERTY, getQuestion());
+		appendKeyValuePair(result, USER_ANSWER_PROPERTY, getUserAnswer());
 		appendKeyValuePair(result, ANSWER_PROPERTY, getAnswer());
 		appendKeyValuePair(result, CHANGE_REQUEST_PROPERTY, getChangeRequest());
 		appendKeyValuePair(result, VERSION_PROPERTY, getVersion());
@@ -347,7 +347,7 @@ public class AnswerQuestion extends BaseEntity implements  java.io.Serializable{
 			dest.setId(getId());
 			dest.setNickName(getNickName());
 			dest.setUser(getUser());
-			dest.setQuestion(getQuestion());
+			dest.setUserAnswer(getUserAnswer());
 			dest.setAnswer(getAnswer());
 			dest.setChangeRequest(getChangeRequest());
 			dest.setVersion(getVersion());
@@ -367,7 +367,7 @@ public class AnswerQuestion extends BaseEntity implements  java.io.Serializable{
 			dest.mergeId(getId());
 			dest.mergeNickName(getNickName());
 			dest.mergeUser(getUser());
-			dest.mergeQuestion(getQuestion());
+			dest.mergeUserAnswer(getUserAnswer());
 			dest.mergeAnswer(getAnswer());
 			dest.mergeChangeRequest(getChangeRequest());
 			dest.mergeVersion(getVersion());
@@ -403,8 +403,8 @@ public class AnswerQuestion extends BaseEntity implements  java.io.Serializable{
 		if(getUser() != null ){
  			stringBuilder.append("\tuser='WechatUser("+getUser().getId()+")';");
  		}
-		if(getQuestion() != null ){
- 			stringBuilder.append("\tquestion='Question("+getQuestion().getId()+")';");
+		if(getUserAnswer() != null ){
+ 			stringBuilder.append("\tuserAnswer='UserAnswer("+getUserAnswer().getId()+")';");
  		}
 		stringBuilder.append("\tanswer='"+getAnswer()+"';");
 		if(getChangeRequest() != null ){

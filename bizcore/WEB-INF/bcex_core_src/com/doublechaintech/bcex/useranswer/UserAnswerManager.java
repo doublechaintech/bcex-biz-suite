@@ -29,6 +29,16 @@ public interface UserAnswerManager{
 	/*======================================================DATA MAINTENANCE===========================================================*/
 	
 
+	//public  AnswerQuestionManager getAnswerQuestionManager(BcexUserContext userContext, String userAnswerId, String nickName, String userId, String answer, String changeRequestId ,String [] tokensExpr)  throws Exception;
+	
+	public  UserAnswer addAnswerQuestion(BcexUserContext userContext, String userAnswerId, String nickName, String userId, String answer, String changeRequestId , String [] tokensExpr)  throws Exception;
+	public  UserAnswer removeAnswerQuestion(BcexUserContext userContext, String userAnswerId, String answerQuestionId, int answerQuestionVersion,String [] tokensExpr)  throws Exception;
+	public  UserAnswer updateAnswerQuestion(BcexUserContext userContext, String userAnswerId, String answerQuestionId, int answerQuestionVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
+
+	/*
+
+	*/
+
 
 
 }

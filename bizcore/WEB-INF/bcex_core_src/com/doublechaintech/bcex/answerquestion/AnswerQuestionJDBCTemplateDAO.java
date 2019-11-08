@@ -21,12 +21,12 @@ import com.doublechaintech.bcex.BcexUserContext;
 
 
 import com.doublechaintech.bcex.changerequest.ChangeRequest;
+import com.doublechaintech.bcex.useranswer.UserAnswer;
 import com.doublechaintech.bcex.wechatuser.WechatUser;
-import com.doublechaintech.bcex.question.Question;
 
+import com.doublechaintech.bcex.useranswer.UserAnswerDAO;
 import com.doublechaintech.bcex.changerequest.ChangeRequestDAO;
 import com.doublechaintech.bcex.wechatuser.WechatUserDAO;
-import com.doublechaintech.bcex.question.QuestionDAO;
 
 
 
@@ -56,12 +56,12 @@ public class AnswerQuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements An
  	}
  
  	
- 	private  QuestionDAO  questionDAO;
- 	public void setQuestionDAO(QuestionDAO questionDAO){
-	 	this.questionDAO = questionDAO;
+ 	private  UserAnswerDAO  userAnswerDAO;
+ 	public void setUserAnswerDAO(UserAnswerDAO userAnswerDAO){
+	 	this.userAnswerDAO = userAnswerDAO;
  	}
- 	public QuestionDAO getQuestionDAO(){
-	 	return this.questionDAO;
+ 	public UserAnswerDAO getUserAnswerDAO(){
+	 	return this.userAnswerDAO;
  	}
 
 
@@ -221,14 +221,14 @@ public class AnswerQuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements An
  	
   
 
- 	protected boolean isExtractQuestionEnabled(Map<String,Object> options){
+ 	protected boolean isExtractUserAnswerEnabled(Map<String,Object> options){
  		
-	 	return checkOptions(options, AnswerQuestionTokens.QUESTION);
+	 	return checkOptions(options, AnswerQuestionTokens.USERANSWER);
  	}
 
- 	protected boolean isSaveQuestionEnabled(Map<String,Object> options){
+ 	protected boolean isSaveUserAnswerEnabled(Map<String,Object> options){
 	 	
- 		return checkOptions(options, AnswerQuestionTokens.QUESTION);
+ 		return checkOptions(options, AnswerQuestionTokens.USERANSWER);
  	}
  	
 
@@ -279,8 +279,8 @@ public class AnswerQuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements An
 	 		extractUser(answerQuestion, loadOptions);
  		}
   	
- 		if(isExtractQuestionEnabled(loadOptions)){
-	 		extractQuestion(answerQuestion, loadOptions);
+ 		if(isExtractUserAnswerEnabled(loadOptions)){
+	 		extractUserAnswer(answerQuestion, loadOptions);
  		}
   	
  		if(isExtractChangeRequestEnabled(loadOptions)){
@@ -314,18 +314,18 @@ public class AnswerQuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements An
  		
   
 
- 	protected AnswerQuestion extractQuestion(AnswerQuestion answerQuestion, Map<String,Object> options) throws Exception{
+ 	protected AnswerQuestion extractUserAnswer(AnswerQuestion answerQuestion, Map<String,Object> options) throws Exception{
 
-		if(answerQuestion.getQuestion() == null){
+		if(answerQuestion.getUserAnswer() == null){
 			return answerQuestion;
 		}
-		String questionId = answerQuestion.getQuestion().getId();
-		if( questionId == null){
+		String userAnswerId = answerQuestion.getUserAnswer().getId();
+		if( userAnswerId == null){
 			return answerQuestion;
 		}
-		Question question = getQuestionDAO().load(questionId,options);
-		if(question != null){
-			answerQuestion.setQuestion(question);
+		UserAnswer userAnswer = getUserAnswerDAO().load(userAnswerId,options);
+		if(userAnswer != null){
+			answerQuestion.setUserAnswer(userAnswer);
 		}
 		
  		
@@ -399,28 +399,28 @@ public class AnswerQuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements An
 	}
  	
   	
- 	public SmartList<AnswerQuestion> findAnswerQuestionByQuestion(String questionId,Map<String,Object> options){
+ 	public SmartList<AnswerQuestion> findAnswerQuestionByUserAnswer(String userAnswerId,Map<String,Object> options){
  	
-  		SmartList<AnswerQuestion> resultList = queryWith(AnswerQuestionTable.COLUMN_QUESTION, questionId, options, getAnswerQuestionMapper());
-		// analyzeAnswerQuestionByQuestion(resultList, questionId, options);
+  		SmartList<AnswerQuestion> resultList = queryWith(AnswerQuestionTable.COLUMN_USER_ANSWER, userAnswerId, options, getAnswerQuestionMapper());
+		// analyzeAnswerQuestionByUserAnswer(resultList, userAnswerId, options);
 		return resultList;
  	}
  	 
  
- 	public SmartList<AnswerQuestion> findAnswerQuestionByQuestion(String questionId, int start, int count,Map<String,Object> options){
+ 	public SmartList<AnswerQuestion> findAnswerQuestionByUserAnswer(String userAnswerId, int start, int count,Map<String,Object> options){
  		
- 		SmartList<AnswerQuestion> resultList =  queryWithRange(AnswerQuestionTable.COLUMN_QUESTION, questionId, options, getAnswerQuestionMapper(), start, count);
- 		//analyzeAnswerQuestionByQuestion(resultList, questionId, options);
+ 		SmartList<AnswerQuestion> resultList =  queryWithRange(AnswerQuestionTable.COLUMN_USER_ANSWER, userAnswerId, options, getAnswerQuestionMapper(), start, count);
+ 		//analyzeAnswerQuestionByUserAnswer(resultList, userAnswerId, options);
  		return resultList;
  		
  	}
- 	public void analyzeAnswerQuestionByQuestion(SmartList<AnswerQuestion> resultList, String questionId, Map<String,Object> options){
+ 	public void analyzeAnswerQuestionByUserAnswer(SmartList<AnswerQuestion> resultList, String userAnswerId, Map<String,Object> options){
 		if(resultList==null){
 			return;//do nothing when the list is null.
 		}
 		
  		MultipleAccessKey filterKey = new MultipleAccessKey();
- 		filterKey.put(AnswerQuestion.QUESTION_PROPERTY, questionId);
+ 		filterKey.put(AnswerQuestion.USER_ANSWER_PROPERTY, userAnswerId);
  		Map<String,Object> emptyOptions = new HashMap<String,Object>();
  		
  		StatsInfo info = new StatsInfo();
@@ -432,13 +432,13 @@ public class AnswerQuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements An
  		
  	}
  	@Override
- 	public int countAnswerQuestionByQuestion(String questionId,Map<String,Object> options){
+ 	public int countAnswerQuestionByUserAnswer(String userAnswerId,Map<String,Object> options){
 
- 		return countWith(AnswerQuestionTable.COLUMN_QUESTION, questionId, options);
+ 		return countWith(AnswerQuestionTable.COLUMN_USER_ANSWER, userAnswerId, options);
  	}
  	@Override
-	public Map<String, Integer> countAnswerQuestionByQuestionIds(String[] ids, Map<String, Object> options) {
-		return countWithIds(AnswerQuestionTable.COLUMN_QUESTION, ids, options);
+	public Map<String, Integer> countAnswerQuestionByUserAnswerIds(String[] ids, Map<String, Object> options) {
+		return countWithIds(AnswerQuestionTable.COLUMN_USER_ANSWER, ids, options);
 	}
  	
   	
@@ -633,8 +633,8 @@ public class AnswerQuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements An
  			parameters[1] = answerQuestion.getUser().getId();
  		}
   	
- 		if(answerQuestion.getQuestion() != null){
- 			parameters[2] = answerQuestion.getQuestion().getId();
+ 		if(answerQuestion.getUserAnswer() != null){
+ 			parameters[2] = answerQuestion.getUserAnswer().getId();
  		}
  
  		parameters[3] = answerQuestion.getAnswer(); 	
@@ -660,8 +660,8 @@ public class AnswerQuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements An
  		
  		}
  		 	
- 		if(answerQuestion.getQuestion() != null){
- 			parameters[3] = answerQuestion.getQuestion().getId();
+ 		if(answerQuestion.getUserAnswer() != null){
+ 			parameters[3] = answerQuestion.getUserAnswer().getId();
  		
  		}
  		
@@ -683,8 +683,8 @@ public class AnswerQuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements An
 	 		saveUser(answerQuestion, options);
  		}
   	
- 		if(isSaveQuestionEnabled(options)){
-	 		saveQuestion(answerQuestion, options);
+ 		if(isSaveUserAnswerEnabled(options)){
+	 		saveUserAnswer(answerQuestion, options);
  		}
   	
  		if(isSaveChangeRequestEnabled(options)){
@@ -718,13 +718,13 @@ public class AnswerQuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements An
 	
   
  
- 	protected AnswerQuestion saveQuestion(AnswerQuestion answerQuestion, Map<String,Object> options){
+ 	protected AnswerQuestion saveUserAnswer(AnswerQuestion answerQuestion, Map<String,Object> options){
  		//Call inject DAO to execute this method
- 		if(answerQuestion.getQuestion() == null){
+ 		if(answerQuestion.getUserAnswer() == null){
  			return answerQuestion;//do nothing when it is null
  		}
  		
- 		getQuestionDAO().save(answerQuestion.getQuestion(),options);
+ 		getUserAnswerDAO().save(answerQuestion.getUserAnswer(),options);
  		return answerQuestion;
  		
  	}

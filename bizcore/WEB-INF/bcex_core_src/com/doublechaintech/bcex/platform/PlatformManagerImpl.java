@@ -1679,7 +1679,7 @@ public class PlatformManagerImpl extends CustomBcexCheckerManager implements Pla
 
 
 
-	protected void checkParamsForAddingWechatUser(BcexUserContext userContext, String platformId, String name, String avarta,String [] tokensExpr) throws Exception{
+	protected void checkParamsForAddingWechatUser(BcexUserContext userContext, String platformId, String name, String avarta, String userType,String [] tokensExpr) throws Exception{
 		
 				checkerOf(userContext).checkIdOfPlatform(platformId);
 
@@ -1687,17 +1687,19 @@ public class PlatformManagerImpl extends CustomBcexCheckerManager implements Pla
 		checkerOf(userContext).checkNameOfWechatUser(name);
 		
 		checkerOf(userContext).checkAvartaOfWechatUser(avarta);
+		
+		checkerOf(userContext).checkUserTypeOfWechatUser(userType);
 	
 		checkerOf(userContext).throwExceptionIfHasErrors(PlatformManagerException.class);
 
 	
 	}
-	public  Platform addWechatUser(BcexUserContext userContext, String platformId, String name, String avarta, String [] tokensExpr) throws Exception
+	public  Platform addWechatUser(BcexUserContext userContext, String platformId, String name, String avarta, String userType, String [] tokensExpr) throws Exception
 	{	
 		
-		checkParamsForAddingWechatUser(userContext,platformId,name, avarta,tokensExpr);
+		checkParamsForAddingWechatUser(userContext,platformId,name, avarta, userType,tokensExpr);
 		
-		WechatUser wechatUser = createWechatUser(userContext,name, avarta);
+		WechatUser wechatUser = createWechatUser(userContext,name, avarta, userType);
 		
 		Platform platform = loadPlatform(userContext, platformId, allTokens());
 		synchronized(platform){ 
@@ -1710,20 +1712,21 @@ public class PlatformManagerImpl extends CustomBcexCheckerManager implements Pla
 			return present(userContext,platform, mergedAllTokens(tokensExpr));
 		}
 	}
-	protected void checkParamsForUpdatingWechatUserProperties(BcexUserContext userContext, String platformId,String id,String name,String avarta,String [] tokensExpr) throws Exception {
+	protected void checkParamsForUpdatingWechatUserProperties(BcexUserContext userContext, String platformId,String id,String name,String avarta,String userType,String [] tokensExpr) throws Exception {
 		
 		checkerOf(userContext).checkIdOfPlatform(platformId);
 		checkerOf(userContext).checkIdOfWechatUser(id);
 		
 		checkerOf(userContext).checkNameOfWechatUser( name);
 		checkerOf(userContext).checkAvartaOfWechatUser( avarta);
+		checkerOf(userContext).checkUserTypeOfWechatUser( userType);
 
 		checkerOf(userContext).throwExceptionIfHasErrors(PlatformManagerException.class);
 		
 	}
-	public  Platform updateWechatUserProperties(BcexUserContext userContext, String platformId, String id,String name,String avarta, String [] tokensExpr) throws Exception
+	public  Platform updateWechatUserProperties(BcexUserContext userContext, String platformId, String id,String name,String avarta,String userType, String [] tokensExpr) throws Exception
 	{	
-		checkParamsForUpdatingWechatUserProperties(userContext,platformId,id,name,avarta,tokensExpr);
+		checkParamsForUpdatingWechatUserProperties(userContext,platformId,id,name,avarta,userType,tokensExpr);
 
 		Map<String, Object> options = tokens()
 				.allTokens()
@@ -1740,6 +1743,7 @@ public class PlatformManagerImpl extends CustomBcexCheckerManager implements Pla
 		
 		item.updateName( name );
 		item.updateAvarta( avarta );
+		item.updateUserType( userType );
 
 		
 		//checkParamsForAddingWechatUser(userContext,platformId,name, code, used,tokensExpr);
@@ -1750,14 +1754,15 @@ public class PlatformManagerImpl extends CustomBcexCheckerManager implements Pla
 	}
 	
 	
-	protected WechatUser createWechatUser(BcexUserContext userContext, String name, String avarta) throws Exception{
+	protected WechatUser createWechatUser(BcexUserContext userContext, String name, String avarta, String userType) throws Exception{
 
 		WechatUser wechatUser = new WechatUser();
 		
 		
 		wechatUser.setName(name);		
 		wechatUser.setAvarta(avarta);		
-		wechatUser.setCreateTime(userContext.now());
+		wechatUser.setCreateTime(userContext.now());		
+		wechatUser.setUserType(userType);
 	
 		
 		return wechatUser;
@@ -1875,6 +1880,10 @@ public class PlatformManagerImpl extends CustomBcexCheckerManager implements Pla
 		
 		if(WechatUser.AVARTA_PROPERTY.equals(property)){
 			checkerOf(userContext).checkAvartaOfWechatUser(parseString(newValueExpr));
+		}
+		
+		if(WechatUser.USER_TYPE_PROPERTY.equals(property)){
+			checkerOf(userContext).checkUserTypeOfWechatUser(parseString(newValueExpr));
 		}
 		
 	

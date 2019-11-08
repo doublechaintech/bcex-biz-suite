@@ -12,13 +12,14 @@ public interface StartExamManager{
 
 		
 
-	public StartExam createStartExam(BcexUserContext userContext, String nickName, String changeRequestId) throws Exception;	
+	public StartExam createStartExam(BcexUserContext userContext, String nickName, String userId, String changeRequestId) throws Exception;	
 	public StartExam updateStartExam(BcexUserContext userContext,String startExamId, int startExamVersion, String property, String newValueExpr,String [] tokensExpr) throws Exception;
 	public StartExam loadStartExam(BcexUserContext userContext, String startExamId, String [] tokensExpr) throws Exception;
 	public StartExam internalSaveStartExam(BcexUserContext userContext, StartExam startExam) throws Exception;
 	public StartExam internalSaveStartExam(BcexUserContext userContext, StartExam startExam,Map<String,Object>option) throws Exception;
 	
-	public StartExam transferToAnotherChangeRequest(BcexUserContext userContext, String startExamId, String anotherChangeRequestId)  throws Exception;
+	public StartExam transferToAnotherUser(BcexUserContext userContext, String startExamId, String anotherUserId)  throws Exception;
+ 	public StartExam transferToAnotherChangeRequest(BcexUserContext userContext, String startExamId, String anotherChangeRequestId)  throws Exception;
  
 
 	public void delete(BcexUserContext userContext, String startExamId, int version) throws Exception;

@@ -28,16 +28,6 @@ public interface QuestionManager{
 	/*======================================================DATA MAINTENANCE===========================================================*/
 	
 
-	//public  AnswerQuestionManager getAnswerQuestionManager(BcexUserContext userContext, String questionId, String nickName, String userId, String answer, String changeRequestId ,String [] tokensExpr)  throws Exception;
-	
-	public  Question addAnswerQuestion(BcexUserContext userContext, String questionId, String nickName, String userId, String answer, String changeRequestId , String [] tokensExpr)  throws Exception;
-	public  Question removeAnswerQuestion(BcexUserContext userContext, String questionId, String answerQuestionId, int answerQuestionVersion,String [] tokensExpr)  throws Exception;
-	public  Question updateAnswerQuestion(BcexUserContext userContext, String questionId, String answerQuestionId, int answerQuestionVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
-
-	/*
-
-	*/
-
 	//public  AnswerManager getAnswerManager(BcexUserContext userContext, String questionId, String title, String comment ,String [] tokensExpr)  throws Exception;
 	
 	public  Question addAnswer(BcexUserContext userContext, String questionId, String title, String comment , String [] tokensExpr)  throws Exception;

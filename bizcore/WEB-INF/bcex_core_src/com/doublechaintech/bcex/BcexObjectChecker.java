@@ -204,6 +204,7 @@ public class BcexObjectChecker extends BcexChecker{
 		markAsChecked(startExamAsBaseEntity);
 		commonObjectPropertyCheck(startExamAsBaseEntity,"id",this::checkIdOfStartExam);
 		commonObjectPropertyCheck(startExamAsBaseEntity,"nickName",this::checkNickNameOfStartExam);
+		commonObjectPropertyCheck(startExamAsBaseEntity,"user",this::checkUserOfStartExam);
 		commonObjectPropertyCheck(startExamAsBaseEntity,"changeRequest",this::checkChangeRequestOfStartExam);
 		commonObjectPropertyCheck(startExamAsBaseEntity,"version",this::checkVersionOfStartExam);
 		return this;
@@ -219,7 +220,7 @@ public class BcexObjectChecker extends BcexChecker{
 		commonObjectPropertyCheck(answerQuestionAsBaseEntity,"id",this::checkIdOfAnswerQuestion);
 		commonObjectPropertyCheck(answerQuestionAsBaseEntity,"nickName",this::checkNickNameOfAnswerQuestion);
 		commonObjectPropertyCheck(answerQuestionAsBaseEntity,"user",this::checkUserOfAnswerQuestion);
-		commonObjectPropertyCheck(answerQuestionAsBaseEntity,"question",this::checkQuestionOfAnswerQuestion);
+		commonObjectPropertyCheck(answerQuestionAsBaseEntity,"userAnswer",this::checkUserAnswerOfAnswerQuestion);
 		commonObjectPropertyCheck(answerQuestionAsBaseEntity,"answer",this::checkAnswerOfAnswerQuestion);
 		commonObjectPropertyCheck(answerQuestionAsBaseEntity,"changeRequest",this::checkChangeRequestOfAnswerQuestion);
 		commonObjectPropertyCheck(answerQuestionAsBaseEntity,"version",this::checkVersionOfAnswerQuestion);
@@ -260,7 +261,6 @@ public class BcexObjectChecker extends BcexChecker{
 		commonObjectPropertyCheck(questionAsBaseEntity,"rightAnswer",this::checkRightAnswerOfQuestion);
 		commonObjectPropertyCheck(questionAsBaseEntity,"platform",this::checkPlatformOfQuestion);
 		commonObjectPropertyCheck(questionAsBaseEntity,"version",this::checkVersionOfQuestion);
-		commonObjectPropertyCheck(questionAsBaseEntity,"answerQuestionList",this::checkAnswerQuestionListOfQuestion);
 		commonObjectPropertyCheck(questionAsBaseEntity,"answerList",this::checkAnswerListOfQuestion);
 		commonObjectPropertyCheck(questionAsBaseEntity,"userAnswerList",this::checkUserAnswerListOfQuestion);
 		return this;
@@ -307,8 +307,10 @@ public class BcexObjectChecker extends BcexChecker{
 		commonObjectPropertyCheck(wechatUserAsBaseEntity,"name",this::checkNameOfWechatUser);
 		commonObjectPropertyCheck(wechatUserAsBaseEntity,"avarta",this::checkAvartaOfWechatUser);
 		commonObjectPropertyAssign(wechatUserAsBaseEntity,"createTime",this::assignCreateTimeOfWechatUser);
+		commonObjectPropertyCheck(wechatUserAsBaseEntity,"userType",this::checkUserTypeOfWechatUser);
 		commonObjectPropertyCheck(wechatUserAsBaseEntity,"platform",this::checkPlatformOfWechatUser);
 		commonObjectPropertyCheck(wechatUserAsBaseEntity,"version",this::checkVersionOfWechatUser);
+		commonObjectPropertyCheck(wechatUserAsBaseEntity,"startExamList",this::checkStartExamListOfWechatUser);
 		commonObjectPropertyCheck(wechatUserAsBaseEntity,"answerQuestionList",this::checkAnswerQuestionListOfWechatUser);
 		commonObjectPropertyCheck(wechatUserAsBaseEntity,"wechatLoginInfoList",this::checkWechatLoginInfoListOfWechatUser);
 		commonObjectPropertyCheck(wechatUserAsBaseEntity,"examList",this::checkExamListOfWechatUser);
@@ -365,6 +367,7 @@ public class BcexObjectChecker extends BcexChecker{
 		commonObjectPropertyCheck(userAnswerAsBaseEntity,"question",this::checkQuestionOfUserAnswer);
 		commonObjectPropertyCheck(userAnswerAsBaseEntity,"exam",this::checkExamOfUserAnswer);
 		commonObjectPropertyCheck(userAnswerAsBaseEntity,"version",this::checkVersionOfUserAnswer);
+		commonObjectPropertyCheck(userAnswerAsBaseEntity,"answerQuestionList",this::checkAnswerQuestionListOfUserAnswer);
 		return this;
 
 	}
@@ -812,6 +815,20 @@ public class BcexObjectChecker extends BcexChecker{
 	}
 
 
+	public static final String USER_OF_START_EXAM = "start_exam.user";
+
+
+	public BcexObjectChecker checkUserOfStartExam(BaseEntity userAsBaseEntity){
+
+		if(userAsBaseEntity == null){
+			checkBaseEntityReference(userAsBaseEntity,true,USER_OF_START_EXAM);
+			return this;
+		}
+		checkAndFixWechatUser(userAsBaseEntity);
+		return this;
+	}
+
+
 	public static final String CHANGE_REQUEST_OF_START_EXAM = "start_exam.change_request";
 
 
@@ -840,16 +857,16 @@ public class BcexObjectChecker extends BcexChecker{
 	}
 
 
-	public static final String QUESTION_OF_ANSWER_QUESTION = "answer_question.question";
+	public static final String USER_ANSWER_OF_ANSWER_QUESTION = "answer_question.user_answer";
 
 
-	public BcexObjectChecker checkQuestionOfAnswerQuestion(BaseEntity questionAsBaseEntity){
+	public BcexObjectChecker checkUserAnswerOfAnswerQuestion(BaseEntity userAnswerAsBaseEntity){
 
-		if(questionAsBaseEntity == null){
-			checkBaseEntityReference(questionAsBaseEntity,true,QUESTION_OF_ANSWER_QUESTION);
+		if(userAnswerAsBaseEntity == null){
+			checkBaseEntityReference(userAnswerAsBaseEntity,true,USER_ANSWER_OF_ANSWER_QUESTION);
 			return this;
 		}
-		checkAndFixQuestion(questionAsBaseEntity);
+		checkAndFixUserAnswer(userAnswerAsBaseEntity);
 		return this;
 	}
 
@@ -888,13 +905,6 @@ public class BcexObjectChecker extends BcexChecker{
 		return this;
 	}
 
-
-	public BcexObjectChecker checkAnswerQuestionListOfQuestion(List<BaseEntity> answerQuestionList){
-		AtomicInteger index = new AtomicInteger();
-		answerQuestionList.stream().forEach(answerQuestion->
-			commonObjectElementCheck(answerQuestion,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixAnswerQuestion));
-		return this;
-	}
 
 	public BcexObjectChecker checkAnswerListOfQuestion(List<BaseEntity> answerList){
 		AtomicInteger index = new AtomicInteger();
@@ -951,6 +961,13 @@ public class BcexObjectChecker extends BcexChecker{
 		return this;
 	}
 
+
+	public BcexObjectChecker checkStartExamListOfWechatUser(List<BaseEntity> startExamList){
+		AtomicInteger index = new AtomicInteger();
+		startExamList.stream().forEach(startExam->
+			commonObjectElementCheck(startExam,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixStartExam));
+		return this;
+	}
 
 	public BcexObjectChecker checkAnswerQuestionListOfWechatUser(List<BaseEntity> answerQuestionList){
 		AtomicInteger index = new AtomicInteger();
@@ -1049,6 +1066,13 @@ public class BcexObjectChecker extends BcexChecker{
 		return this;
 	}
 
+
+	public BcexObjectChecker checkAnswerQuestionListOfUserAnswer(List<BaseEntity> answerQuestionList){
+		AtomicInteger index = new AtomicInteger();
+		answerQuestionList.stream().forEach(answerQuestion->
+			commonObjectElementCheck(answerQuestion,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixAnswerQuestion));
+		return this;
+	}
 
 	public static final String QUESTION_OF_USER_ANSWER = "user_answer.question";
 

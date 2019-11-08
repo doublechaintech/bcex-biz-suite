@@ -9,12 +9,12 @@ import com.doublechaintech.bcex.MultipleAccessKey;
 import com.doublechaintech.bcex.BcexUserContext;
 
 import com.doublechaintech.bcex.changerequest.ChangeRequest;
+import com.doublechaintech.bcex.useranswer.UserAnswer;
 import com.doublechaintech.bcex.wechatuser.WechatUser;
-import com.doublechaintech.bcex.question.Question;
 
+import com.doublechaintech.bcex.useranswer.UserAnswerDAO;
 import com.doublechaintech.bcex.changerequest.ChangeRequestDAO;
 import com.doublechaintech.bcex.wechatuser.WechatUserDAO;
-import com.doublechaintech.bcex.question.QuestionDAO;
 
 
 public interface AnswerQuestionDAO{
@@ -59,11 +59,11 @@ public interface AnswerQuestionDAO{
 
  
   
- 	public SmartList<AnswerQuestion> findAnswerQuestionByQuestion(String questionId, Map<String,Object> options);
- 	public int countAnswerQuestionByQuestion(String questionId, Map<String,Object> options);
- 	public Map<String, Integer> countAnswerQuestionByQuestionIds(String[] ids, Map<String,Object> options);
- 	public SmartList<AnswerQuestion> findAnswerQuestionByQuestion(String questionId, int start, int count, Map<String,Object> options);
- 	public void analyzeAnswerQuestionByQuestion(SmartList<AnswerQuestion> resultList, String questionId, Map<String,Object> options);
+ 	public SmartList<AnswerQuestion> findAnswerQuestionByUserAnswer(String userAnswerId, Map<String,Object> options);
+ 	public int countAnswerQuestionByUserAnswer(String userAnswerId, Map<String,Object> options);
+ 	public Map<String, Integer> countAnswerQuestionByUserAnswerIds(String[] ids, Map<String,Object> options);
+ 	public SmartList<AnswerQuestion> findAnswerQuestionByUserAnswer(String userAnswerId, int start, int count, Map<String,Object> options);
+ 	public void analyzeAnswerQuestionByUserAnswer(SmartList<AnswerQuestion> resultList, String userAnswerId, Map<String,Object> options);
 
  
   

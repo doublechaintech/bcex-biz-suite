@@ -69,5 +69,90 @@ public abstract class WxappServiceViewService extends BaseWxappServiceViewServic
 		return page.doRender(ctx);
 	}
 	
+	// 更新个人信息(update profile)
+	public Object customerUpdateProfile(BcexUserContext userContext, String name , String avantar , String userType) throws Exception {
+		String accessUrl = makeUrlF("customerUpdateProfile", false, name , avantar , userType);
+		
+		CustomBcexUserContextImpl ctx = (CustomBcexUserContextImpl) userContext;
+		ctx.setAccessUrl(accessUrl);
+		ensureCurrentUserInfo(ctx);
+		ctx.setName(name);
+		ctx.setAvantar(avantar);
+		ctx.setUserType(userType);
+		commonLog(ctx, "customerUpdateProfile", "更新个人信息", ctx.getRemoteIP(), ctx.tokenId(), makeUrlF("", false, name , avantar , userType), null);
+		int resultCode = processRequestCustomerUpdateProfile(ctx);
+		if (returnRightNow(resultCode)){
+			return ctx.getResultObject();
+		}
+		BaseViewPage page = assemblerSimplePopupPage(ctx, "customerUpdateProfile");
+		return page.doRender(ctx);
+	}
+	
+	// 开始考试(start exam)
+	public Object customerStartExam(BcexUserContext userContext) throws Exception {
+		String accessUrl = makeUrlF("customerStartExam", false);
+		
+		CustomBcexUserContextImpl ctx = (CustomBcexUserContextImpl) userContext;
+		ctx.setAccessUrl(accessUrl);
+		ensureCurrentUserInfo(ctx);
+		commonLog(ctx, "customerStartExam", "开始考试", ctx.getRemoteIP(), ctx.tokenId(), makeUrlF("", false), null);
+		int resultCode = processRequestCustomerStartExam(ctx);
+		if (returnRightNow(resultCode)){
+			return ctx.getResultObject();
+		}
+		BaseViewPage page = assemblerAnswerSheetPage(ctx, "customerStartExam");
+		return page.doRender(ctx);
+	}
+	
+	// 答题(answer question)
+	public Object customerAnswerQuestion(BcexUserContext userContext, String quizId , String answer) throws Exception {
+		String accessUrl = makeUrlF("customerAnswerQuestion", false, quizId , answer);
+		
+		CustomBcexUserContextImpl ctx = (CustomBcexUserContextImpl) userContext;
+		ctx.setAccessUrl(accessUrl);
+		ensureCurrentUserInfo(ctx);
+		ctx.setQuizId(quizId);
+		ctx.setAnswer(answer);
+		commonLog(ctx, "customerAnswerQuestion", "答题", ctx.getRemoteIP(), ctx.tokenId(), makeUrlF("", false, quizId , answer), null);
+		int resultCode = processRequestCustomerAnswerQuestion(ctx);
+		if (returnRightNow(resultCode)){
+			return ctx.getResultObject();
+		}
+		BaseViewPage page = null;
+		switch(resultCode){
+			case PRC_ALL_DONE:{
+				// 全部答完
+				page = assemblerExamResultPage(ctx, "customerAnswerQuestion");
+				break;
+			}
+			case PRC_HAS_MORE_QUESTION:
+			case PRC_BY_DEFAULT: {
+				page = assemblerAnswerSheetPage(ctx, "customerAnswerQuestion");
+				break;
+			}
+			default: {
+				throw new Exception("未定义的分支代码"+resultCode);
+			}
+		}
+		return page.doRender(ctx);
+	}
+	
+	// 查看成绩(view score)
+	public Object customerViewScore(BcexUserContext userContext, String quizId) throws Exception {
+		String accessUrl = makeUrlF("customerViewScore", false, quizId);
+		
+		CustomBcexUserContextImpl ctx = (CustomBcexUserContextImpl) userContext;
+		ctx.setAccessUrl(accessUrl);
+		ensureCurrentUserInfo(ctx);
+		ctx.setQuizId(quizId);
+		commonLog(ctx, "customerViewScore", "查看成绩", ctx.getRemoteIP(), ctx.tokenId(), makeUrlF("", false, quizId), null);
+		int resultCode = processRequestCustomerViewScore(ctx);
+		if (returnRightNow(resultCode)){
+			return ctx.getResultObject();
+		}
+		BaseViewPage page = assemblerScoreboardPage(ctx, "customerViewScore");
+		return page.doRender(ctx);
+	}
+	
 }
 

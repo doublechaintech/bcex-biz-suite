@@ -21,8 +21,10 @@ import com.doublechaintech.bcex.BcexCheckerManager;
 import com.doublechaintech.bcex.CustomBcexCheckerManager;
 
 import com.doublechaintech.bcex.changerequest.ChangeRequest;
+import com.doublechaintech.bcex.wechatuser.WechatUser;
 
 import com.doublechaintech.bcex.changerequest.CandidateChangeRequest;
+import com.doublechaintech.bcex.wechatuser.CandidateWechatUser;
 
 
 
@@ -148,6 +150,7 @@ public class StartExamManagerImpl extends CustomBcexCheckerManager implements St
 		addAction(userContext, startExam, tokens,"@update","updateStartExam","updateStartExam/"+startExam.getId()+"/","main","primary");
 		addAction(userContext, startExam, tokens,"@copy","cloneStartExam","cloneStartExam/"+startExam.getId()+"/","main","primary");
 		
+		addAction(userContext, startExam, tokens,"start_exam.transfer_to_user","transferToAnotherUser","transferToAnotherUser/"+startExam.getId()+"/","main","primary");
 		addAction(userContext, startExam, tokens,"start_exam.transfer_to_change_request","transferToAnotherChangeRequest","transferToAnotherChangeRequest/"+startExam.getId()+"/","main","primary");
 	
 		
@@ -161,7 +164,7 @@ public class StartExamManagerImpl extends CustomBcexCheckerManager implements St
  	
 
 
-	public StartExam createStartExam(BcexUserContext userContext,String nickName, String changeRequestId) throws Exception
+	public StartExam createStartExam(BcexUserContext userContext,String nickName, String userId, String changeRequestId) throws Exception
 	{
 		
 		
@@ -176,6 +179,11 @@ public class StartExamManagerImpl extends CustomBcexCheckerManager implements St
 		StartExam startExam=createNewStartExam();	
 
 		startExam.setNickName(nickName);
+			
+		WechatUser user = loadWechatUser(userContext, userId,emptyOptions());
+		startExam.setUser(user);
+		
+		
 			
 		ChangeRequest changeRequest = loadChangeRequest(userContext, changeRequestId,emptyOptions());
 		startExam.setChangeRequest(changeRequest);
@@ -208,6 +216,8 @@ public class StartExamManagerImpl extends CustomBcexCheckerManager implements St
 		if(StartExam.NICK_NAME_PROPERTY.equals(property)){
 			checkerOf(userContext).checkNickNameOfStartExam(parseString(newValueExpr));
 		}		
+
+				
 
 		
 	
@@ -315,7 +325,56 @@ public class StartExamManagerImpl extends CustomBcexCheckerManager implements St
 		return StartExamTokens.mergeAll(tokens).done();
 	}
 	
-	protected void checkParamsForTransferingAnotherChangeRequest(BcexUserContext userContext, String startExamId, String anotherChangeRequestId) throws Exception
+	protected void checkParamsForTransferingAnotherUser(BcexUserContext userContext, String startExamId, String anotherUserId) throws Exception
+ 	{
+ 		
+ 		checkerOf(userContext).checkIdOfStartExam(startExamId);
+ 		checkerOf(userContext).checkIdOfWechatUser(anotherUserId);//check for optional reference
+ 		checkerOf(userContext).throwExceptionIfHasErrors(StartExamManagerException.class);
+ 		
+ 	}
+ 	public StartExam transferToAnotherUser(BcexUserContext userContext, String startExamId, String anotherUserId) throws Exception
+ 	{
+ 		checkParamsForTransferingAnotherUser(userContext, startExamId,anotherUserId);
+ 
+		StartExam startExam = loadStartExam(userContext, startExamId, allTokens());	
+		synchronized(startExam){
+			//will be good when the startExam loaded from this JVM process cache.
+			//also good when there is a ram based DAO implementation
+			WechatUser user = loadWechatUser(userContext, anotherUserId, emptyOptions());		
+			startExam.updateUser(user);		
+			startExam = saveStartExam(userContext, startExam, emptyOptions());
+			
+			return present(userContext,startExam, allTokens());
+			
+		}
+
+ 	}
+ 	
+	 	
+ 	
+ 	
+	public CandidateWechatUser requestCandidateUser(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo) throws Exception {
+
+		CandidateWechatUser result = new CandidateWechatUser();
+		result.setOwnerClass(ownerClass);
+		result.setOwnerId(id);
+		result.setFilterKey(filterKey==null?"":filterKey.trim());
+		result.setPageNo(pageNo);
+		result.setValueFieldName("id");
+		result.setDisplayFieldName("name");
+		
+		pageNo = Math.max(1, pageNo);
+		int pageSize = 20;
+		//requestCandidateProductForSkuAsOwner
+		SmartList<WechatUser> candidateList = wechatUserDaoOf(userContext).requestCandidateWechatUserForStartExam(userContext,ownerClass, id, filterKey, pageNo, pageSize);
+		result.setCandidates(candidateList);
+		int totalCount = candidateList.getTotalCount();
+		result.setTotalPage(Math.max(1, (totalCount + pageSize -1)/pageSize ));
+		return result;
+	}
+ 	
+ 	protected void checkParamsForTransferingAnotherChangeRequest(BcexUserContext userContext, String startExamId, String anotherChangeRequestId) throws Exception
  	{
  		
  		checkerOf(userContext).checkIdOfStartExam(startExamId);
@@ -371,6 +430,16 @@ public class StartExamManagerImpl extends CustomBcexCheckerManager implements St
  	{
 		
  		return changeRequestDaoOf(userContext).load(newChangeRequestId, options);
+ 	}
+ 	
+ 	
+ 	
+	
+	 	
+ 	protected WechatUser loadWechatUser(BcexUserContext userContext, String newUserId, Map<String,Object> options) throws Exception
+ 	{
+		
+ 		return wechatUserDaoOf(userContext).load(newUserId, options);
  	}
  	
  	

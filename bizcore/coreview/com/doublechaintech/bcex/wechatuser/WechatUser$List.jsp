@@ -107,6 +107,9 @@
 <c:if test="${param.referName ne 'createTime'}">
 	<th>${userContext.localeMap['wechat_user.create_time']}</th>
 </c:if>
+<c:if test="${param.referName ne 'userType'}">
+	<th>${userContext.localeMap['wechat_user.user_type']}</th>
+</c:if>
 <c:if test="${param.referName ne 'platform'}">
 	<th>${userContext.localeMap['wechat_user.platform']}</th>
 </c:if>
@@ -119,6 +122,7 @@
 <c:if test="${param.referName ne 'name'}">	<td contenteditable='true' class='edit-value'  propertyToChange='name' storedCellValue='${item.name}' prefix='${ownerBeanName}Manager/updateWechatUser/${result.id}/${item.id}/'>${item.name}</td>
 </c:if><c:if test="${param.referName ne 'avarta'}">	<td contenteditable='true' class='edit-value'  propertyToChange='avarta' storedCellValue='${item.avarta}' prefix='${ownerBeanName}Manager/updateWechatUser/${result.id}/${item.id}/'>${item.avarta}</td>
 </c:if><c:if test="${param.referName ne 'createTime'}">	<td contenteditable='true' class='edit-value'  propertyToChange='createTime' storedCellValue='${item.createTime}' prefix='${ownerBeanName}Manager/updateWechatUser/${result.id}/${item.id}/'><fmt:formatDate pattern="yyyy-MM-dd'T'HH:mm:ss" value="${item.createTime}" /></td>
+</c:if><c:if test="${param.referName ne 'userType'}">	<td contenteditable='true' class='edit-value'  propertyToChange='userType' storedCellValue='${item.userType}' prefix='${ownerBeanName}Manager/updateWechatUser/${result.id}/${item.id}/'>${item.userType}</td>
 </c:if><c:if test="${param.referName ne 'platform'}">
 	<td class="select_candidate_td"
 			data-candidate-method="./wechatUserManager/requestCandidatePlatform/${ownerBeanName}/${item.id}/"

@@ -73,7 +73,6 @@ public class QuestionTokens extends CommonTokens{
 		
 		return start()
 			.withPlatform()
-			.withAnswerQuestionList()
 			.withAnswerList()
 			.withUserAnswerList();
 	
@@ -110,72 +109,6 @@ public class QuestionTokens extends CommonTokens{
 	}
 	
 	
-	protected static final String ANSWER_QUESTION_LIST = "answerQuestionList";
-	public String getAnswerQuestionList(){
-		return ANSWER_QUESTION_LIST;
-	}
-	public QuestionTokens withAnswerQuestionList(){		
-		addSimpleOptions(ANSWER_QUESTION_LIST);
-		return this;
-	}
-	public QuestionTokens analyzeAnswerQuestionList(){		
-		addSimpleOptions(ANSWER_QUESTION_LIST+".anaylze");
-		return this;
-	}
-	public boolean analyzeAnswerQuestionListEnabled(){		
-		
-		if(checkOptions(this.options(), ANSWER_QUESTION_LIST+".anaylze")){
-			return true; //most of the case, should call here
-		}
-		//if not true, then query for global setting
-		return checkOptions(this.options(), ALL_LISTS_ANALYZE);
-	}
-	public QuestionTokens extractMoreFromAnswerQuestionList(String idsSeperatedWithComma){		
-		addSimpleOptions(ANSWER_QUESTION_LIST+".extractIds", idsSeperatedWithComma);
-		return this;
-	}
-	
-	
-	
-	
-	private int answerQuestionListSortCounter = 0;
-	public QuestionTokens sortAnswerQuestionListWith(String field, String descOrAsc){		
-		addSortMoreOptions(ANSWER_QUESTION_LIST,answerQuestionListSortCounter++, field, descOrAsc);
-		return this;
-	}
-	private int answerQuestionListSearchCounter = 0;
-	public QuestionTokens searchAnswerQuestionListWith(String field, String verb, String value){		
-		addSearchMoreOptions(ANSWER_QUESTION_LIST,answerQuestionListSearchCounter++, field, verb, value);
-		return this;
-	}
-	
-	public QuestionTokens searchAllTextOfAnswerQuestionList(String verb, String value){	
-		String field = "id|nickName|answer";
-		addSearchMoreOptions(ANSWER_QUESTION_LIST,answerQuestionListSearchCounter++, field, verb, value);
-		return this;
-	}
-	
-	
-	
-	public QuestionTokens rowsPerPageOfAnswerQuestionList(int rowsPerPage){		
-		addSimpleOptions(ANSWER_QUESTION_LIST+"RowsPerPage",rowsPerPage);
-		return this;
-	}
-	public QuestionTokens currentPageNumberOfAnswerQuestionList(int currentPageNumber){		
-		addSimpleOptions(ANSWER_QUESTION_LIST+"CurrentPage",currentPageNumber);
-		return this;
-	}
-	public QuestionTokens retainColumnsOfAnswerQuestionList(String[] columns){		
-		addSimpleOptions(ANSWER_QUESTION_LIST+"RetainColumns",columns);
-		return this;
-	}
-	public QuestionTokens excludeColumnsOfAnswerQuestionList(String[] columns){		
-		addSimpleOptions(ANSWER_QUESTION_LIST+"ExcludeColumns",columns);
-		return this;
-	}
-	
-	
-		
 	protected static final String ANSWER_LIST = "answerList";
 	public String getAnswerList(){
 		return ANSWER_LIST;
@@ -311,7 +244,6 @@ public class QuestionTokens extends CommonTokens{
 	
 	public  QuestionTokens searchEntireObjectText(String verb, String value){
 		
-		searchAllTextOfAnswerQuestionList(verb, value);	
 		searchAllTextOfAnswerList(verb, value);	
 		searchAllTextOfUserAnswerList(verb, value);	
 		return this;

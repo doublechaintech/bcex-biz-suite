@@ -221,6 +221,15 @@ public class BcexChecker extends BaseChecker{
 		return this;
 	}	
 
+	public static final String  USER_OF_START_EXAM ="start_exam.user";
+	public BcexChecker checkUserIdOfStartExam(String userId)
+	{
+		
+	 	checkIdOfStartExam(userId ); 		
+		
+		return this;
+	}	
+
 	public static final String  CHANGE_REQUEST_OF_START_EXAM ="start_exam.change_request";
 	public BcexChecker checkChangeRequestIdOfStartExam(String changeRequestId)
 	{
@@ -266,11 +275,11 @@ public class BcexChecker extends BaseChecker{
 		return this;
 	}	
 
-	public static final String  QUESTION_OF_ANSWER_QUESTION ="answer_question.question";
-	public BcexChecker checkQuestionIdOfAnswerQuestion(String questionId)
+	public static final String  USER_ANSWER_OF_ANSWER_QUESTION ="answer_question.user_answer";
+	public BcexChecker checkUserAnswerIdOfAnswerQuestion(String userAnswerId)
 	{
 		
-	 	checkIdOfAnswerQuestion(questionId ); 		
+	 	checkIdOfAnswerQuestion(userAnswerId ); 		
 		
 		return this;
 	}	
@@ -279,7 +288,7 @@ public class BcexChecker extends BaseChecker{
 	public BcexChecker checkAnswerOfAnswerQuestion(String answer)
 	{
 		
-	 	checkStringLengthRange(answer,1, 20,ANSWER_OF_ANSWER_QUESTION ); 		
+	 	checkStringLengthRange(answer,0, 20,ANSWER_OF_ANSWER_QUESTION ); 		
 		
 		return this;
 	}	
@@ -559,6 +568,15 @@ public class BcexChecker extends BaseChecker{
 	{
 		
 	 	checkImage(avarta,0, 512,AVARTA_OF_WECHAT_USER ); 		
+		
+		return this;
+	}	
+
+	public static final String  USER_TYPE_OF_WECHAT_USER ="wechat_user.user_type";
+	public BcexChecker checkUserTypeOfWechatUser(String userType)
+	{
+		
+	 	checkStringLengthRange(userType,1, 20,USER_TYPE_OF_WECHAT_USER ); 		
 		
 		return this;
 	}	

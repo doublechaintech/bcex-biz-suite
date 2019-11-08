@@ -73,6 +73,7 @@ public class WechatUserTokens extends CommonTokens{
 		
 		return start()
 			.withPlatform()
+			.withStartExamList()
 			.withAnswerQuestionList()
 			.withWechatLoginInfoList()
 			.withExamList()
@@ -111,6 +112,72 @@ public class WechatUserTokens extends CommonTokens{
 	}
 	
 	
+	protected static final String START_EXAM_LIST = "startExamList";
+	public String getStartExamList(){
+		return START_EXAM_LIST;
+	}
+	public WechatUserTokens withStartExamList(){		
+		addSimpleOptions(START_EXAM_LIST);
+		return this;
+	}
+	public WechatUserTokens analyzeStartExamList(){		
+		addSimpleOptions(START_EXAM_LIST+".anaylze");
+		return this;
+	}
+	public boolean analyzeStartExamListEnabled(){		
+		
+		if(checkOptions(this.options(), START_EXAM_LIST+".anaylze")){
+			return true; //most of the case, should call here
+		}
+		//if not true, then query for global setting
+		return checkOptions(this.options(), ALL_LISTS_ANALYZE);
+	}
+	public WechatUserTokens extractMoreFromStartExamList(String idsSeperatedWithComma){		
+		addSimpleOptions(START_EXAM_LIST+".extractIds", idsSeperatedWithComma);
+		return this;
+	}
+	
+	
+	
+	
+	private int startExamListSortCounter = 0;
+	public WechatUserTokens sortStartExamListWith(String field, String descOrAsc){		
+		addSortMoreOptions(START_EXAM_LIST,startExamListSortCounter++, field, descOrAsc);
+		return this;
+	}
+	private int startExamListSearchCounter = 0;
+	public WechatUserTokens searchStartExamListWith(String field, String verb, String value){		
+		addSearchMoreOptions(START_EXAM_LIST,startExamListSearchCounter++, field, verb, value);
+		return this;
+	}
+	
+	public WechatUserTokens searchAllTextOfStartExamList(String verb, String value){	
+		String field = "id|nickName";
+		addSearchMoreOptions(START_EXAM_LIST,startExamListSearchCounter++, field, verb, value);
+		return this;
+	}
+	
+	
+	
+	public WechatUserTokens rowsPerPageOfStartExamList(int rowsPerPage){		
+		addSimpleOptions(START_EXAM_LIST+"RowsPerPage",rowsPerPage);
+		return this;
+	}
+	public WechatUserTokens currentPageNumberOfStartExamList(int currentPageNumber){		
+		addSimpleOptions(START_EXAM_LIST+"CurrentPage",currentPageNumber);
+		return this;
+	}
+	public WechatUserTokens retainColumnsOfStartExamList(String[] columns){		
+		addSimpleOptions(START_EXAM_LIST+"RetainColumns",columns);
+		return this;
+	}
+	public WechatUserTokens excludeColumnsOfStartExamList(String[] columns){		
+		addSimpleOptions(START_EXAM_LIST+"ExcludeColumns",columns);
+		return this;
+	}
+	
+	
+		
 	protected static final String ANSWER_QUESTION_LIST = "answerQuestionList";
 	public String getAnswerQuestionList(){
 		return ANSWER_QUESTION_LIST;
@@ -378,6 +445,7 @@ public class WechatUserTokens extends CommonTokens{
 	
 	public  WechatUserTokens searchEntireObjectText(String verb, String value){
 		
+		searchAllTextOfStartExamList(verb, value);	
 		searchAllTextOfAnswerQuestionList(verb, value);	
 		searchAllTextOfWechatLoginInfoList(verb, value);	
 		searchAllTextOfExamList(verb, value);	

@@ -77,9 +77,9 @@ public interface PlatformManager{
 
 	*/
 
-	//public  WechatUserManager getWechatUserManager(BcexUserContext userContext, String platformId, String name, String avarta ,String [] tokensExpr)  throws Exception;
+	//public  WechatUserManager getWechatUserManager(BcexUserContext userContext, String platformId, String name, String avarta, String userType ,String [] tokensExpr)  throws Exception;
 	
-	public  Platform addWechatUser(BcexUserContext userContext, String platformId, String name, String avarta , String [] tokensExpr)  throws Exception;
+	public  Platform addWechatUser(BcexUserContext userContext, String platformId, String name, String avarta, String userType , String [] tokensExpr)  throws Exception;
 	public  Platform removeWechatUser(BcexUserContext userContext, String platformId, String wechatUserId, int wechatUserVersion,String [] tokensExpr)  throws Exception;
 	public  Platform updateWechatUser(BcexUserContext userContext, String platformId, String wechatUserId, int wechatUserVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
 

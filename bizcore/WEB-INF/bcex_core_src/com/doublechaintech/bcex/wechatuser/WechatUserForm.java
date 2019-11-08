@@ -76,6 +76,20 @@ public class WechatUserForm extends BaseForm {
 	}
 
 
+	public WechatUserForm userTypeField(String parameterName, String initValue){
+		FormField field = userTypeFromWechatUser(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public WechatUserForm userTypeField(String initValue){
+		return userTypeField("userType",initValue);
+	}
+	public WechatUserForm userTypeField(){
+		return userTypeField("userType","");
+	}
+
+
 	public WechatUserForm platformIdField(String parameterName, String initValue){
 		FormField field = platformIdFromWechatUser(parameterName, initValue);		
 		this.addFormField(field);
@@ -138,6 +152,62 @@ public class WechatUserForm extends BaseForm {
 
 
 
+	public WechatUserForm startExamIdFieldForStartExam(String parameterName, String initValue){
+		FormField field =  idFromStartExam(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public WechatUserForm startExamIdFieldForStartExam(String initValue){
+		return startExamIdFieldForStartExam("startExamId",initValue);
+	}
+	public WechatUserForm startExamIdFieldForStartExam(){
+		return startExamIdFieldForStartExam("startExamId","");
+	}
+
+
+	public WechatUserForm nickNameFieldForStartExam(String parameterName, String initValue){
+		FormField field =  nickNameFromStartExam(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public WechatUserForm nickNameFieldForStartExam(String initValue){
+		return nickNameFieldForStartExam("nickName",initValue);
+	}
+	public WechatUserForm nickNameFieldForStartExam(){
+		return nickNameFieldForStartExam("nickName","");
+	}
+
+
+	public WechatUserForm userIdFieldForStartExam(String parameterName, String initValue){
+		FormField field =  userIdFromStartExam(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public WechatUserForm userIdFieldForStartExam(String initValue){
+		return userIdFieldForStartExam("userId",initValue);
+	}
+	public WechatUserForm userIdFieldForStartExam(){
+		return userIdFieldForStartExam("userId","");
+	}
+
+
+	public WechatUserForm changeRequestIdFieldForStartExam(String parameterName, String initValue){
+		FormField field =  changeRequestIdFromStartExam(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public WechatUserForm changeRequestIdFieldForStartExam(String initValue){
+		return changeRequestIdFieldForStartExam("changeRequestId",initValue);
+	}
+	public WechatUserForm changeRequestIdFieldForStartExam(){
+		return changeRequestIdFieldForStartExam("changeRequestId","");
+	}
+
+
 	public WechatUserForm answerQuestionIdFieldForAnswerQuestion(String parameterName, String initValue){
 		FormField field =  idFromAnswerQuestion(parameterName, initValue);		
 		this.addFormField(field);
@@ -180,17 +250,17 @@ public class WechatUserForm extends BaseForm {
 	}
 
 
-	public WechatUserForm questionIdFieldForAnswerQuestion(String parameterName, String initValue){
-		FormField field =  questionIdFromAnswerQuestion(parameterName, initValue);		
+	public WechatUserForm userAnswerIdFieldForAnswerQuestion(String parameterName, String initValue){
+		FormField field =  userAnswerIdFromAnswerQuestion(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public WechatUserForm questionIdFieldForAnswerQuestion(String initValue){
-		return questionIdFieldForAnswerQuestion("questionId",initValue);
+	public WechatUserForm userAnswerIdFieldForAnswerQuestion(String initValue){
+		return userAnswerIdFieldForAnswerQuestion("userAnswerId",initValue);
 	}
-	public WechatUserForm questionIdFieldForAnswerQuestion(){
-		return questionIdFieldForAnswerQuestion("questionId","");
+	public WechatUserForm userAnswerIdFieldForAnswerQuestion(){
+		return userAnswerIdFieldForAnswerQuestion("userAnswerId","");
 	}
 
 

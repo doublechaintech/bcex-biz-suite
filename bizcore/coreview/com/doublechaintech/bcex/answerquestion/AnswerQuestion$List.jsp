@@ -104,8 +104,8 @@
 <c:if test="${param.referName ne 'user'}">
 	<th>${userContext.localeMap['answer_question.user']}</th>
 </c:if>
-<c:if test="${param.referName ne 'question'}">
-	<th>${userContext.localeMap['answer_question.question']}</th>
+<c:if test="${param.referName ne 'userAnswer'}">
+	<th>${userContext.localeMap['answer_question.user_answer']}</th>
 </c:if>
 <c:if test="${param.referName ne 'answer'}">
 	<th>${userContext.localeMap['answer_question.answer']}</th>
@@ -139,16 +139,16 @@
 		</div>
 	</td>
 </c:if>
-<c:if test="${param.referName ne 'question'}">
+<c:if test="${param.referName ne 'userAnswer'}">
 	<td class="select_candidate_td"
-			data-candidate-method="./answerQuestionManager/requestCandidateQuestion/${ownerBeanName}/${item.id}/"
-			data-switch-method="./answerQuestionManager/transferToAnotherQuestion/${item.id}/"
-			data-link-template="./questionManager/view/${'$'}{ID}/">
+			data-candidate-method="./answerQuestionManager/requestCandidateUserAnswer/${ownerBeanName}/${item.id}/"
+			data-switch-method="./answerQuestionManager/transferToAnotherUserAnswer/${item.id}/"
+			data-link-template="./userAnswerManager/view/${'$'}{ID}/">
 		<span class="display_span">
-			<c:if test="${not empty  item.question}">
-			<a href='./questionManager/view/${item.question.id}/'>${item.question.displayName}</a>
+			<c:if test="${not empty  item.userAnswer}">
+			<a href='./userAnswerManager/view/${item.userAnswer.id}/'>${item.userAnswer.displayName}</a>
 			</c:if>
-			<c:if test="${empty  item.question}">
+			<c:if test="${empty  item.userAnswer}">
 			<a href='#'></a>
 			</c:if>
 			<button class="btn btn-link candidate-action">...</button>

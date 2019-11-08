@@ -163,6 +163,20 @@ public class WechatLoginInfoForm extends BaseForm {
 	}
 
 
+	public WechatLoginInfoForm userTypeFieldOfWechatUser(String parameterName, String initValue){
+		FormField field =  userTypeFromWechatUser(parameterName, initValue);
+		this.addFormField(field);	
+		return this;
+	}
+	
+	public WechatLoginInfoForm userTypeFieldOfWechatUser(String initValue){
+		return userTypeFieldOfWechatUser("userType",initValue);
+	}
+	public WechatLoginInfoForm userTypeFieldOfWechatUser(){
+		return userTypeFieldOfWechatUser("userType","");
+	}
+
+
 	public WechatLoginInfoForm platformIdFieldOfWechatUser(String parameterName, String initValue){
 		FormField field =  platformIdFromWechatUser(parameterName, initValue);
 		this.addFormField(field);	

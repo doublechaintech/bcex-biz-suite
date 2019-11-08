@@ -10,13 +10,11 @@ import com.doublechaintech.bcex.BcexUserContext;
 
 import com.doublechaintech.bcex.answer.Answer;
 import com.doublechaintech.bcex.platform.Platform;
-import com.doublechaintech.bcex.answerquestion.AnswerQuestion;
 import com.doublechaintech.bcex.useranswer.UserAnswer;
 
 import com.doublechaintech.bcex.useranswer.UserAnswerDAO;
 import com.doublechaintech.bcex.platform.PlatformDAO;
 import com.doublechaintech.bcex.answer.AnswerDAO;
-import com.doublechaintech.bcex.answerquestion.AnswerQuestionDAO;
 
 
 public interface QuestionDAO{
@@ -47,30 +45,15 @@ public interface QuestionDAO{
 	public Question disconnectFromAll(String questionId, int version) throws Exception;
 	public int deleteAll() throws Exception;
 
-	public AnswerQuestionDAO getAnswerQuestionDAO();
-		
 	public AnswerDAO getAnswerDAO();
 		
 	public UserAnswerDAO getUserAnswerDAO();
 		
 	
- 	public SmartList<Question> requestCandidateQuestionForAnswerQuestion(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception;
-		
  	public SmartList<Question> requestCandidateQuestionForAnswer(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception;
 		
  	public SmartList<Question> requestCandidateQuestionForUserAnswer(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception;
 		
-	
-	public Question planToRemoveAnswerQuestionList(Question question, String answerQuestionIds[], Map<String,Object> options)throws Exception;
-
-
-	//disconnect Question with user in AnswerQuestion
-	public Question planToRemoveAnswerQuestionListWithUser(Question question, String userId, Map<String,Object> options)throws Exception;
-	public int countAnswerQuestionListWithUser(String questionId, String userId, Map<String,Object> options)throws Exception;
-	
-	//disconnect Question with change_request in AnswerQuestion
-	public Question planToRemoveAnswerQuestionListWithChangeRequest(Question question, String changeRequestId, Map<String,Object> options)throws Exception;
-	public int countAnswerQuestionListWithChangeRequest(String questionId, String changeRequestId, Map<String,Object> options)throws Exception;
 	
 	public Question planToRemoveAnswerList(Question question, String answerIds[], Map<String,Object> options)throws Exception;
 
@@ -94,9 +77,6 @@ public interface QuestionDAO{
 
  
  
-	// 需要一个加载引用我的对象的enhance方法:AnswerQuestion的question的AnswerQuestionList
-	public SmartList<AnswerQuestion> loadOurAnswerQuestionList(BcexUserContext userContext, List<Question> us, Map<String,Object> options) throws Exception;
-	
 	// 需要一个加载引用我的对象的enhance方法:Answer的question的AnswerList
 	public SmartList<Answer> loadOurAnswerList(BcexUserContext userContext, List<Question> us, Map<String,Object> options) throws Exception;
 	

@@ -96,13 +96,13 @@
 	
 
 	<bean id="startExamDAOBase" class="com.doublechaintech.bcex.startexam.StartExamJDBCTemplateDAO">
-		<property name="dataSource" ref="dataSource" /><property name="changeRequestDAO" ref="changeRequestDAO" />
+		<property name="dataSource" ref="dataSource" /><property name="changeRequestDAO" ref="changeRequestDAO" /><property name="wechatUserDAO" ref="wechatUserDAO" />
 	</bean>
 	<bean id="startExamDAO" parent="startExamDAOBase"></bean>
 	
 
 	<bean id="answerQuestionDAOBase" class="com.doublechaintech.bcex.answerquestion.AnswerQuestionJDBCTemplateDAO">
-		<property name="dataSource" ref="dataSource" /><property name="changeRequestDAO" ref="changeRequestDAO" /><property name="wechatUserDAO" ref="wechatUserDAO" /><property name="questionDAO" ref="questionDAO" />
+		<property name="dataSource" ref="dataSource" /><property name="changeRequestDAO" ref="changeRequestDAO" /><property name="wechatUserDAO" ref="wechatUserDAO" /><property name="userAnswerDAO" ref="userAnswerDAO" />
 	</bean>
 	<bean id="answerQuestionDAO" parent="answerQuestionDAOBase"></bean>
 	
@@ -117,8 +117,6 @@
 
 	<bean id="questionDAOBase" class="com.doublechaintech.bcex.question.QuestionJDBCTemplateDAO">
 		<property name="dataSource" ref="dataSource" /><property name="platformDAO" ref="platformDAO" />
-		<property name="answerQuestionDAO" ref="answerQuestionDAO" />
-		
 		<property name="answerDAO" ref="answerDAO" />
 		
 		<property name="userAnswerDAO" ref="userAnswerDAO" />
@@ -141,6 +139,8 @@
 
 	<bean id="wechatUserDAOBase" class="com.doublechaintech.bcex.wechatuser.WechatUserJDBCTemplateDAO">
 		<property name="dataSource" ref="dataSource" /><property name="platformDAO" ref="platformDAO" />
+		<property name="startExamDAO" ref="startExamDAO" />
+		
 		<property name="answerQuestionDAO" ref="answerQuestionDAO" />
 		
 		<property name="wechatLoginInfoDAO" ref="wechatLoginInfoDAO" />
@@ -171,6 +171,8 @@
 
 	<bean id="userAnswerDAOBase" class="com.doublechaintech.bcex.useranswer.UserAnswerJDBCTemplateDAO">
 		<property name="dataSource" ref="dataSource" /><property name="questionDAO" ref="questionDAO" /><property name="examDAO" ref="examDAO" />
+		<property name="answerQuestionDAO" ref="answerQuestionDAO" />
+		
 	</bean>
 	<bean id="userAnswerDAO" parent="userAnswerDAOBase"></bean>
 	

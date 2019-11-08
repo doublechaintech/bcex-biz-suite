@@ -16,6 +16,7 @@ import com.doublechaintech.bcex.wechatlogininfo.WechatLoginInfo;
 import com.doublechaintech.bcex.platform.Platform;
 import com.doublechaintech.bcex.faultanswer.FaultAnswer;
 import com.doublechaintech.bcex.answerquestion.AnswerQuestion;
+import com.doublechaintech.bcex.startexam.StartExam;
 import com.doublechaintech.bcex.exam.Exam;
 
 @JsonSerialize(using = WechatUserSerializer.class)
@@ -26,9 +27,11 @@ public class WechatUser extends BaseEntity implements  java.io.Serializable{
 	public static final String NAME_PROPERTY                  = "name"              ;
 	public static final String AVARTA_PROPERTY                = "avarta"            ;
 	public static final String CREATE_TIME_PROPERTY           = "createTime"        ;
+	public static final String USER_TYPE_PROPERTY             = "userType"          ;
 	public static final String PLATFORM_PROPERTY              = "platform"          ;
 	public static final String VERSION_PROPERTY               = "version"           ;
 
+	public static final String START_EXAM_LIST                          = "startExamList"     ;
 	public static final String ANSWER_QUESTION_LIST                     = "answerQuestionList";
 	public static final String WECHAT_LOGIN_INFO_LIST                   = "wechatLoginInfoList";
 	public static final String EXAM_LIST                                = "examList"          ;
@@ -57,10 +60,12 @@ public class WechatUser extends BaseEntity implements  java.io.Serializable{
 	protected		String              	mName               ;
 	protected		String              	mAvarta             ;
 	protected		DateTime            	mCreateTime         ;
+	protected		String              	mUserType           ;
 	protected		Platform            	mPlatform           ;
 	protected		int                 	mVersion            ;
 	
 	
+	protected		SmartList<StartExam>	mStartExamList      ;
 	protected		SmartList<AnswerQuestion>	mAnswerQuestionList ;
 	protected		SmartList<WechatLoginInfo>	mWechatLoginInfoList;
 	protected		SmartList<Exam>     	mExamList           ;
@@ -87,13 +92,15 @@ public class WechatUser extends BaseEntity implements  java.io.Serializable{
 		this.changed = true;
 	}
 	
-	public 	WechatUser(String name, String avarta, DateTime createTime, Platform platform)
+	public 	WechatUser(String name, String avarta, DateTime createTime, String userType, Platform platform)
 	{
 		setName(name);
 		setAvarta(avarta);
 		setCreateTime(createTime);
+		setUserType(userType);
 		setPlatform(platform);
 
+		this.mStartExamList = new SmartList<StartExam>();
 		this.mAnswerQuestionList = new SmartList<AnswerQuestion>();
 		this.mWechatLoginInfoList = new SmartList<WechatLoginInfo>();
 		this.mExamList = new SmartList<Exam>();
@@ -112,6 +119,9 @@ public class WechatUser extends BaseEntity implements  java.io.Serializable{
 		}
 		if(CREATE_TIME_PROPERTY.equals(property)){
 			changeCreateTimeProperty(newValueExpr);
+		}
+		if(USER_TYPE_PROPERTY.equals(property)){
+			changeUserTypeProperty(newValueExpr);
 		}
 
       
@@ -163,6 +173,21 @@ public class WechatUser extends BaseEntity implements  java.io.Serializable{
 			
 			
 			
+	protected void changeUserTypeProperty(String newValueExpr){
+		String oldValue = getUserType();
+		String newValue = parseString(newValueExpr);
+		if(equalsString(oldValue , newValue)){
+			return;//they can be both null, or exact the same object, this is much faster than equals function
+		}
+		//they are surely different each other
+		updateUserType(newValue);
+		this.onChangeProperty(USER_TYPE_PROPERTY, oldValue, newValue);
+		return;
+  
+	}
+			
+			
+			
 
 
 	
@@ -177,8 +202,15 @@ public class WechatUser extends BaseEntity implements  java.io.Serializable{
 		if(CREATE_TIME_PROPERTY.equals(property)){
 			return getCreateTime();
 		}
+		if(USER_TYPE_PROPERTY.equals(property)){
+			return getUserType();
+		}
 		if(PLATFORM_PROPERTY.equals(property)){
 			return getPlatform();
+		}
+		if(START_EXAM_LIST.equals(property)){
+			List<BaseEntity> list = getStartExamList().stream().map(item->item).collect(Collectors.toList());
+			return list;
 		}
 		if(ANSWER_QUESTION_LIST.equals(property)){
 			List<BaseEntity> list = getAnswerQuestionList().stream().map(item->item).collect(Collectors.toList());
@@ -271,6 +303,22 @@ public class WechatUser extends BaseEntity implements  java.io.Serializable{
 	}
 	
 	
+	public void setUserType(String userType){
+		this.mUserType = trimString(userType);;
+	}
+	public String getUserType(){
+		return this.mUserType;
+	}
+	public WechatUser updateUserType(String userType){
+		this.mUserType = trimString(userType);;
+		this.changed = true;
+		return this;
+	}
+	public void mergeUserType(String userType){
+		if(userType != null) { setUserType(userType);}
+	}
+	
+	
 	public void setPlatform(Platform platform){
 		this.mPlatform = platform;;
 	}
@@ -308,6 +356,113 @@ public class WechatUser extends BaseEntity implements  java.io.Serializable{
 	}
 	
 	
+
+	public  SmartList<StartExam> getStartExamList(){
+		if(this.mStartExamList == null){
+			this.mStartExamList = new SmartList<StartExam>();
+			this.mStartExamList.setListInternalName (START_EXAM_LIST );
+			//有名字，便于做权限控制
+		}
+		
+		return this.mStartExamList;	
+	}
+	public  void setStartExamList(SmartList<StartExam> startExamList){
+		for( StartExam startExam:startExamList){
+			startExam.setUser(this);
+		}
+
+		this.mStartExamList = startExamList;
+		this.mStartExamList.setListInternalName (START_EXAM_LIST );
+		
+	}
+	
+	public  void addStartExam(StartExam startExam){
+		startExam.setUser(this);
+		getStartExamList().add(startExam);
+	}
+	public  void addStartExamList(SmartList<StartExam> startExamList){
+		for( StartExam startExam:startExamList){
+			startExam.setUser(this);
+		}
+		getStartExamList().addAll(startExamList);
+	}
+	public  void mergeStartExamList(SmartList<StartExam> startExamList){
+		if(startExamList==null){
+			return;
+		}
+		if(startExamList.isEmpty()){
+			return;
+		}
+		addStartExamList( startExamList );
+		
+	}
+	public  StartExam removeStartExam(StartExam startExamIndex){
+		
+		int index = getStartExamList().indexOf(startExamIndex);
+        if(index < 0){
+        	String message = "StartExam("+startExamIndex.getId()+") with version='"+startExamIndex.getVersion()+"' NOT found!";
+            throw new IllegalStateException(message);
+        }
+        StartExam startExam = getStartExamList().get(index);        
+        // startExam.clearUser(); //disconnect with User
+        startExam.clearFromAll(); //disconnect with User
+		
+		boolean result = getStartExamList().planToRemove(startExam);
+        if(!result){
+        	String message = "StartExam("+startExamIndex.getId()+") with version='"+startExamIndex.getVersion()+"' NOT found!";
+            throw new IllegalStateException(message);
+        }
+        return startExam;
+        
+	
+	}
+	//断舍离
+	public  void breakWithStartExam(StartExam startExam){
+		
+		if(startExam == null){
+			return;
+		}
+		startExam.setUser(null);
+		//getStartExamList().remove();
+	
+	}
+	
+	public  boolean hasStartExam(StartExam startExam){
+	
+		return getStartExamList().contains(startExam);
+  
+	}
+	
+	public void copyStartExamFrom(StartExam startExam) {
+
+		StartExam startExamInList = findTheStartExam(startExam);
+		StartExam newStartExam = new StartExam();
+		startExamInList.copyTo(newStartExam);
+		newStartExam.setVersion(0);//will trigger copy
+		getStartExamList().add(newStartExam);
+		addItemToFlexiableObject(COPIED_CHILD, newStartExam);
+	}
+	
+	public  StartExam findTheStartExam(StartExam startExam){
+		
+		int index =  getStartExamList().indexOf(startExam);
+		//The input parameter must have the same id and version number.
+		if(index < 0){
+ 			String message = "StartExam("+startExam.getId()+") with version='"+startExam.getVersion()+"' NOT found!";
+			throw new IllegalStateException(message);
+		}
+		
+		return  getStartExamList().get(index);
+		//Performance issue when using LinkedList, but it is almost an ArrayList for sure!
+	}
+	
+	public  void cleanUpStartExamList(){
+		getStartExamList().clear();
+	}
+	
+	
+	
+
 
 	public  SmartList<AnswerQuestion> getAnswerQuestionList(){
 		if(this.mAnswerQuestionList == null){
@@ -747,6 +902,7 @@ public class WechatUser extends BaseEntity implements  java.io.Serializable{
 	public List<BaseEntity>  collectRefercencesFromLists(String internalType){
 		
 		List<BaseEntity> entityList = new ArrayList<BaseEntity>();
+		collectFromList(this, entityList, getStartExamList(), internalType);
 		collectFromList(this, entityList, getAnswerQuestionList(), internalType);
 		collectFromList(this, entityList, getWechatLoginInfoList(), internalType);
 		collectFromList(this, entityList, getExamList(), internalType);
@@ -758,6 +914,7 @@ public class WechatUser extends BaseEntity implements  java.io.Serializable{
 	public  List<SmartList<?>> getAllRelatedLists() {
 		List<SmartList<?>> listOfList = new ArrayList<SmartList<?>>();
 		
+		listOfList.add( getStartExamList());
 		listOfList.add( getAnswerQuestionList());
 		listOfList.add( getWechatLoginInfoList());
 		listOfList.add( getExamList());
@@ -775,8 +932,14 @@ public class WechatUser extends BaseEntity implements  java.io.Serializable{
 		appendKeyValuePair(result, NAME_PROPERTY, getName());
 		appendKeyValuePair(result, AVARTA_PROPERTY, getAvarta());
 		appendKeyValuePair(result, CREATE_TIME_PROPERTY, getCreateTime());
+		appendKeyValuePair(result, USER_TYPE_PROPERTY, getUserType());
 		appendKeyValuePair(result, PLATFORM_PROPERTY, getPlatform());
 		appendKeyValuePair(result, VERSION_PROPERTY, getVersion());
+		appendKeyValuePair(result, START_EXAM_LIST, getStartExamList());
+		if(!getStartExamList().isEmpty()){
+			appendKeyValuePair(result, "startExamCount", getStartExamList().getTotalCount());
+			appendKeyValuePair(result, "startExamCurrentPageNumber", getStartExamList().getCurrentPageNumber());
+		}
 		appendKeyValuePair(result, ANSWER_QUESTION_LIST, getAnswerQuestionList());
 		if(!getAnswerQuestionList().isEmpty()){
 			appendKeyValuePair(result, "answerQuestionCount", getAnswerQuestionList().getTotalCount());
@@ -815,8 +978,10 @@ public class WechatUser extends BaseEntity implements  java.io.Serializable{
 			dest.setName(getName());
 			dest.setAvarta(getAvarta());
 			dest.setCreateTime(getCreateTime());
+			dest.setUserType(getUserType());
 			dest.setPlatform(getPlatform());
 			dest.setVersion(getVersion());
+			dest.setStartExamList(getStartExamList());
 			dest.setAnswerQuestionList(getAnswerQuestionList());
 			dest.setWechatLoginInfoList(getWechatLoginInfoList());
 			dest.setExamList(getExamList());
@@ -838,8 +1003,10 @@ public class WechatUser extends BaseEntity implements  java.io.Serializable{
 			dest.mergeName(getName());
 			dest.mergeAvarta(getAvarta());
 			dest.mergeCreateTime(getCreateTime());
+			dest.mergeUserType(getUserType());
 			dest.mergePlatform(getPlatform());
 			dest.mergeVersion(getVersion());
+			dest.mergeStartExamList(getStartExamList());
 			dest.mergeAnswerQuestionList(getAnswerQuestionList());
 			dest.mergeWechatLoginInfoList(getWechatLoginInfoList());
 			dest.mergeExamList(getExamList());
@@ -862,6 +1029,7 @@ public class WechatUser extends BaseEntity implements  java.io.Serializable{
 			dest.mergeName(getName());
 			dest.mergeAvarta(getAvarta());
 			dest.mergeCreateTime(getCreateTime());
+			dest.mergeUserType(getUserType());
 			dest.mergeVersion(getVersion());
 
 		}
@@ -876,6 +1044,7 @@ public class WechatUser extends BaseEntity implements  java.io.Serializable{
 		stringBuilder.append("\tname='"+getName()+"';");
 		stringBuilder.append("\tavarta='"+getAvarta()+"';");
 		stringBuilder.append("\tcreateTime='"+getCreateTime()+"';");
+		stringBuilder.append("\tuserType='"+getUserType()+"';");
 		if(getPlatform() != null ){
  			stringBuilder.append("\tplatform='Platform("+getPlatform().getId()+")';");
  		}

@@ -1024,6 +1024,50 @@ public class ChangeRequestJDBCTemplateDAO extends BcexBaseDAOImpl implements Cha
 	}
 
 
+	//disconnect ChangeRequest with user in StartExam
+	public ChangeRequest planToRemoveStartExamListWithUser(ChangeRequest changeRequest, String userId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(StartExam.CHANGE_REQUEST_PROPERTY, changeRequest.getId());
+		key.put(StartExam.USER_PROPERTY, userId);
+		
+		SmartList<StartExam> externalStartExamList = getStartExamDAO().
+				findStartExamWithKey(key, options);
+		if(externalStartExamList == null){
+			return changeRequest;
+		}
+		if(externalStartExamList.isEmpty()){
+			return changeRequest;
+		}
+		
+		for(StartExam startExamItem: externalStartExamList){
+			startExamItem.clearUser();
+			startExamItem.clearChangeRequest();
+			
+		}
+		
+		
+		SmartList<StartExam> startExamList = changeRequest.getStartExamList();		
+		startExamList.addAllToRemoveList(externalStartExamList);
+		return changeRequest;
+	}
+	
+	public int countStartExamListWithUser(String changeRequestId, String userId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(StartExam.CHANGE_REQUEST_PROPERTY, changeRequestId);
+		key.put(StartExam.USER_PROPERTY, userId);
+		
+		int count = getStartExamDAO().countStartExamWithKey(key, options);
+		return count;
+	}
+	
 	public ChangeRequest planToRemoveAnswerQuestionList(ChangeRequest changeRequest, String answerQuestionIds[], Map<String,Object> options)throws Exception{
 	
 		MultipleAccessKey key = new MultipleAccessKey();
@@ -1096,15 +1140,15 @@ public class ChangeRequestJDBCTemplateDAO extends BcexBaseDAOImpl implements Cha
 		return count;
 	}
 	
-	//disconnect ChangeRequest with question in AnswerQuestion
-	public ChangeRequest planToRemoveAnswerQuestionListWithQuestion(ChangeRequest changeRequest, String questionId, Map<String,Object> options)throws Exception{
+	//disconnect ChangeRequest with user_answer in AnswerQuestion
+	public ChangeRequest planToRemoveAnswerQuestionListWithUserAnswer(ChangeRequest changeRequest, String userAnswerId, Map<String,Object> options)throws Exception{
 				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
 		//the list will not be null here, empty, maybe
 		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
 		
 		MultipleAccessKey key = new MultipleAccessKey();
 		key.put(AnswerQuestion.CHANGE_REQUEST_PROPERTY, changeRequest.getId());
-		key.put(AnswerQuestion.QUESTION_PROPERTY, questionId);
+		key.put(AnswerQuestion.USER_ANSWER_PROPERTY, userAnswerId);
 		
 		SmartList<AnswerQuestion> externalAnswerQuestionList = getAnswerQuestionDAO().
 				findAnswerQuestionWithKey(key, options);
@@ -1116,7 +1160,7 @@ public class ChangeRequestJDBCTemplateDAO extends BcexBaseDAOImpl implements Cha
 		}
 		
 		for(AnswerQuestion answerQuestionItem: externalAnswerQuestionList){
-			answerQuestionItem.clearQuestion();
+			answerQuestionItem.clearUserAnswer();
 			answerQuestionItem.clearChangeRequest();
 			
 		}
@@ -1127,14 +1171,14 @@ public class ChangeRequestJDBCTemplateDAO extends BcexBaseDAOImpl implements Cha
 		return changeRequest;
 	}
 	
-	public int countAnswerQuestionListWithQuestion(String changeRequestId, String questionId, Map<String,Object> options)throws Exception{
+	public int countAnswerQuestionListWithUserAnswer(String changeRequestId, String userAnswerId, Map<String,Object> options)throws Exception{
 				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
 		//the list will not be null here, empty, maybe
 		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
 
 		MultipleAccessKey key = new MultipleAccessKey();
 		key.put(AnswerQuestion.CHANGE_REQUEST_PROPERTY, changeRequestId);
-		key.put(AnswerQuestion.QUESTION_PROPERTY, questionId);
+		key.put(AnswerQuestion.USER_ANSWER_PROPERTY, userAnswerId);
 		
 		int count = getAnswerQuestionDAO().countAnswerQuestionWithKey(key, options);
 		return count;

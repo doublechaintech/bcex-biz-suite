@@ -12,12 +12,14 @@ import com.doublechaintech.bcex.wechatlogininfo.WechatLoginInfo;
 import com.doublechaintech.bcex.platform.Platform;
 import com.doublechaintech.bcex.faultanswer.FaultAnswer;
 import com.doublechaintech.bcex.answerquestion.AnswerQuestion;
+import com.doublechaintech.bcex.startexam.StartExam;
 import com.doublechaintech.bcex.exam.Exam;
 
 import com.doublechaintech.bcex.faultanswer.FaultAnswerDAO;
 import com.doublechaintech.bcex.exam.ExamDAO;
 import com.doublechaintech.bcex.platform.PlatformDAO;
 import com.doublechaintech.bcex.wechatlogininfo.WechatLoginInfoDAO;
+import com.doublechaintech.bcex.startexam.StartExamDAO;
 import com.doublechaintech.bcex.answerquestion.AnswerQuestionDAO;
 
 
@@ -49,6 +51,8 @@ public interface WechatUserDAO{
 	public WechatUser disconnectFromAll(String wechatUserId, int version) throws Exception;
 	public int deleteAll() throws Exception;
 
+	public StartExamDAO getStartExamDAO();
+		
 	public AnswerQuestionDAO getAnswerQuestionDAO();
 		
 	public WechatLoginInfoDAO getWechatLoginInfoDAO();
@@ -58,6 +62,8 @@ public interface WechatUserDAO{
 	public FaultAnswerDAO getFaultAnswerDAO();
 		
 	
+ 	public SmartList<WechatUser> requestCandidateWechatUserForStartExam(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception;
+		
  	public SmartList<WechatUser> requestCandidateWechatUserForAnswerQuestion(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception;
 		
  	public SmartList<WechatUser> requestCandidateWechatUserForWechatLoginInfo(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception;
@@ -67,12 +73,19 @@ public interface WechatUserDAO{
  	public SmartList<WechatUser> requestCandidateWechatUserForFaultAnswer(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception;
 		
 	
+	public WechatUser planToRemoveStartExamList(WechatUser wechatUser, String startExamIds[], Map<String,Object> options)throws Exception;
+
+
+	//disconnect WechatUser with change_request in StartExam
+	public WechatUser planToRemoveStartExamListWithChangeRequest(WechatUser wechatUser, String changeRequestId, Map<String,Object> options)throws Exception;
+	public int countStartExamListWithChangeRequest(String wechatUserId, String changeRequestId, Map<String,Object> options)throws Exception;
+	
 	public WechatUser planToRemoveAnswerQuestionList(WechatUser wechatUser, String answerQuestionIds[], Map<String,Object> options)throws Exception;
 
 
-	//disconnect WechatUser with question in AnswerQuestion
-	public WechatUser planToRemoveAnswerQuestionListWithQuestion(WechatUser wechatUser, String questionId, Map<String,Object> options)throws Exception;
-	public int countAnswerQuestionListWithQuestion(String wechatUserId, String questionId, Map<String,Object> options)throws Exception;
+	//disconnect WechatUser with user_answer in AnswerQuestion
+	public WechatUser planToRemoveAnswerQuestionListWithUserAnswer(WechatUser wechatUser, String userAnswerId, Map<String,Object> options)throws Exception;
+	public int countAnswerQuestionListWithUserAnswer(String wechatUserId, String userAnswerId, Map<String,Object> options)throws Exception;
 	
 	//disconnect WechatUser with change_request in AnswerQuestion
 	public WechatUser planToRemoveAnswerQuestionListWithChangeRequest(WechatUser wechatUser, String changeRequestId, Map<String,Object> options)throws Exception;
@@ -115,6 +128,9 @@ public interface WechatUserDAO{
 
  
  
+	// 需要一个加载引用我的对象的enhance方法:StartExam的user的StartExamList
+	public SmartList<StartExam> loadOurStartExamList(BcexUserContext userContext, List<WechatUser> us, Map<String,Object> options) throws Exception;
+	
 	// 需要一个加载引用我的对象的enhance方法:AnswerQuestion的user的AnswerQuestionList
 	public SmartList<AnswerQuestion> loadOurAnswerQuestionList(BcexUserContext userContext, List<WechatUser> us, Map<String,Object> options) throws Exception;
 	

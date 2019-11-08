@@ -101,6 +101,9 @@
 <c:if test="${param.referName ne 'nickName'}">
 	<th>${userContext.localeMap['start_exam.nick_name']}</th>
 </c:if>
+<c:if test="${param.referName ne 'user'}">
+	<th>${userContext.localeMap['start_exam.user']}</th>
+</c:if>
 <c:if test="${param.referName ne 'changeRequest'}">
 	<th>${userContext.localeMap['start_exam.change_request']}</th>
 </c:if>
@@ -111,7 +114,26 @@
 			<c:forEach var="item" items="${startExamList}">
 				<tr currentVersion='${item.version}' id="startExam-${item.id}" ><td><a class="link-action-removed" href="./startExamManager/view/${item.id}/"> ${item.id}</a></td>
 <c:if test="${param.referName ne 'nickName'}">	<td contenteditable='true' class='edit-value'  propertyToChange='nickName' storedCellValue='${item.nickName}' prefix='${ownerBeanName}Manager/updateStartExam/${result.id}/${item.id}/'>${item.nickName}</td>
-</c:if><c:if test="${param.referName ne 'changeRequest'}">
+</c:if><c:if test="${param.referName ne 'user'}">
+	<td class="select_candidate_td"
+			data-candidate-method="./startExamManager/requestCandidateUser/${ownerBeanName}/${item.id}/"
+			data-switch-method="./startExamManager/transferToAnotherUser/${item.id}/"
+			data-link-template="./wechatUserManager/view/${'$'}{ID}/">
+		<span class="display_span">
+			<c:if test="${not empty  item.user}">
+			<a href='./wechatUserManager/view/${item.user.id}/'>${item.user.displayName}</a>
+			</c:if>
+			<c:if test="${empty  item.user}">
+			<a href='#'></a>
+			</c:if>
+			<button class="btn btn-link candidate-action">...</button>
+		</span>
+		<div class="candidate_span" style="display:none;">
+			<input type="text" data-provide="typeahead" class="input-sm form-control candidate-filter-input" autocomplete="off" />
+		</div>
+	</td>
+</c:if>
+<c:if test="${param.referName ne 'changeRequest'}">
 	<td class="select_candidate_td"
 			data-candidate-method="./startExamManager/requestCandidateChangeRequest/${ownerBeanName}/${item.id}/"
 			data-switch-method="./startExamManager/transferToAnotherChangeRequest/${item.id}/"

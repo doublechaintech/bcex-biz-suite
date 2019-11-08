@@ -319,6 +319,90 @@ public class UserAnswerForm extends BaseForm {
 	
 
 
+
+	public UserAnswerForm answerQuestionIdFieldForAnswerQuestion(String parameterName, String initValue){
+		FormField field =  idFromAnswerQuestion(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public UserAnswerForm answerQuestionIdFieldForAnswerQuestion(String initValue){
+		return answerQuestionIdFieldForAnswerQuestion("answerQuestionId",initValue);
+	}
+	public UserAnswerForm answerQuestionIdFieldForAnswerQuestion(){
+		return answerQuestionIdFieldForAnswerQuestion("answerQuestionId","");
+	}
+
+
+	public UserAnswerForm nickNameFieldForAnswerQuestion(String parameterName, String initValue){
+		FormField field =  nickNameFromAnswerQuestion(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public UserAnswerForm nickNameFieldForAnswerQuestion(String initValue){
+		return nickNameFieldForAnswerQuestion("nickName",initValue);
+	}
+	public UserAnswerForm nickNameFieldForAnswerQuestion(){
+		return nickNameFieldForAnswerQuestion("nickName","");
+	}
+
+
+	public UserAnswerForm userIdFieldForAnswerQuestion(String parameterName, String initValue){
+		FormField field =  userIdFromAnswerQuestion(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public UserAnswerForm userIdFieldForAnswerQuestion(String initValue){
+		return userIdFieldForAnswerQuestion("userId",initValue);
+	}
+	public UserAnswerForm userIdFieldForAnswerQuestion(){
+		return userIdFieldForAnswerQuestion("userId","");
+	}
+
+
+	public UserAnswerForm userAnswerIdFieldForAnswerQuestion(String parameterName, String initValue){
+		FormField field =  userAnswerIdFromAnswerQuestion(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public UserAnswerForm userAnswerIdFieldForAnswerQuestion(String initValue){
+		return userAnswerIdFieldForAnswerQuestion("userAnswerId",initValue);
+	}
+	public UserAnswerForm userAnswerIdFieldForAnswerQuestion(){
+		return userAnswerIdFieldForAnswerQuestion("userAnswerId","");
+	}
+
+
+	public UserAnswerForm answerFieldForAnswerQuestion(String parameterName, String initValue){
+		FormField field =  answerFromAnswerQuestion(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public UserAnswerForm answerFieldForAnswerQuestion(String initValue){
+		return answerFieldForAnswerQuestion("answer",initValue);
+	}
+	public UserAnswerForm answerFieldForAnswerQuestion(){
+		return answerFieldForAnswerQuestion("answer","");
+	}
+
+
+	public UserAnswerForm changeRequestIdFieldForAnswerQuestion(String parameterName, String initValue){
+		FormField field =  changeRequestIdFromAnswerQuestion(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public UserAnswerForm changeRequestIdFieldForAnswerQuestion(String initValue){
+		return changeRequestIdFieldForAnswerQuestion("changeRequestId",initValue);
+	}
+	public UserAnswerForm changeRequestIdFieldForAnswerQuestion(){
+		return changeRequestIdFieldForAnswerQuestion("changeRequestId","");
+	}
+
 	
 
 	

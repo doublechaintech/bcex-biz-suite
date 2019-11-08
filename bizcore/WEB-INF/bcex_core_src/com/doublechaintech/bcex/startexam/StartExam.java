@@ -13,6 +13,7 @@ import com.doublechaintech.bcex.KeyValuePair;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.doublechaintech.bcex.changerequest.ChangeRequest;
+import com.doublechaintech.bcex.wechatuser.WechatUser;
 
 @JsonSerialize(using = StartExamSerializer.class)
 public class StartExam extends BaseEntity implements  java.io.Serializable{
@@ -20,6 +21,7 @@ public class StartExam extends BaseEntity implements  java.io.Serializable{
 	
 	public static final String ID_PROPERTY                    = "id"                ;
 	public static final String NICK_NAME_PROPERTY             = "nickName"          ;
+	public static final String USER_PROPERTY                  = "user"              ;
 	public static final String CHANGE_REQUEST_PROPERTY        = "changeRequest"     ;
 	public static final String VERSION_PROPERTY               = "version"           ;
 
@@ -45,6 +47,7 @@ public class StartExam extends BaseEntity implements  java.io.Serializable{
 
 	protected		String              	mId                 ;
 	protected		String              	mNickName           ;
+	protected		WechatUser          	mUser               ;
 	protected		ChangeRequest       	mChangeRequest      ;
 	protected		int                 	mVersion            ;
 	
@@ -66,14 +69,16 @@ public class StartExam extends BaseEntity implements  java.io.Serializable{
 	
 	// disconnect from all, 中文就是一了百了，跟所有一切尘世断绝往来藏身于茫茫数据海洋
 	public 	void clearFromAll(){
+		setUser( null );
 		setChangeRequest( null );
 
 		this.changed = true;
 	}
 	
-	public 	StartExam(String nickName, ChangeRequest changeRequest)
+	public 	StartExam(String nickName, WechatUser user, ChangeRequest changeRequest)
 	{
 		setNickName(nickName);
+		setUser(user);
 		setChangeRequest(changeRequest);
 	
 	}
@@ -112,6 +117,9 @@ public class StartExam extends BaseEntity implements  java.io.Serializable{
      	
 		if(NICK_NAME_PROPERTY.equals(property)){
 			return getNickName();
+		}
+		if(USER_PROPERTY.equals(property)){
+			return getUser();
 		}
 		if(CHANGE_REQUEST_PROPERTY.equals(property)){
 			return getChangeRequest();
@@ -159,6 +167,27 @@ public class StartExam extends BaseEntity implements  java.io.Serializable{
 	}
 	
 	
+	public void setUser(WechatUser user){
+		this.mUser = user;;
+	}
+	public WechatUser getUser(){
+		return this.mUser;
+	}
+	public StartExam updateUser(WechatUser user){
+		this.mUser = user;;
+		this.changed = true;
+		return this;
+	}
+	public void mergeUser(WechatUser user){
+		if(user != null) { setUser(user);}
+	}
+	
+	
+	public void clearUser(){
+		setUser ( null );
+		this.changed = true;
+	}
+	
 	public void setChangeRequest(ChangeRequest changeRequest){
 		this.mChangeRequest = changeRequest;;
 	}
@@ -199,6 +228,7 @@ public class StartExam extends BaseEntity implements  java.io.Serializable{
 
 	public void collectRefercences(BaseEntity owner, List<BaseEntity> entityList, String internalType){
 
+		addToEntityList(this, entityList, getUser(), internalType);
 		addToEntityList(this, entityList, getChangeRequest(), internalType);
 
 		
@@ -225,6 +255,7 @@ public class StartExam extends BaseEntity implements  java.io.Serializable{
 
 		appendKeyValuePair(result, ID_PROPERTY, getId());
 		appendKeyValuePair(result, NICK_NAME_PROPERTY, getNickName());
+		appendKeyValuePair(result, USER_PROPERTY, getUser());
 		appendKeyValuePair(result, CHANGE_REQUEST_PROPERTY, getChangeRequest());
 		appendKeyValuePair(result, VERSION_PROPERTY, getVersion());
 
@@ -243,6 +274,7 @@ public class StartExam extends BaseEntity implements  java.io.Serializable{
 		
 			dest.setId(getId());
 			dest.setNickName(getNickName());
+			dest.setUser(getUser());
 			dest.setChangeRequest(getChangeRequest());
 			dest.setVersion(getVersion());
 
@@ -260,6 +292,7 @@ public class StartExam extends BaseEntity implements  java.io.Serializable{
 		
 			dest.mergeId(getId());
 			dest.mergeNickName(getNickName());
+			dest.mergeUser(getUser());
 			dest.mergeChangeRequest(getChangeRequest());
 			dest.mergeVersion(getVersion());
 
@@ -290,6 +323,9 @@ public class StartExam extends BaseEntity implements  java.io.Serializable{
 		stringBuilder.append("StartExam{");
 		stringBuilder.append("\tid='"+getId()+"';");
 		stringBuilder.append("\tnickName='"+getNickName()+"';");
+		if(getUser() != null ){
+ 			stringBuilder.append("\tuser='WechatUser("+getUser().getId()+")';");
+ 		}
 		if(getChangeRequest() != null ){
  			stringBuilder.append("\tchangeRequest='ChangeRequest("+getChangeRequest().getId()+")';");
  		}

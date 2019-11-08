@@ -69,6 +69,10 @@ public interface ChangeRequestDAO{
 	public ChangeRequest planToRemoveStartExamList(ChangeRequest changeRequest, String startExamIds[], Map<String,Object> options)throws Exception;
 
 
+	//disconnect ChangeRequest with user in StartExam
+	public ChangeRequest planToRemoveStartExamListWithUser(ChangeRequest changeRequest, String userId, Map<String,Object> options)throws Exception;
+	public int countStartExamListWithUser(String changeRequestId, String userId, Map<String,Object> options)throws Exception;
+	
 	public ChangeRequest planToRemoveAnswerQuestionList(ChangeRequest changeRequest, String answerQuestionIds[], Map<String,Object> options)throws Exception;
 
 
@@ -76,9 +80,9 @@ public interface ChangeRequestDAO{
 	public ChangeRequest planToRemoveAnswerQuestionListWithUser(ChangeRequest changeRequest, String userId, Map<String,Object> options)throws Exception;
 	public int countAnswerQuestionListWithUser(String changeRequestId, String userId, Map<String,Object> options)throws Exception;
 	
-	//disconnect ChangeRequest with question in AnswerQuestion
-	public ChangeRequest planToRemoveAnswerQuestionListWithQuestion(ChangeRequest changeRequest, String questionId, Map<String,Object> options)throws Exception;
-	public int countAnswerQuestionListWithQuestion(String changeRequestId, String questionId, Map<String,Object> options)throws Exception;
+	//disconnect ChangeRequest with user_answer in AnswerQuestion
+	public ChangeRequest planToRemoveAnswerQuestionListWithUserAnswer(ChangeRequest changeRequest, String userAnswerId, Map<String,Object> options)throws Exception;
+	public int countAnswerQuestionListWithUserAnswer(String changeRequestId, String userAnswerId, Map<String,Object> options)throws Exception;
 	
 	
 	public SmartList<ChangeRequest> queryList(String sql, Object ... parmeters);

@@ -72,12 +72,14 @@ public class StartExamTokens extends CommonTokens{
 	protected static StartExamTokens allTokens(){
 		
 		return start()
+			.withUser()
 			.withChangeRequest();
 	
 	}
 	public static StartExamTokens withoutListsTokens(){
 		
 		return start()
+			.withUser()
 			.withChangeRequest();
 	
 	}
@@ -97,6 +99,16 @@ public class StartExamTokens extends CommonTokens{
 		return this;
 	}
 
+	protected static final String USER = "user";
+	public String getUser(){
+		return USER;
+	}
+	public StartExamTokens withUser(){		
+		addSimpleOptions(USER);
+		return this;
+	}
+	
+	
 	protected static final String CHANGEREQUEST = "changeRequest";
 	public String getChangeRequest(){
 		return CHANGEREQUEST;

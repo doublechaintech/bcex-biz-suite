@@ -16,6 +16,7 @@ public class WechatUserMapper extends BaseRowMapper<WechatUser>{
  		setName(wechatUser, rs, rowNumber); 		
  		setAvarta(wechatUser, rs, rowNumber); 		
  		setCreateTime(wechatUser, rs, rowNumber); 		
+ 		setUserType(wechatUser, rs, rowNumber); 		
  		setPlatform(wechatUser, rs, rowNumber); 		
  		setVersion(wechatUser, rs, rowNumber);
 
@@ -72,6 +73,18 @@ public class WechatUserMapper extends BaseRowMapper<WechatUser>{
 		}
 		
 		wechatUser.setCreateTime(convertToDateTime(createTime));
+	}
+		
+	protected void setUserType(WechatUser wechatUser, ResultSet rs, int rowNumber) throws SQLException{
+	
+		//there will be issue when the type is double/int/long
+		String userType = rs.getString(WechatUserTable.COLUMN_USER_TYPE);
+		if(userType == null){
+			//do nothing when nothing found in database
+			return;
+		}
+		
+		wechatUser.setUserType(userType);
 	}
 		 		
  	protected void setPlatform(WechatUser wechatUser, ResultSet rs, int rowNumber) throws SQLException{

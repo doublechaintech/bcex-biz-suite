@@ -48,6 +48,7 @@
 		<fields>
 			<field name="id" nullable="false" type="string" checkType="StringLengthRange" min="2" max="64" description="ID" />
 			<field name="nick_name" type="string" checkType="StringLengthRange" min="1" max="200" description="昵称" />
+			<field name="user" type="reference" checkType="exist(wechat_user)" description="用户" />
 			<field name="change_request" type="reference" checkType="exist(change_request)" description="变更请求" />
 			<field name="version" type="int" checkType="IntegerRange" min="0" max="Integer.MAX_VALUE" description="版本" />
 		</fields>
@@ -58,8 +59,8 @@
 			<field name="id" nullable="false" type="string" checkType="StringLengthRange" min="2" max="64" description="ID" />
 			<field name="nick_name" type="string" checkType="StringLengthRange" min="1" max="200" description="昵称" />
 			<field name="user" type="reference" checkType="exist(wechat_user)" description="用户" />
-			<field name="question" type="reference" checkType="exist(question)" description="检查问题" />
-			<field name="answer" type="string" checkType="StringLengthRange" min="1" max="20" description="回答" />
+			<field name="user_answer" type="reference" checkType="exist(user_answer)" description="用户的答案" />
+			<field name="answer" type="string" checkType="StringLengthRange" min="0" max="20" description="回答" />
 			<field name="change_request" type="reference" checkType="exist(change_request)" description="变更请求" />
 			<field name="version" type="int" checkType="IntegerRange" min="0" max="Integer.MAX_VALUE" description="版本" />
 		</fields>
@@ -117,6 +118,7 @@
 			<field name="name" type="string" checkType="StringLengthRange" min="1" max="200" description="名称" />
 			<field name="avarta" type="string_image" checkType="Image" min="0" max="512" description="Avarta" />
 			<field name="create_time" type="date_time_create" checkType="DateTimeCreate" min="1900-01-01T00:00:00" max="createTime()" description="创建时间" />
+			<field name="user_type" type="string" checkType="StringLengthRange" min="1" max="20" description="用户类型" />
 			<field name="platform" type="reference" checkType="exist(platform)" description="平台" />
 			<field name="version" type="int" checkType="IntegerRange" min="0" max="Integer.MAX_VALUE" description="版本" />
 		</fields>

@@ -21,8 +21,10 @@ import com.doublechaintech.bcex.BcexUserContext;
 
 
 import com.doublechaintech.bcex.changerequest.ChangeRequest;
+import com.doublechaintech.bcex.wechatuser.WechatUser;
 
 import com.doublechaintech.bcex.changerequest.ChangeRequestDAO;
+import com.doublechaintech.bcex.wechatuser.WechatUserDAO;
 
 
 
@@ -40,6 +42,15 @@ public class StartExamJDBCTemplateDAO extends BcexBaseDAOImpl implements StartEx
  	}
  	public ChangeRequestDAO getChangeRequestDAO(){
 	 	return this.changeRequestDAO;
+ 	}
+ 
+ 	
+ 	private  WechatUserDAO  wechatUserDAO;
+ 	public void setWechatUserDAO(WechatUserDAO wechatUserDAO){
+	 	this.wechatUserDAO = wechatUserDAO;
+ 	}
+ 	public WechatUserDAO getWechatUserDAO(){
+	 	return this.wechatUserDAO;
  	}
 
 
@@ -185,6 +196,20 @@ public class StartExamJDBCTemplateDAO extends BcexBaseDAOImpl implements StartEx
 
  
 
+ 	protected boolean isExtractUserEnabled(Map<String,Object> options){
+ 		
+	 	return checkOptions(options, StartExamTokens.USER);
+ 	}
+
+ 	protected boolean isSaveUserEnabled(Map<String,Object> options){
+	 	
+ 		return checkOptions(options, StartExamTokens.USER);
+ 	}
+ 	
+
+ 	
+  
+
  	protected boolean isExtractChangeRequestEnabled(Map<String,Object> options){
  		
 	 	return checkOptions(options, StartExamTokens.CHANGEREQUEST);
@@ -225,6 +250,10 @@ public class StartExamJDBCTemplateDAO extends BcexBaseDAOImpl implements StartEx
 		
 		StartExam startExam = extractStartExam(accessKey, loadOptions);
  	
+ 		if(isExtractUserEnabled(loadOptions)){
+	 		extractUser(startExam, loadOptions);
+ 		}
+  	
  		if(isExtractChangeRequestEnabled(loadOptions)){
 	 		extractChangeRequest(startExam, loadOptions);
  		}
@@ -235,6 +264,26 @@ public class StartExamJDBCTemplateDAO extends BcexBaseDAOImpl implements StartEx
 	}
 
 	 
+
+ 	protected StartExam extractUser(StartExam startExam, Map<String,Object> options) throws Exception{
+
+		if(startExam.getUser() == null){
+			return startExam;
+		}
+		String userId = startExam.getUser().getId();
+		if( userId == null){
+			return startExam;
+		}
+		WechatUser user = getWechatUserDAO().load(userId,options);
+		if(user != null){
+			startExam.setUser(user);
+		}
+		
+ 		
+ 		return startExam;
+ 	}
+ 		
+  
 
  	protected StartExam extractChangeRequest(StartExam startExam, Map<String,Object> options) throws Exception{
 
@@ -258,6 +307,49 @@ public class StartExamJDBCTemplateDAO extends BcexBaseDAOImpl implements StartEx
 		
 		
   	
+ 	public SmartList<StartExam> findStartExamByUser(String wechatUserId,Map<String,Object> options){
+ 	
+  		SmartList<StartExam> resultList = queryWith(StartExamTable.COLUMN_USER, wechatUserId, options, getStartExamMapper());
+		// analyzeStartExamByUser(resultList, wechatUserId, options);
+		return resultList;
+ 	}
+ 	 
+ 
+ 	public SmartList<StartExam> findStartExamByUser(String wechatUserId, int start, int count,Map<String,Object> options){
+ 		
+ 		SmartList<StartExam> resultList =  queryWithRange(StartExamTable.COLUMN_USER, wechatUserId, options, getStartExamMapper(), start, count);
+ 		//analyzeStartExamByUser(resultList, wechatUserId, options);
+ 		return resultList;
+ 		
+ 	}
+ 	public void analyzeStartExamByUser(SmartList<StartExam> resultList, String wechatUserId, Map<String,Object> options){
+		if(resultList==null){
+			return;//do nothing when the list is null.
+		}
+		
+ 		MultipleAccessKey filterKey = new MultipleAccessKey();
+ 		filterKey.put(StartExam.USER_PROPERTY, wechatUserId);
+ 		Map<String,Object> emptyOptions = new HashMap<String,Object>();
+ 		
+ 		StatsInfo info = new StatsInfo();
+ 		
+ 		
+ 		resultList.setStatsInfo(info);
+
+ 	
+ 		
+ 	}
+ 	@Override
+ 	public int countStartExamByUser(String wechatUserId,Map<String,Object> options){
+
+ 		return countWith(StartExamTable.COLUMN_USER, wechatUserId, options);
+ 	}
+ 	@Override
+	public Map<String, Integer> countStartExamByUserIds(String[] ids, Map<String, Object> options) {
+		return countWithIds(StartExamTable.COLUMN_USER, ids, options);
+	}
+ 	
+  	
  	public SmartList<StartExam> findStartExamByChangeRequest(String changeRequestId,Map<String,Object> options){
  	
   		SmartList<StartExam> resultList = queryWith(StartExamTable.COLUMN_CHANGE_REQUEST, changeRequestId, options, getStartExamMapper());
@@ -277,6 +369,15 @@ public class StartExamJDBCTemplateDAO extends BcexBaseDAOImpl implements StartEx
 		if(resultList==null){
 			return;//do nothing when the list is null.
 		}
+		
+ 		MultipleAccessKey filterKey = new MultipleAccessKey();
+ 		filterKey.put(StartExam.CHANGE_REQUEST_PROPERTY, changeRequestId);
+ 		Map<String,Object> emptyOptions = new HashMap<String,Object>();
+ 		
+ 		StatsInfo info = new StatsInfo();
+ 		
+ 		
+ 		resultList.setStatsInfo(info);
 
  	
  		
@@ -433,28 +534,37 @@ public class StartExamJDBCTemplateDAO extends BcexBaseDAOImpl implements StartEx
  		return prepareStartExamCreateParameters(startExam);
  	}
  	protected Object[] prepareStartExamUpdateParameters(StartExam startExam){
- 		Object[] parameters = new Object[5];
+ 		Object[] parameters = new Object[6];
  
  		parameters[0] = startExam.getNickName(); 	
+ 		if(startExam.getUser() != null){
+ 			parameters[1] = startExam.getUser().getId();
+ 		}
+  	
  		if(startExam.getChangeRequest() != null){
- 			parameters[1] = startExam.getChangeRequest().getId();
+ 			parameters[2] = startExam.getChangeRequest().getId();
  		}
  		
- 		parameters[2] = startExam.nextVersion();
- 		parameters[3] = startExam.getId();
- 		parameters[4] = startExam.getVersion();
+ 		parameters[3] = startExam.nextVersion();
+ 		parameters[4] = startExam.getId();
+ 		parameters[5] = startExam.getVersion();
  				
  		return parameters;
  	}
  	protected Object[] prepareStartExamCreateParameters(StartExam startExam){
-		Object[] parameters = new Object[3];
+		Object[] parameters = new Object[4];
 		String newStartExamId=getNextId();
 		startExam.setId(newStartExamId);
 		parameters[0] =  startExam.getId();
  
  		parameters[1] = startExam.getNickName(); 	
+ 		if(startExam.getUser() != null){
+ 			parameters[2] = startExam.getUser().getId();
+ 		
+ 		}
+ 		 	
  		if(startExam.getChangeRequest() != null){
- 			parameters[2] = startExam.getChangeRequest().getId();
+ 			parameters[3] = startExam.getChangeRequest().getId();
  		
  		}
  				
@@ -466,6 +576,10 @@ public class StartExamJDBCTemplateDAO extends BcexBaseDAOImpl implements StartEx
 		
 		saveStartExam(startExam);
  	
+ 		if(isSaveUserEnabled(options)){
+	 		saveUser(startExam, options);
+ 		}
+  	
  		if(isSaveChangeRequestEnabled(options)){
 	 		saveChangeRequest(startExam, options);
  		}
@@ -479,6 +593,23 @@ public class StartExamJDBCTemplateDAO extends BcexBaseDAOImpl implements StartEx
 	
 	//======================================================================================
 	 
+ 
+ 	protected StartExam saveUser(StartExam startExam, Map<String,Object> options){
+ 		//Call inject DAO to execute this method
+ 		if(startExam.getUser() == null){
+ 			return startExam;//do nothing when it is null
+ 		}
+ 		
+ 		getWechatUserDAO().save(startExam.getUser(),options);
+ 		return startExam;
+ 		
+ 	}
+ 	
+ 	
+ 	
+ 	 
+	
+  
  
  	protected StartExam saveChangeRequest(StartExam startExam, Map<String,Object> options){
  		//Call inject DAO to execute this method

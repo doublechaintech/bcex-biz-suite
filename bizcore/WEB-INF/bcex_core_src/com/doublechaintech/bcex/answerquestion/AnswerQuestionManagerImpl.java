@@ -21,12 +21,12 @@ import com.doublechaintech.bcex.BcexCheckerManager;
 import com.doublechaintech.bcex.CustomBcexCheckerManager;
 
 import com.doublechaintech.bcex.changerequest.ChangeRequest;
+import com.doublechaintech.bcex.useranswer.UserAnswer;
 import com.doublechaintech.bcex.wechatuser.WechatUser;
-import com.doublechaintech.bcex.question.Question;
 
 import com.doublechaintech.bcex.changerequest.CandidateChangeRequest;
+import com.doublechaintech.bcex.useranswer.CandidateUserAnswer;
 import com.doublechaintech.bcex.wechatuser.CandidateWechatUser;
-import com.doublechaintech.bcex.question.CandidateQuestion;
 
 
 
@@ -153,7 +153,7 @@ public class AnswerQuestionManagerImpl extends CustomBcexCheckerManager implemen
 		addAction(userContext, answerQuestion, tokens,"@copy","cloneAnswerQuestion","cloneAnswerQuestion/"+answerQuestion.getId()+"/","main","primary");
 		
 		addAction(userContext, answerQuestion, tokens,"answer_question.transfer_to_user","transferToAnotherUser","transferToAnotherUser/"+answerQuestion.getId()+"/","main","primary");
-		addAction(userContext, answerQuestion, tokens,"answer_question.transfer_to_question","transferToAnotherQuestion","transferToAnotherQuestion/"+answerQuestion.getId()+"/","main","primary");
+		addAction(userContext, answerQuestion, tokens,"answer_question.transfer_to_user_answer","transferToAnotherUserAnswer","transferToAnotherUserAnswer/"+answerQuestion.getId()+"/","main","primary");
 		addAction(userContext, answerQuestion, tokens,"answer_question.transfer_to_change_request","transferToAnotherChangeRequest","transferToAnotherChangeRequest/"+answerQuestion.getId()+"/","main","primary");
 	
 		
@@ -167,7 +167,7 @@ public class AnswerQuestionManagerImpl extends CustomBcexCheckerManager implemen
  	
 
 
-	public AnswerQuestion createAnswerQuestion(BcexUserContext userContext,String nickName, String userId, String questionId, String answer, String changeRequestId) throws Exception
+	public AnswerQuestion createAnswerQuestion(BcexUserContext userContext,String nickName, String userId, String userAnswerId, String answer, String changeRequestId) throws Exception
 	{
 		
 		
@@ -189,8 +189,8 @@ public class AnswerQuestionManagerImpl extends CustomBcexCheckerManager implemen
 		
 		
 			
-		Question question = loadQuestion(userContext, questionId,emptyOptions());
-		answerQuestion.setQuestion(question);
+		UserAnswer userAnswer = loadUserAnswer(userContext, userAnswerId,emptyOptions());
+		answerQuestion.setUserAnswer(userAnswer);
 		
 		
 		answerQuestion.setAnswer(answer);
@@ -389,24 +389,24 @@ public class AnswerQuestionManagerImpl extends CustomBcexCheckerManager implemen
 		return result;
 	}
  	
- 	protected void checkParamsForTransferingAnotherQuestion(BcexUserContext userContext, String answerQuestionId, String anotherQuestionId) throws Exception
+ 	protected void checkParamsForTransferingAnotherUserAnswer(BcexUserContext userContext, String answerQuestionId, String anotherUserAnswerId) throws Exception
  	{
  		
  		checkerOf(userContext).checkIdOfAnswerQuestion(answerQuestionId);
- 		checkerOf(userContext).checkIdOfQuestion(anotherQuestionId);//check for optional reference
+ 		checkerOf(userContext).checkIdOfUserAnswer(anotherUserAnswerId);//check for optional reference
  		checkerOf(userContext).throwExceptionIfHasErrors(AnswerQuestionManagerException.class);
  		
  	}
- 	public AnswerQuestion transferToAnotherQuestion(BcexUserContext userContext, String answerQuestionId, String anotherQuestionId) throws Exception
+ 	public AnswerQuestion transferToAnotherUserAnswer(BcexUserContext userContext, String answerQuestionId, String anotherUserAnswerId) throws Exception
  	{
- 		checkParamsForTransferingAnotherQuestion(userContext, answerQuestionId,anotherQuestionId);
+ 		checkParamsForTransferingAnotherUserAnswer(userContext, answerQuestionId,anotherUserAnswerId);
  
 		AnswerQuestion answerQuestion = loadAnswerQuestion(userContext, answerQuestionId, allTokens());	
 		synchronized(answerQuestion){
 			//will be good when the answerQuestion loaded from this JVM process cache.
 			//also good when there is a ram based DAO implementation
-			Question question = loadQuestion(userContext, anotherQuestionId, emptyOptions());		
-			answerQuestion.updateQuestion(question);		
+			UserAnswer userAnswer = loadUserAnswer(userContext, anotherUserAnswerId, emptyOptions());		
+			answerQuestion.updateUserAnswer(userAnswer);		
 			answerQuestion = saveAnswerQuestion(userContext, answerQuestion, emptyOptions());
 			
 			return present(userContext,answerQuestion, allTokens());
@@ -418,9 +418,9 @@ public class AnswerQuestionManagerImpl extends CustomBcexCheckerManager implemen
 	 	
  	
  	
-	public CandidateQuestion requestCandidateQuestion(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo) throws Exception {
+	public CandidateUserAnswer requestCandidateUserAnswer(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo) throws Exception {
 
-		CandidateQuestion result = new CandidateQuestion();
+		CandidateUserAnswer result = new CandidateUserAnswer();
 		result.setOwnerClass(ownerClass);
 		result.setOwnerId(id);
 		result.setFilterKey(filterKey==null?"":filterKey.trim());
@@ -431,7 +431,7 @@ public class AnswerQuestionManagerImpl extends CustomBcexCheckerManager implemen
 		pageNo = Math.max(1, pageNo);
 		int pageSize = 20;
 		//requestCandidateProductForSkuAsOwner
-		SmartList<Question> candidateList = questionDaoOf(userContext).requestCandidateQuestionForAnswerQuestion(userContext,ownerClass, id, filterKey, pageNo, pageSize);
+		SmartList<UserAnswer> candidateList = userAnswerDaoOf(userContext).requestCandidateUserAnswerForAnswerQuestion(userContext,ownerClass, id, filterKey, pageNo, pageSize);
 		result.setCandidates(candidateList);
 		int totalCount = candidateList.getTotalCount();
 		result.setTotalPage(Math.max(1, (totalCount + pageSize -1)/pageSize ));
@@ -510,10 +510,10 @@ public class AnswerQuestionManagerImpl extends CustomBcexCheckerManager implemen
  	
 	
 	 	
- 	protected Question loadQuestion(BcexUserContext userContext, String newQuestionId, Map<String,Object> options) throws Exception
+ 	protected UserAnswer loadUserAnswer(BcexUserContext userContext, String newUserAnswerId, Map<String,Object> options) throws Exception
  	{
 		
- 		return questionDaoOf(userContext).load(newQuestionId, options);
+ 		return userAnswerDaoOf(userContext).load(newUserAnswerId, options);
  	}
  	
  	

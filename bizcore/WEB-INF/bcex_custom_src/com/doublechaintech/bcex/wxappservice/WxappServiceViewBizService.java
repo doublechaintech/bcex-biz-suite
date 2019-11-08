@@ -4,12 +4,17 @@ import java.util.Map;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.doublechaintech.bcex.CustomBcexUserContextImpl;
+import com.doublechaintech.bcex.changerequest.ChangeRequest;
+import com.doublechaintech.bcex.exam.Exam;
 import com.doublechaintech.bcex.secuser.SecUser;
+import com.doublechaintech.bcex.useranswer.UserAnswer;
 import com.doublechaintech.bcex.utils.BcexConstants;
+import com.doublechaintech.bcex.utils.MiscUtils;
 import com.doublechaintech.bcex.wechatuser.WechatUser;
 import com.skynet.infrastructure.StorageService;
 import com.terapico.caf.DateTime;
 import com.terapico.caf.baseelement.LoginParam;
+import com.terapico.caf.viewcomponent.PopupViewComponent;
 import com.terapico.utils.DebugUtil;
 import com.terapico.utils.RandomUtil;
 
@@ -62,7 +67,8 @@ public class WxappServiceViewBizService extends BasicWxappServiceViewBizService{
 		String name = "微信用户"+RandomUtil.randomChars(6);
 		String avarta = BcexConstants.ANONYMUSE_AVANTA;
 		String platformId = BcexConstants.ROOT_PLATFORM_ID;
-		WechatUser newUser = wechatUserManagerOf(ctx).createWechatUser(ctx, name, avarta, platformId);
+		String userType = "未填写";
+		WechatUser newUser = wechatUserManagerOf(ctx).createWechatUser(ctx, name, avarta, userType, platformId);
 		// 创建secUSer
 		String login = openId;
 		String mobile = null;
@@ -109,6 +115,47 @@ public class WxappServiceViewBizService extends BasicWxappServiceViewBizService{
 
 		StorageService storageService = (StorageService) ctx.getBean("storageService");
 		return storageService.genToken(userUploadHome);
+	}
+	@Override
+	protected int processRequestCustomerUpdateProfile(CustomBcexUserContextImpl ctx) throws Exception {
+		WechatUser user = ctx.getCurrentUserInfo();
+		user.updateName(ctx.getName());
+		user.updateAvarta(ctx.getAvantar());
+		user.updateUserType(ctx.getUserType());
+		MiscUtils.updateUserInfo(ctx, user);
+		
+//		PopupViewComponent popup = new PopupViewComponent("更新成功","关闭");
+//		ctx.setPopup(popup);
+//		return PRC_BY_DEFAULT;
+		ctx.setResultObject(true);
+		return $PRC_RESULT_OBJECT_WAS_SET;
+	}
+	@Override
+	protected int processRequestCustomerStartExam(CustomBcexUserContextImpl ctx) throws Exception {
+		ChangeRequest startExamRequest = MiscUtils.newStarExamChangeRequest(ctx);
+		this.getChangeRequestService().process(ctx, startExamRequest);
+		Exam exam = ctx.getExam();
+		UserAnswer curUserAnswer = MiscUtils.findNextUserAnswerOfExam(ctx, exam, null);
+		ctx.setUserAnswer(curUserAnswer);
+		return PRC_BY_DEFAULT;
+	}
+	@Override
+	protected int processRequestCustomerAnswerQuestion(CustomBcexUserContextImpl ctx) throws Exception {
+		ChangeRequest answerRequest = MiscUtils.newAnswerQuestionChangeRequest(ctx);
+		this.getChangeRequestService().process(ctx, answerRequest);
+//		Exam exam = ctx.getExam();
+//		UserAnswer curUserAnswer = MiscUtils.findNextUserAnswerOfExam(ctx, exam, ctx.getQuizId());
+//		ctx.setUserAnswer(curUserAnswer);
+//		if (curUserAnswer == null) {
+//			return PRC_ALL_DONE;
+//		}
+//		return PRC_HAS_MORE_QUESTION;
+		ctx.setResultObject(true);
+		return $PRC_RESULT_OBJECT_WAS_SET;
+	}
+	@Override
+	protected int processRequestCustomerViewScore(CustomBcexUserContextImpl ctx) throws Exception {
+		return PRC_BY_DEFAULT;
 	}
 	
 }

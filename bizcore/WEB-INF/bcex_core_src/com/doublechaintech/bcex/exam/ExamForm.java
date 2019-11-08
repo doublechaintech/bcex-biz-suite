@@ -219,6 +219,20 @@ public class ExamForm extends BaseForm {
 	}
 
 
+	public ExamForm userTypeFieldOfWechatUser(String parameterName, String initValue){
+		FormField field =  userTypeFromWechatUser(parameterName, initValue);
+		this.addFormField(field);	
+		return this;
+	}
+	
+	public ExamForm userTypeFieldOfWechatUser(String initValue){
+		return userTypeFieldOfWechatUser("userType",initValue);
+	}
+	public ExamForm userTypeFieldOfWechatUser(){
+		return userTypeFieldOfWechatUser("userType","");
+	}
+
+
 	public ExamForm platformIdFieldOfWechatUser(String parameterName, String initValue){
 		FormField field =  platformIdFromWechatUser(parameterName, initValue);
 		this.addFormField(field);	

@@ -320,6 +320,20 @@ public class ChangeRequestForm extends BaseForm {
 	}
 
 
+	public ChangeRequestForm userIdFieldForStartExam(String parameterName, String initValue){
+		FormField field =  userIdFromStartExam(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ChangeRequestForm userIdFieldForStartExam(String initValue){
+		return userIdFieldForStartExam("userId",initValue);
+	}
+	public ChangeRequestForm userIdFieldForStartExam(){
+		return userIdFieldForStartExam("userId","");
+	}
+
+
 	public ChangeRequestForm changeRequestIdFieldForStartExam(String parameterName, String initValue){
 		FormField field =  changeRequestIdFromStartExam(parameterName, initValue);		
 		this.addFormField(field);
@@ -376,17 +390,17 @@ public class ChangeRequestForm extends BaseForm {
 	}
 
 
-	public ChangeRequestForm questionIdFieldForAnswerQuestion(String parameterName, String initValue){
-		FormField field =  questionIdFromAnswerQuestion(parameterName, initValue);		
+	public ChangeRequestForm userAnswerIdFieldForAnswerQuestion(String parameterName, String initValue){
+		FormField field =  userAnswerIdFromAnswerQuestion(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public ChangeRequestForm questionIdFieldForAnswerQuestion(String initValue){
-		return questionIdFieldForAnswerQuestion("questionId",initValue);
+	public ChangeRequestForm userAnswerIdFieldForAnswerQuestion(String initValue){
+		return userAnswerIdFieldForAnswerQuestion("userAnswerId",initValue);
 	}
-	public ChangeRequestForm questionIdFieldForAnswerQuestion(){
-		return questionIdFieldForAnswerQuestion("questionId","");
+	public ChangeRequestForm userAnswerIdFieldForAnswerQuestion(){
+		return userAnswerIdFieldForAnswerQuestion("userAnswerId","");
 	}
 
 

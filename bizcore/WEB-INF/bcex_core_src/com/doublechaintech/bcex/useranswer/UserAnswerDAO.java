@@ -8,11 +8,13 @@ import com.doublechaintech.bcex.SmartList;
 import com.doublechaintech.bcex.MultipleAccessKey;
 import com.doublechaintech.bcex.BcexUserContext;
 
+import com.doublechaintech.bcex.answerquestion.AnswerQuestion;
 import com.doublechaintech.bcex.question.Question;
 import com.doublechaintech.bcex.exam.Exam;
 
 import com.doublechaintech.bcex.exam.ExamDAO;
 import com.doublechaintech.bcex.question.QuestionDAO;
+import com.doublechaintech.bcex.answerquestion.AnswerQuestionDAO;
 
 
 public interface UserAnswerDAO{
@@ -43,7 +45,22 @@ public interface UserAnswerDAO{
 	public UserAnswer disconnectFromAll(String userAnswerId, int version) throws Exception;
 	public int deleteAll() throws Exception;
 
+	public AnswerQuestionDAO getAnswerQuestionDAO();
+		
 	
+ 	public SmartList<UserAnswer> requestCandidateUserAnswerForAnswerQuestion(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception;
+		
+	
+	public UserAnswer planToRemoveAnswerQuestionList(UserAnswer userAnswer, String answerQuestionIds[], Map<String,Object> options)throws Exception;
+
+
+	//disconnect UserAnswer with user in AnswerQuestion
+	public UserAnswer planToRemoveAnswerQuestionListWithUser(UserAnswer userAnswer, String userId, Map<String,Object> options)throws Exception;
+	public int countAnswerQuestionListWithUser(String userAnswerId, String userId, Map<String,Object> options)throws Exception;
+	
+	//disconnect UserAnswer with change_request in AnswerQuestion
+	public UserAnswer planToRemoveAnswerQuestionListWithChangeRequest(UserAnswer userAnswer, String changeRequestId, Map<String,Object> options)throws Exception;
+	public int countAnswerQuestionListWithChangeRequest(String userAnswerId, String changeRequestId, Map<String,Object> options)throws Exception;
 	
 	
 	public SmartList<UserAnswer> queryList(String sql, Object ... parmeters);
@@ -65,6 +82,9 @@ public interface UserAnswerDAO{
 
  
  
+	// 需要一个加载引用我的对象的enhance方法:AnswerQuestion的userAnswer的AnswerQuestionList
+	public SmartList<AnswerQuestion> loadOurAnswerQuestionList(BcexUserContext userContext, List<UserAnswer> us, Map<String,Object> options) throws Exception;
+	
 }
 
 

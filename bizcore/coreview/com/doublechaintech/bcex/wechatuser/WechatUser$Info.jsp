@@ -23,6 +23,7 @@
 <li><span>${userContext.localeMap['wechat_user.name']}</span> ${wechatUser.name}</li>
 <li><span>${userContext.localeMap['wechat_user.avarta']}</span> ${wechatUser.avarta}</li>
 <li><span>${userContext.localeMap['wechat_user.create_time']}</span> <fmt:formatDate pattern="yyyy-MM-dd" value="${wechatUser.createTime}" /></li>
+<li><span>${userContext.localeMap['wechat_user.user_type']}</span> ${wechatUser.userType}</li>
 
 	
 	</ul>

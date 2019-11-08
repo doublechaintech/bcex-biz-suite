@@ -101,6 +101,7 @@
 	  <li class="active"><a data-toggle="tab" href="#summary" class="disabled"><i class="fa  fa-home"></i> ${userContext.localeMap['@summary']}</a></li>
 	 
 	<% UserAnswer result = (UserAnswer)request.getAttribute("result");  %>
+			<li><a data-toggle="tab" href="#answerQuestionList" class="disabled"> ${userContext.localeMap['answer_question']}</a></li>
  
 	</ul>
 	</div>
@@ -154,7 +155,15 @@
 
 	
 
-	
+		<c:if test='${not empty userContext.accessTokens["answerQuestionList"] or ignoreListAccessControl}'>
+		<c:set var="answerQuestionList" value="${result.answerQuestionList}" scope="request"/>
+		<c:set var="answerQuestionListName" value="answerQuestionList" scope="request"/>
+		<div id="answerQuestionList" class="tab-pane fade sublist" refer-name="user_answer">
+			<sky:include page="com/doublechaintech/bcex/answerquestion/AnswerQuestion$List.jsp"
+					referName="userAnswer"/>
+		</div>
+	</c:if>
+
 	
 
 </div><!--<div class="tab-content" style="padding-top: 10px">-->

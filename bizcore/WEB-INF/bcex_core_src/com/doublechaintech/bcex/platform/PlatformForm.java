@@ -544,6 +544,20 @@ public class PlatformForm extends BaseForm {
 	}
 
 
+	public PlatformForm userTypeFieldForWechatUser(String parameterName, String initValue){
+		FormField field =  userTypeFromWechatUser(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public PlatformForm userTypeFieldForWechatUser(String initValue){
+		return userTypeFieldForWechatUser("userType",initValue);
+	}
+	public PlatformForm userTypeFieldForWechatUser(){
+		return userTypeFieldForWechatUser("userType","");
+	}
+
+
 	public PlatformForm platformIdFieldForWechatUser(String parameterName, String initValue){
 		FormField field =  platformIdFromWechatUser(parameterName, initValue);		
 		this.addFormField(field);

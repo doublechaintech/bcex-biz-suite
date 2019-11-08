@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- appender是configuration的子节点，是负责写日志的组件。 -->
+    <!-- ConsoleAppender：把日志输出到控制台 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- %d日期及时间,%t线程名,%p日志输出级别，%c类的全名,%file 类名，%line行号，%m输出的信息，%n换行-->
+            <pattern>%d[  %t]---[%p]---%c:%file:%line- %m%n</pattern>
+            <!-- 控制台也要使用UTF-8，不要使用GBK，否则会中文乱码 -->
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 默认输出级别为info,通过控制台输出 -->
+    <root level="info">
+        <appender-ref ref="STDOUT" />
+    </root>
+    <!-- 指定项目中某个包，当有日志操作行为时的日志记录级别 -->
+    <!-- com为根包，也就是只要是发生在这个根包下面的所有日志操作行为的权限都是DEBUG -->
+    <!-- 级别依次为【从高到低】：FATAL > ERROR > WARN > INFO > DEBUG > TRACE  -->
+    <!--     <logger name="com" level="DEBUG">
+            <appender-ref ref="filelog" />
+        </logger> -->
+</configuration>

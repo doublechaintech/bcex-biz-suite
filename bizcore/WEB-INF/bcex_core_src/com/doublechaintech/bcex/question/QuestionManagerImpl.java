@@ -22,13 +22,10 @@ import com.doublechaintech.bcex.CustomBcexCheckerManager;
 
 import com.doublechaintech.bcex.answer.Answer;
 import com.doublechaintech.bcex.platform.Platform;
-import com.doublechaintech.bcex.answerquestion.AnswerQuestion;
 import com.doublechaintech.bcex.useranswer.UserAnswer;
 
 import com.doublechaintech.bcex.platform.CandidatePlatform;
 
-import com.doublechaintech.bcex.changerequest.ChangeRequest;
-import com.doublechaintech.bcex.wechatuser.WechatUser;
 import com.doublechaintech.bcex.question.Question;
 import com.doublechaintech.bcex.exam.Exam;
 
@@ -156,10 +153,6 @@ public class QuestionManagerImpl extends CustomBcexCheckerManager implements Que
 		addAction(userContext, question, tokens,"@copy","cloneQuestion","cloneQuestion/"+question.getId()+"/","main","primary");
 		
 		addAction(userContext, question, tokens,"question.transfer_to_platform","transferToAnotherPlatform","transferToAnotherPlatform/"+question.getId()+"/","main","primary");
-		addAction(userContext, question, tokens,"question.addAnswerQuestion","addAnswerQuestion","addAnswerQuestion/"+question.getId()+"/","answerQuestionList","primary");
-		addAction(userContext, question, tokens,"question.removeAnswerQuestion","removeAnswerQuestion","removeAnswerQuestion/"+question.getId()+"/","answerQuestionList","primary");
-		addAction(userContext, question, tokens,"question.updateAnswerQuestion","updateAnswerQuestion","updateAnswerQuestion/"+question.getId()+"/","answerQuestionList","primary");
-		addAction(userContext, question, tokens,"question.copyAnswerQuestionFrom","copyAnswerQuestionFrom","copyAnswerQuestionFrom/"+question.getId()+"/","answerQuestionList","primary");
 		addAction(userContext, question, tokens,"question.addAnswer","addAnswer","addAnswer/"+question.getId()+"/","answerList","primary");
 		addAction(userContext, question, tokens,"question.removeAnswer","removeAnswer","removeAnswer/"+question.getId()+"/","answerList","primary");
 		addAction(userContext, question, tokens,"question.updateAnswer","updateAnswer","updateAnswer/"+question.getId()+"/","answerList","primary");
@@ -362,7 +355,6 @@ public class QuestionManagerImpl extends CustomBcexCheckerManager implements Que
 	}
 	protected Map<String,Object> viewTokens(){
 		return tokens().allTokens()
-		.sortAnswerQuestionListWith("id","desc")
 		.sortAnswerListWith("id","desc")
 		.sortUserAnswerListWith("id","desc")
 		.analyzeAllLists().done();
@@ -473,42 +465,6 @@ public class QuestionManagerImpl extends CustomBcexCheckerManager implements Que
 	}
 
 
-	//disconnect Question with user in AnswerQuestion
-	protected Question breakWithAnswerQuestionByUser(BcexUserContext userContext, String questionId, String userId,  String [] tokensExpr)
-		 throws Exception{
-			
-			//TODO add check code here
-			
-			Question question = loadQuestion(userContext, questionId, allTokens());
-
-			synchronized(question){ 
-				//Will be good when the thread loaded from this JVM process cache.
-				//Also good when there is a RAM based DAO implementation
-				
-				questionDaoOf(userContext).planToRemoveAnswerQuestionListWithUser(question, userId, this.emptyOptions());
-
-				question = saveQuestion(userContext, question, tokens().withAnswerQuestionList().done());
-				return question;
-			}
-	}
-	//disconnect Question with change_request in AnswerQuestion
-	protected Question breakWithAnswerQuestionByChangeRequest(BcexUserContext userContext, String questionId, String changeRequestId,  String [] tokensExpr)
-		 throws Exception{
-			
-			//TODO add check code here
-			
-			Question question = loadQuestion(userContext, questionId, allTokens());
-
-			synchronized(question){ 
-				//Will be good when the thread loaded from this JVM process cache.
-				//Also good when there is a RAM based DAO implementation
-				
-				questionDaoOf(userContext).planToRemoveAnswerQuestionListWithChangeRequest(question, changeRequestId, this.emptyOptions());
-
-				question = saveQuestion(userContext, question, tokens().withAnswerQuestionList().done());
-				return question;
-			}
-	}
 	//disconnect Question with exam in UserAnswer
 	protected Question breakWithUserAnswerByExam(BcexUserContext userContext, String questionId, String examId,  String [] tokensExpr)
 		 throws Exception{
@@ -532,255 +488,6 @@ public class QuestionManagerImpl extends CustomBcexCheckerManager implements Que
 	
 	
 	
-
-	protected void checkParamsForAddingAnswerQuestion(BcexUserContext userContext, String questionId, String nickName, String userId, String answer, String changeRequestId,String [] tokensExpr) throws Exception{
-		
-				checkerOf(userContext).checkIdOfQuestion(questionId);
-
-		
-		checkerOf(userContext).checkNickNameOfAnswerQuestion(nickName);
-		
-		checkerOf(userContext).checkUserIdOfAnswerQuestion(userId);
-		
-		checkerOf(userContext).checkAnswerOfAnswerQuestion(answer);
-		
-		checkerOf(userContext).checkChangeRequestIdOfAnswerQuestion(changeRequestId);
-	
-		checkerOf(userContext).throwExceptionIfHasErrors(QuestionManagerException.class);
-
-	
-	}
-	public  Question addAnswerQuestion(BcexUserContext userContext, String questionId, String nickName, String userId, String answer, String changeRequestId, String [] tokensExpr) throws Exception
-	{	
-		
-		checkParamsForAddingAnswerQuestion(userContext,questionId,nickName, userId, answer, changeRequestId,tokensExpr);
-		
-		AnswerQuestion answerQuestion = createAnswerQuestion(userContext,nickName, userId, answer, changeRequestId);
-		
-		Question question = loadQuestion(userContext, questionId, allTokens());
-		synchronized(question){ 
-			//Will be good when the question loaded from this JVM process cache.
-			//Also good when there is a RAM based DAO implementation
-			question.addAnswerQuestion( answerQuestion );		
-			question = saveQuestion(userContext, question, tokens().withAnswerQuestionList().done());
-			
-			userContext.getManagerGroup().getAnswerQuestionManager().onNewInstanceCreated(userContext, answerQuestion);
-			return present(userContext,question, mergedAllTokens(tokensExpr));
-		}
-	}
-	protected void checkParamsForUpdatingAnswerQuestionProperties(BcexUserContext userContext, String questionId,String id,String nickName,String answer,String [] tokensExpr) throws Exception {
-		
-		checkerOf(userContext).checkIdOfQuestion(questionId);
-		checkerOf(userContext).checkIdOfAnswerQuestion(id);
-		
-		checkerOf(userContext).checkNickNameOfAnswerQuestion( nickName);
-		checkerOf(userContext).checkAnswerOfAnswerQuestion( answer);
-
-		checkerOf(userContext).throwExceptionIfHasErrors(QuestionManagerException.class);
-		
-	}
-	public  Question updateAnswerQuestionProperties(BcexUserContext userContext, String questionId, String id,String nickName,String answer, String [] tokensExpr) throws Exception
-	{	
-		checkParamsForUpdatingAnswerQuestionProperties(userContext,questionId,id,nickName,answer,tokensExpr);
-
-		Map<String, Object> options = tokens()
-				.allTokens()
-				//.withAnswerQuestionListList()
-				.searchAnswerQuestionListWith(AnswerQuestion.ID_PROPERTY, "is", id).done();
-		
-		Question questionToUpdate = loadQuestion(userContext, questionId, options);
-		
-		if(questionToUpdate.getAnswerQuestionList().isEmpty()){
-			throw new QuestionManagerException("AnswerQuestion is NOT FOUND with id: '"+id+"'");
-		}
-		
-		AnswerQuestion item = questionToUpdate.getAnswerQuestionList().first();
-		
-		item.updateNickName( nickName );
-		item.updateAnswer( answer );
-
-		
-		//checkParamsForAddingAnswerQuestion(userContext,questionId,name, code, used,tokensExpr);
-		Question question = saveQuestion(userContext, questionToUpdate, tokens().withAnswerQuestionList().done());
-		synchronized(question){ 
-			return present(userContext,question, mergedAllTokens(tokensExpr));
-		}
-	}
-	
-	
-	protected AnswerQuestion createAnswerQuestion(BcexUserContext userContext, String nickName, String userId, String answer, String changeRequestId) throws Exception{
-
-		AnswerQuestion answerQuestion = new AnswerQuestion();
-		
-		
-		answerQuestion.setNickName(nickName);		
-		WechatUser  user = new WechatUser();
-		user.setId(userId);		
-		answerQuestion.setUser(user);		
-		answerQuestion.setAnswer(answer);		
-		ChangeRequest  changeRequest = new ChangeRequest();
-		changeRequest.setId(changeRequestId);		
-		answerQuestion.setChangeRequest(changeRequest);
-	
-		
-		return answerQuestion;
-	
-		
-	}
-	
-	protected AnswerQuestion createIndexedAnswerQuestion(String id, int version){
-
-		AnswerQuestion answerQuestion = new AnswerQuestion();
-		answerQuestion.setId(id);
-		answerQuestion.setVersion(version);
-		return answerQuestion;			
-		
-	}
-	
-	protected void checkParamsForRemovingAnswerQuestionList(BcexUserContext userContext, String questionId, 
-			String answerQuestionIds[],String [] tokensExpr) throws Exception {
-		
-		checkerOf(userContext).checkIdOfQuestion(questionId);
-		for(String answerQuestionIdItem: answerQuestionIds){
-			checkerOf(userContext).checkIdOfAnswerQuestion(answerQuestionIdItem);
-		}
-		
-		checkerOf(userContext).throwExceptionIfHasErrors(QuestionManagerException.class);
-		
-	}
-	public  Question removeAnswerQuestionList(BcexUserContext userContext, String questionId, 
-			String answerQuestionIds[],String [] tokensExpr) throws Exception{
-			
-			checkParamsForRemovingAnswerQuestionList(userContext, questionId,  answerQuestionIds, tokensExpr);
-			
-			
-			Question question = loadQuestion(userContext, questionId, allTokens());
-			synchronized(question){ 
-				//Will be good when the question loaded from this JVM process cache.
-				//Also good when there is a RAM based DAO implementation
-				questionDaoOf(userContext).planToRemoveAnswerQuestionList(question, answerQuestionIds, allTokens());
-				question = saveQuestion(userContext, question, tokens().withAnswerQuestionList().done());
-				deleteRelationListInGraph(userContext, question.getAnswerQuestionList());
-				return present(userContext,question, mergedAllTokens(tokensExpr));
-			}
-	}
-	
-	protected void checkParamsForRemovingAnswerQuestion(BcexUserContext userContext, String questionId, 
-		String answerQuestionId, int answerQuestionVersion,String [] tokensExpr) throws Exception{
-		
-		checkerOf(userContext).checkIdOfQuestion( questionId);
-		checkerOf(userContext).checkIdOfAnswerQuestion(answerQuestionId);
-		checkerOf(userContext).checkVersionOfAnswerQuestion(answerQuestionVersion);
-		checkerOf(userContext).throwExceptionIfHasErrors(QuestionManagerException.class);
-	
-	}
-	public  Question removeAnswerQuestion(BcexUserContext userContext, String questionId, 
-		String answerQuestionId, int answerQuestionVersion,String [] tokensExpr) throws Exception{
-		
-		checkParamsForRemovingAnswerQuestion(userContext,questionId, answerQuestionId, answerQuestionVersion,tokensExpr);
-		
-		AnswerQuestion answerQuestion = createIndexedAnswerQuestion(answerQuestionId, answerQuestionVersion);
-		Question question = loadQuestion(userContext, questionId, allTokens());
-		synchronized(question){ 
-			//Will be good when the question loaded from this JVM process cache.
-			//Also good when there is a RAM based DAO implementation
-			question.removeAnswerQuestion( answerQuestion );		
-			question = saveQuestion(userContext, question, tokens().withAnswerQuestionList().done());
-			deleteRelationInGraph(userContext, answerQuestion);
-			return present(userContext,question, mergedAllTokens(tokensExpr));
-		}
-		
-		
-	}
-	protected void checkParamsForCopyingAnswerQuestion(BcexUserContext userContext, String questionId, 
-		String answerQuestionId, int answerQuestionVersion,String [] tokensExpr) throws Exception{
-		
-		checkerOf(userContext).checkIdOfQuestion( questionId);
-		checkerOf(userContext).checkIdOfAnswerQuestion(answerQuestionId);
-		checkerOf(userContext).checkVersionOfAnswerQuestion(answerQuestionVersion);
-		checkerOf(userContext).throwExceptionIfHasErrors(QuestionManagerException.class);
-	
-	}
-	public  Question copyAnswerQuestionFrom(BcexUserContext userContext, String questionId, 
-		String answerQuestionId, int answerQuestionVersion,String [] tokensExpr) throws Exception{
-		
-		checkParamsForCopyingAnswerQuestion(userContext,questionId, answerQuestionId, answerQuestionVersion,tokensExpr);
-		
-		AnswerQuestion answerQuestion = createIndexedAnswerQuestion(answerQuestionId, answerQuestionVersion);
-		Question question = loadQuestion(userContext, questionId, allTokens());
-		synchronized(question){ 
-			//Will be good when the question loaded from this JVM process cache.
-			//Also good when there is a RAM based DAO implementation
-			
-			
-			
-			question.copyAnswerQuestionFrom( answerQuestion );		
-			question = saveQuestion(userContext, question, tokens().withAnswerQuestionList().done());
-			
-			userContext.getManagerGroup().getAnswerQuestionManager().onNewInstanceCreated(userContext, (AnswerQuestion)question.getFlexiableObjects().get(BaseEntity.COPIED_CHILD));
-			return present(userContext,question, mergedAllTokens(tokensExpr));
-		}
-		
-	}
-	
-	protected void checkParamsForUpdatingAnswerQuestion(BcexUserContext userContext, String questionId, String answerQuestionId, int answerQuestionVersion, String property, String newValueExpr,String [] tokensExpr) throws Exception{
-		
-
-		
-		checkerOf(userContext).checkIdOfQuestion(questionId);
-		checkerOf(userContext).checkIdOfAnswerQuestion(answerQuestionId);
-		checkerOf(userContext).checkVersionOfAnswerQuestion(answerQuestionVersion);
-		
-
-		if(AnswerQuestion.NICK_NAME_PROPERTY.equals(property)){
-			checkerOf(userContext).checkNickNameOfAnswerQuestion(parseString(newValueExpr));
-		}
-		
-		if(AnswerQuestion.ANSWER_PROPERTY.equals(property)){
-			checkerOf(userContext).checkAnswerOfAnswerQuestion(parseString(newValueExpr));
-		}
-		
-	
-		checkerOf(userContext).throwExceptionIfHasErrors(QuestionManagerException.class);
-	
-	}
-	
-	public  Question updateAnswerQuestion(BcexUserContext userContext, String questionId, String answerQuestionId, int answerQuestionVersion, String property, String newValueExpr,String [] tokensExpr)
-			throws Exception{
-		
-		checkParamsForUpdatingAnswerQuestion(userContext, questionId, answerQuestionId, answerQuestionVersion, property, newValueExpr,  tokensExpr);
-		
-		Map<String,Object> loadTokens = this.tokens().withAnswerQuestionList().searchAnswerQuestionListWith(AnswerQuestion.ID_PROPERTY, "eq", answerQuestionId).done();
-		
-		
-		
-		Question question = loadQuestion(userContext, questionId, loadTokens);
-		
-		synchronized(question){ 
-			//Will be good when the question loaded from this JVM process cache.
-			//Also good when there is a RAM based DAO implementation
-			//question.removeAnswerQuestion( answerQuestion );	
-			//make changes to AcceleraterAccount.
-			AnswerQuestion answerQuestionIndex = createIndexedAnswerQuestion(answerQuestionId, answerQuestionVersion);
-		
-			AnswerQuestion answerQuestion = question.findTheAnswerQuestion(answerQuestionIndex);
-			if(answerQuestion == null){
-				throw new QuestionManagerException(answerQuestion+" is NOT FOUND" );
-			}
-			
-			answerQuestion.changeProperty(property, newValueExpr);
-			
-			question = saveQuestion(userContext, question, tokens().withAnswerQuestionList().done());
-			return present(userContext,question, mergedAllTokens(tokensExpr));
-		}
-
-	}
-	/*
-
-	*/
-	
-
-
 
 	protected void checkParamsForAddingAnswer(BcexUserContext userContext, String questionId, String title, String comment,String [] tokensExpr) throws Exception{
 		
