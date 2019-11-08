@@ -2,12 +2,15 @@ package com.doublechaintech.bcex.wxappservice;
 
 import java.util.Map;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.doublechaintech.bcex.CustomBcexUserContextImpl;
 import com.doublechaintech.bcex.secuser.SecUser;
 import com.doublechaintech.bcex.utils.BcexConstants;
 import com.doublechaintech.bcex.wechatuser.WechatUser;
+import com.skynet.infrastructure.StorageService;
 import com.terapico.caf.DateTime;
 import com.terapico.caf.baseelement.LoginParam;
+import com.terapico.utils.DebugUtil;
 import com.terapico.utils.RandomUtil;
 
 
@@ -22,6 +25,10 @@ public class WxappServiceViewBizService extends BasicWxappServiceViewBizService{
 	protected int processRequestClientLogin(CustomBcexUserContextImpl ctx) throws Exception {
 		this.processClientLogin(ctx, ctx.getLoginParam());
 		return PRC_BY_DEFAULT;
+	}
+	public Object loginForTest(CustomBcexUserContextImpl ctx, String formData) throws Exception {
+		LoginParam logp = DebugUtil.getObjectMapper().readValue(formData, LoginParam.class);
+		return clientLogin(ctx, logp);
 	}
 	
 	// 处理请求：查看首页. 返回值：PRC_BY_DEFAULT: ; 
@@ -83,6 +90,25 @@ public class WxappServiceViewBizService extends BasicWxappServiceViewBizService{
 				objectId, location);
 		
 		return newUser;
+	}
+	
+	public Object customGetOssToken(CustomBcexUserContextImpl ctx) throws Exception{
+		DecodedJWT token = super.getTokenFromClientRequest(ctx);
+		if (token == null){
+			throwsExceptionWithMessage(ctx,"cannot get jwt token from request");
+		}
+
+		String userUploadHome = token.getClaim("userUploadHome").asString();
+
+		if (userUploadHome == null){
+			throwsExceptionWithMessage(ctx, "userUploadHome is empty");
+		}
+
+		//we will output json only
+		ctx.forceRenderingAsJson();
+
+		StorageService storageService = (StorageService) ctx.getBean("storageService");
+		return storageService.genToken(userUploadHome);
 	}
 	
 }

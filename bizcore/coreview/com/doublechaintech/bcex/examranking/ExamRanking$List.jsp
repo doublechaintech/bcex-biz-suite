@@ -101,8 +101,8 @@
 <c:if test="${param.referName ne 'name'}">
 	<th>${userContext.localeMap['exam_ranking.name']}</th>
 </c:if>
-<c:if test="${param.referName ne 'avatar'}">
-	<th>${userContext.localeMap['exam_ranking.avatar']}</th>
+<c:if test="${param.referName ne 'avarta'}">
+	<th>${userContext.localeMap['exam_ranking.avarta']}</th>
 </c:if>
 <c:if test="${param.referName ne 'platform'}">
 	<th>${userContext.localeMap['exam_ranking.platform']}</th>
@@ -114,7 +114,7 @@
 			<c:forEach var="item" items="${examRankingList}">
 				<tr currentVersion='${item.version}' id="examRanking-${item.id}" ><td><a class="link-action-removed" href="./examRankingManager/view/${item.id}/"> ${item.id}</a></td>
 <c:if test="${param.referName ne 'name'}">	<td contenteditable='true' class='edit-value'  propertyToChange='name' storedCellValue='${item.name}' prefix='${ownerBeanName}Manager/updateExamRanking/${result.id}/${item.id}/'>${item.name}</td>
-</c:if><c:if test="${param.referName ne 'avatar'}">	<td contenteditable='true' class='edit-value'  propertyToChange='avatar' storedCellValue='${item.avatar}' prefix='${ownerBeanName}Manager/updateExamRanking/${result.id}/${item.id}/'>${item.avatar}</td>
+</c:if><c:if test="${param.referName ne 'avarta'}">	<td contenteditable='true' class='edit-value'  propertyToChange='avarta' storedCellValue='${item.avarta}' prefix='${ownerBeanName}Manager/updateExamRanking/${result.id}/${item.id}/'>${item.avarta}</td>
 </c:if><c:if test="${param.referName ne 'platform'}">
 	<td class="select_candidate_td"
 			data-candidate-method="./examRankingManager/requestCandidatePlatform/${ownerBeanName}/${item.id}/"

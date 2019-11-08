@@ -19,7 +19,7 @@
 	
 	<li><span>${userContext.localeMap['exam_ranking.id']}</span> ${examRanking.id}</li>
 <li><span>${userContext.localeMap['exam_ranking.name']}</span> ${examRanking.name}</li>
-<li><span>${userContext.localeMap['exam_ranking.avatar']}</span> ${examRanking.avatar}</li>
+<li><span>${userContext.localeMap['exam_ranking.avarta']}</span> ${examRanking.avarta}</li>
 
 	
 	</ul>

@@ -12,12 +12,27 @@
 
 
 package com.doublechaintech.bcex.secuser;
-import java.util.Date;
-import com.doublechaintech.bcex.BcexUserContext;
+import javax.servlet.http.HttpServletRequest;
+
+import com.doublechaintech.bcex.BcexUserContextImpl;
+import com.doublechaintech.bcex.CustomBcexUserContextImpl;
+import com.doublechaintech.bcex.UserContextImpl;
 
 public class SecUserCustomManagerImpl extends CustomSecUserManagerImpl{
 
+	@Override
+	protected BcexUserContextImpl createNewConext(String path) {
+		return new CustomBcexUserContextImpl();
+	}
 
+	@Override
+	protected void init(UserContextImpl userContext, HttpServletRequest request) {
+		super.init(userContext, request);
+		CustomBcexUserContextImpl ctx = (CustomBcexUserContextImpl) userContext;
+		ctx.setCookies(request.getCookies()); // 用于开发环境时自动登录
+	}
+
+	
 
 
 

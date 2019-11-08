@@ -41,8 +41,8 @@
 <span >${result.name}</span>
 </div>
 <div class="col-xs-12 col-md-3 summary-section">
-<span class="summary-label">${userContext.localeMap['exam_ranking.avatar']}</span>
-<span >${result.avatar}</span>
+<span class="summary-label">${userContext.localeMap['exam_ranking.avarta']}</span>
+<span >${result.avarta}</span>
 </div>
 
 	</div>
