@@ -16,6 +16,8 @@
 
 	<import resource="classpath*:/META-INF/bcex.xml" />
 	<import resource="classpath*:/META-INF/bcex_manager.xml" />
+	<import resource="classpath*:/META-INF/change_request_custom.xml" />
+	
 	
 
 	<bean id="checker" class="com.doublechaintech.bcex.CustomBcexChecker" scope="prototype"></bean>
@@ -51,7 +53,7 @@
 
 	</bean>
 
-
+<!--
 	<bean id="wxMaService"	class="cn.binarywang.wx.miniapp.api.impl.WxMaServiceImpl">
 		<property name="wxMaConfig">
 			<bean class="cn.binarywang.wx.miniapp.api.impl.WxMaDefaultConfigImpl">
@@ -67,7 +69,7 @@
 		<property name="wxMaService" ref="wxMaService"/>
 	</bean>
 	
-
+-->
 </beans>
 
 

@@ -9,7 +9,18 @@ public class ChangeRequestCustomService extends ChangeRequestService{
 	 * 
 	 * */
 	
-	public ChangeRequest register(BcexUserContext userContext, String nickname,  String avartImage ) {
+	public ChangeRequest updateProfile(BcexUserContext userContext, String nickname,  String avartImage) {
+		
+		
+		
+		
+		
+		
+		
+		
+		userContext.log("yes1");
+		
+		
 		return null;
 	}
 	/*

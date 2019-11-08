@@ -35,10 +35,16 @@ sourceSets {
         java.outputDir = file('WEB-INF/classes')
 		
         java {
-            srcDirs = ['WEB-INF/caf_core_src', 'WEB-INF/caf_custom_src', 'WEB-INF/bcex_core_src', 'WEB-INF/bcex_custom_src']
+            srcDirs = ['WEB-INF/caf_core_src',
+             'WEB-INF/caf_custom_src', 
+             'WEB-INF/bcex_core_src', 
+             'WEB-INF/bcex_custom_src','WEB-INF/bcex_event_core_src','WEB-INF/bcex_event_custom_src']
         }
         resources {
-            srcDirs = ['WEB-INF/caf_core_src', 'WEB-INF/caf_custom_src', 'WEB-INF/bcex_core_src', 'WEB-INF/bcex_custom_src']
+            srcDirs = ['WEB-INF/caf_core_src', 
+            'WEB-INF/caf_custom_src',
+             'WEB-INF/bcex_core_src', 
+             'WEB-INF/bcex_custom_src','WEB-INF/bcex_event_core_src','WEB-INF/bcex_event_custom_src']
         }
     }
     test {

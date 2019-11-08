@@ -12,7 +12,7 @@ public class CustomRelation extends BaseRelation{
 		//replaceGenericRelation("ChangeRequestType"                     , BaseRelation.TRUST_CHAIN_ALL, "platform");
 		//replaceGenericRelation("ChangeRequest"                         , BaseRelation.TRUST_CHAIN_ALL, "requestType");
 		//replaceGenericRelation("ChangeRequest"                         , BaseRelation.TRUST_CHAIN_ALL, "platform");
-		//replaceGenericRelation("Registeration"                         , BaseRelation.TRUST_CHAIN_ALL, "changeRequest");
+		//replaceGenericRelation("Registration"                          , BaseRelation.TRUST_CHAIN_ALL, "changeRequest");
 		//replaceGenericRelation("StartExam"                             , BaseRelation.TRUST_CHAIN_ALL, "changeRequest");
 		//replaceGenericRelation("AnswerQuestion"                        , BaseRelation.TRUST_CHAIN_ALL, "user");
 		//replaceGenericRelation("AnswerQuestion"                        , BaseRelation.TRUST_CHAIN_ALL, "question");
@@ -59,8 +59,8 @@ public class CustomRelation extends BaseRelation{
 		//String [] changeRequestRelatedObjectNames = {"request_type:ChangeRequestType","platform:Platform"};
 		//replaceRelationIndex("ChangeRequest",changeRequestRelatedObjectNames);
 
-		//String [] registerationRelatedObjectNames = {"change_request:ChangeRequest"};
-		//replaceRelationIndex("Registeration",registerationRelatedObjectNames);
+		//String [] registrationRelatedObjectNames = {"change_request:ChangeRequest"};
+		//replaceRelationIndex("Registration",registrationRelatedObjectNames);
 
 		//String [] startExamRelatedObjectNames = {"change_request:ChangeRequest"};
 		//replaceRelationIndex("StartExam",startExamRelatedObjectNames);
