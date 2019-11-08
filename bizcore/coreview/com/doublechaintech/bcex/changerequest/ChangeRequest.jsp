@@ -101,7 +101,7 @@
 	  <li class="active"><a data-toggle="tab" href="#summary" class="disabled"><i class="fa  fa-home"></i> ${userContext.localeMap['@summary']}</a></li>
 	 
 	<% ChangeRequest result = (ChangeRequest)request.getAttribute("result");  %>
-			<li><a data-toggle="tab" href="#registerationList" class="disabled"> ${userContext.localeMap['registeration']}</a></li>
+			<li><a data-toggle="tab" href="#registrationList" class="disabled"> ${userContext.localeMap['registration']}</a></li>
 			<li><a data-toggle="tab" href="#startExamList" class="disabled"> ${userContext.localeMap['start_exam']}</a></li>
 			<li><a data-toggle="tab" href="#answerQuestionList" class="disabled"> ${userContext.localeMap['answer_question']}</a></li>
  
@@ -157,11 +157,11 @@
 
 	
 
-		<c:if test='${not empty userContext.accessTokens["registerationList"] or ignoreListAccessControl}'>
-		<c:set var="registerationList" value="${result.registerationList}" scope="request"/>
-		<c:set var="registerationListName" value="registerationList" scope="request"/>
-		<div id="registerationList" class="tab-pane fade sublist" refer-name="change_request">
-			<sky:include page="com/doublechaintech/bcex/registeration/Registeration$List.jsp"
+		<c:if test='${not empty userContext.accessTokens["registrationList"] or ignoreListAccessControl}'>
+		<c:set var="registrationList" value="${result.registrationList}" scope="request"/>
+		<c:set var="registrationListName" value="registrationList" scope="request"/>
+		<div id="registrationList" class="tab-pane fade sublist" refer-name="change_request">
+			<sky:include page="com/doublechaintech/bcex/registration/Registration$List.jsp"
 					referName="changeRequest"/>
 		</div>
 	</c:if>

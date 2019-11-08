@@ -21,7 +21,7 @@
 	
 	<li><span>ID</span><a class="link-action-removed" href="./examRankingManager/view/${examRanking.id}/"> ${examRanking.id}</a></li>
 <li><span>${userContext.localeMap['exam_ranking.name']}</span> ${examRanking.name}</li>
-<li><span>${userContext.localeMap['exam_ranking.avarta']}</span> ${examRanking.avarta}</li>
+<li><span>${userContext.localeMap['exam_ranking.avatar']}</span> ${examRanking.avatar}</li>
 
 	
 	</ul>
