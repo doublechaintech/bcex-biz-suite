@@ -333,6 +333,118 @@ public class QuestionForm extends BaseForm {
 		return examIdFieldForUserAnswer("examId","");
 	}
 
+
+	public QuestionForm faultAnswerIdFieldForFaultAnswer(String parameterName, String initValue){
+		FormField field =  idFromFaultAnswer(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public QuestionForm faultAnswerIdFieldForFaultAnswer(String initValue){
+		return faultAnswerIdFieldForFaultAnswer("faultAnswerId",initValue);
+	}
+	public QuestionForm faultAnswerIdFieldForFaultAnswer(){
+		return faultAnswerIdFieldForFaultAnswer("faultAnswerId","");
+	}
+
+
+	public QuestionForm topicFieldForFaultAnswer(String parameterName, String initValue){
+		FormField field =  topicFromFaultAnswer(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public QuestionForm topicFieldForFaultAnswer(String initValue){
+		return topicFieldForFaultAnswer("topic",initValue);
+	}
+	public QuestionForm topicFieldForFaultAnswer(){
+		return topicFieldForFaultAnswer("topic","");
+	}
+
+
+	public QuestionForm yourAnswerFieldForFaultAnswer(String parameterName, String initValue){
+		FormField field =  yourAnswerFromFaultAnswer(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public QuestionForm yourAnswerFieldForFaultAnswer(String initValue){
+		return yourAnswerFieldForFaultAnswer("yourAnswer",initValue);
+	}
+	public QuestionForm yourAnswerFieldForFaultAnswer(){
+		return yourAnswerFieldForFaultAnswer("yourAnswer","");
+	}
+
+
+	public QuestionForm rightAnswerFieldForFaultAnswer(String parameterName, String initValue){
+		FormField field =  rightAnswerFromFaultAnswer(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public QuestionForm rightAnswerFieldForFaultAnswer(String initValue){
+		return rightAnswerFieldForFaultAnswer("rightAnswer",initValue);
+	}
+	public QuestionForm rightAnswerFieldForFaultAnswer(){
+		return rightAnswerFieldForFaultAnswer("rightAnswer","");
+	}
+
+
+	public QuestionForm createTimeFieldForFaultAnswer(String parameterName, String initValue){
+		FormField field =  createTimeFromFaultAnswer(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public QuestionForm createTimeFieldForFaultAnswer(String initValue){
+		return createTimeFieldForFaultAnswer("createTime",initValue);
+	}
+	public QuestionForm createTimeFieldForFaultAnswer(){
+		return createTimeFieldForFaultAnswer("createTime","");
+	}
+
+
+	public QuestionForm userIdFieldForFaultAnswer(String parameterName, String initValue){
+		FormField field =  userIdFromFaultAnswer(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public QuestionForm userIdFieldForFaultAnswer(String initValue){
+		return userIdFieldForFaultAnswer("userId",initValue);
+	}
+	public QuestionForm userIdFieldForFaultAnswer(){
+		return userIdFieldForFaultAnswer("userId","");
+	}
+
+
+	public QuestionForm questionIdFieldForFaultAnswer(String parameterName, String initValue){
+		FormField field =  questionIdFromFaultAnswer(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public QuestionForm questionIdFieldForFaultAnswer(String initValue){
+		return questionIdFieldForFaultAnswer("questionId",initValue);
+	}
+	public QuestionForm questionIdFieldForFaultAnswer(){
+		return questionIdFieldForFaultAnswer("questionId","");
+	}
+
+
+	public QuestionForm faultTimesFieldForFaultAnswer(String parameterName, String initValue){
+		FormField field =  faultTimesFromFaultAnswer(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public QuestionForm faultTimesFieldForFaultAnswer(String initValue){
+		return faultTimesFieldForFaultAnswer("faultTimes",initValue);
+	}
+	public QuestionForm faultTimesFieldForFaultAnswer(){
+		return faultTimesFieldForFaultAnswer("faultTimes","");
+	}
+
 	
 
 	

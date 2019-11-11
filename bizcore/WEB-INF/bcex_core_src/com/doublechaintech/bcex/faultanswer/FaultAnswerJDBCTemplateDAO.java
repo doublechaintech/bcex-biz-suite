@@ -21,10 +21,10 @@ import com.doublechaintech.bcex.BcexUserContext;
 
 
 import com.doublechaintech.bcex.wechatuser.WechatUser;
-import com.doublechaintech.bcex.exam.Exam;
+import com.doublechaintech.bcex.question.Question;
 
-import com.doublechaintech.bcex.exam.ExamDAO;
 import com.doublechaintech.bcex.wechatuser.WechatUserDAO;
+import com.doublechaintech.bcex.question.QuestionDAO;
 
 
 
@@ -45,12 +45,12 @@ public class FaultAnswerJDBCTemplateDAO extends BcexBaseDAOImpl implements Fault
  	}
  
  	
- 	private  ExamDAO  examDAO;
- 	public void setExamDAO(ExamDAO examDAO){
-	 	this.examDAO = examDAO;
+ 	private  QuestionDAO  questionDAO;
+ 	public void setQuestionDAO(QuestionDAO questionDAO){
+	 	this.questionDAO = questionDAO;
  	}
- 	public ExamDAO getExamDAO(){
-	 	return this.examDAO;
+ 	public QuestionDAO getQuestionDAO(){
+	 	return this.questionDAO;
  	}
 
 
@@ -210,14 +210,14 @@ public class FaultAnswerJDBCTemplateDAO extends BcexBaseDAOImpl implements Fault
  	
   
 
- 	protected boolean isExtractExamEnabled(Map<String,Object> options){
+ 	protected boolean isExtractQuestionEnabled(Map<String,Object> options){
  		
-	 	return checkOptions(options, FaultAnswerTokens.EXAM);
+	 	return checkOptions(options, FaultAnswerTokens.QUESTION);
  	}
 
- 	protected boolean isSaveExamEnabled(Map<String,Object> options){
+ 	protected boolean isSaveQuestionEnabled(Map<String,Object> options){
 	 	
- 		return checkOptions(options, FaultAnswerTokens.EXAM);
+ 		return checkOptions(options, FaultAnswerTokens.QUESTION);
  	}
  	
 
@@ -254,8 +254,8 @@ public class FaultAnswerJDBCTemplateDAO extends BcexBaseDAOImpl implements Fault
 	 		extractUser(faultAnswer, loadOptions);
  		}
   	
- 		if(isExtractExamEnabled(loadOptions)){
-	 		extractExam(faultAnswer, loadOptions);
+ 		if(isExtractQuestionEnabled(loadOptions)){
+	 		extractQuestion(faultAnswer, loadOptions);
  		}
  
 		
@@ -285,18 +285,18 @@ public class FaultAnswerJDBCTemplateDAO extends BcexBaseDAOImpl implements Fault
  		
   
 
- 	protected FaultAnswer extractExam(FaultAnswer faultAnswer, Map<String,Object> options) throws Exception{
+ 	protected FaultAnswer extractQuestion(FaultAnswer faultAnswer, Map<String,Object> options) throws Exception{
 
-		if(faultAnswer.getExam() == null){
+		if(faultAnswer.getQuestion() == null){
 			return faultAnswer;
 		}
-		String examId = faultAnswer.getExam().getId();
-		if( examId == null){
+		String questionId = faultAnswer.getQuestion().getId();
+		if( questionId == null){
 			return faultAnswer;
 		}
-		Exam exam = getExamDAO().load(examId,options);
-		if(exam != null){
-			faultAnswer.setExam(exam);
+		Question question = getQuestionDAO().load(questionId,options);
+		if(question != null){
+			faultAnswer.setQuestion(question);
 		}
 		
  		
@@ -357,28 +357,28 @@ public class FaultAnswerJDBCTemplateDAO extends BcexBaseDAOImpl implements Fault
 	}
  	
   	
- 	public SmartList<FaultAnswer> findFaultAnswerByExam(String examId,Map<String,Object> options){
+ 	public SmartList<FaultAnswer> findFaultAnswerByQuestion(String questionId,Map<String,Object> options){
  	
-  		SmartList<FaultAnswer> resultList = queryWith(FaultAnswerTable.COLUMN_EXAM, examId, options, getFaultAnswerMapper());
-		// analyzeFaultAnswerByExam(resultList, examId, options);
+  		SmartList<FaultAnswer> resultList = queryWith(FaultAnswerTable.COLUMN_QUESTION, questionId, options, getFaultAnswerMapper());
+		// analyzeFaultAnswerByQuestion(resultList, questionId, options);
 		return resultList;
  	}
  	 
  
- 	public SmartList<FaultAnswer> findFaultAnswerByExam(String examId, int start, int count,Map<String,Object> options){
+ 	public SmartList<FaultAnswer> findFaultAnswerByQuestion(String questionId, int start, int count,Map<String,Object> options){
  		
- 		SmartList<FaultAnswer> resultList =  queryWithRange(FaultAnswerTable.COLUMN_EXAM, examId, options, getFaultAnswerMapper(), start, count);
- 		//analyzeFaultAnswerByExam(resultList, examId, options);
+ 		SmartList<FaultAnswer> resultList =  queryWithRange(FaultAnswerTable.COLUMN_QUESTION, questionId, options, getFaultAnswerMapper(), start, count);
+ 		//analyzeFaultAnswerByQuestion(resultList, questionId, options);
  		return resultList;
  		
  	}
- 	public void analyzeFaultAnswerByExam(SmartList<FaultAnswer> resultList, String examId, Map<String,Object> options){
+ 	public void analyzeFaultAnswerByQuestion(SmartList<FaultAnswer> resultList, String questionId, Map<String,Object> options){
 		if(resultList==null){
 			return;//do nothing when the list is null.
 		}
 		
  		MultipleAccessKey filterKey = new MultipleAccessKey();
- 		filterKey.put(FaultAnswer.EXAM_PROPERTY, examId);
+ 		filterKey.put(FaultAnswer.QUESTION_PROPERTY, questionId);
  		Map<String,Object> emptyOptions = new HashMap<String,Object>();
  		
  		StatsInfo info = new StatsInfo();
@@ -397,13 +397,13 @@ public class FaultAnswerJDBCTemplateDAO extends BcexBaseDAOImpl implements Fault
  		
  	}
  	@Override
- 	public int countFaultAnswerByExam(String examId,Map<String,Object> options){
+ 	public int countFaultAnswerByQuestion(String questionId,Map<String,Object> options){
 
- 		return countWith(FaultAnswerTable.COLUMN_EXAM, examId, options);
+ 		return countWith(FaultAnswerTable.COLUMN_QUESTION, questionId, options);
  	}
  	@Override
-	public Map<String, Integer> countFaultAnswerByExamIds(String[] ids, Map<String, Object> options) {
-		return countWithIds(FaultAnswerTable.COLUMN_EXAM, ids, options);
+	public Map<String, Integer> countFaultAnswerByQuestionIds(String[] ids, Map<String, Object> options) {
+		return countWithIds(FaultAnswerTable.COLUMN_QUESTION, ids, options);
 	}
  	
  	
@@ -548,7 +548,7 @@ public class FaultAnswerJDBCTemplateDAO extends BcexBaseDAOImpl implements Fault
  		return prepareFaultAnswerCreateParameters(faultAnswer);
  	}
  	protected Object[] prepareFaultAnswerUpdateParameters(FaultAnswer faultAnswer){
- 		Object[] parameters = new Object[9];
+ 		Object[] parameters = new Object[10];
  
  		parameters[0] = faultAnswer.getTopic();
  		parameters[1] = faultAnswer.getYourAnswer();
@@ -558,18 +558,19 @@ public class FaultAnswerJDBCTemplateDAO extends BcexBaseDAOImpl implements Fault
  			parameters[4] = faultAnswer.getUser().getId();
  		}
   	
- 		if(faultAnswer.getExam() != null){
- 			parameters[5] = faultAnswer.getExam().getId();
+ 		if(faultAnswer.getQuestion() != null){
+ 			parameters[5] = faultAnswer.getQuestion().getId();
  		}
- 		
- 		parameters[6] = faultAnswer.nextVersion();
- 		parameters[7] = faultAnswer.getId();
- 		parameters[8] = faultAnswer.getVersion();
+ 
+ 		parameters[6] = faultAnswer.getFaultTimes();		
+ 		parameters[7] = faultAnswer.nextVersion();
+ 		parameters[8] = faultAnswer.getId();
+ 		parameters[9] = faultAnswer.getVersion();
  				
  		return parameters;
  	}
  	protected Object[] prepareFaultAnswerCreateParameters(FaultAnswer faultAnswer){
-		Object[] parameters = new Object[7];
+		Object[] parameters = new Object[8];
 		String newFaultAnswerId=getNextId();
 		faultAnswer.setId(newFaultAnswerId);
 		parameters[0] =  faultAnswer.getId();
@@ -583,11 +584,12 @@ public class FaultAnswerJDBCTemplateDAO extends BcexBaseDAOImpl implements Fault
  		
  		}
  		 	
- 		if(faultAnswer.getExam() != null){
- 			parameters[6] = faultAnswer.getExam().getId();
+ 		if(faultAnswer.getQuestion() != null){
+ 			parameters[6] = faultAnswer.getQuestion().getId();
  		
  		}
- 				
+ 		
+ 		parameters[7] = faultAnswer.getFaultTimes();		
  				
  		return parameters;
  	}
@@ -600,8 +602,8 @@ public class FaultAnswerJDBCTemplateDAO extends BcexBaseDAOImpl implements Fault
 	 		saveUser(faultAnswer, options);
  		}
   	
- 		if(isSaveExamEnabled(options)){
-	 		saveExam(faultAnswer, options);
+ 		if(isSaveQuestionEnabled(options)){
+	 		saveQuestion(faultAnswer, options);
  		}
  
 		
@@ -631,13 +633,13 @@ public class FaultAnswerJDBCTemplateDAO extends BcexBaseDAOImpl implements Fault
 	
   
  
- 	protected FaultAnswer saveExam(FaultAnswer faultAnswer, Map<String,Object> options){
+ 	protected FaultAnswer saveQuestion(FaultAnswer faultAnswer, Map<String,Object> options){
  		//Call inject DAO to execute this method
- 		if(faultAnswer.getExam() == null){
+ 		if(faultAnswer.getQuestion() == null){
  			return faultAnswer;//do nothing when it is null
  		}
  		
- 		getExamDAO().save(faultAnswer.getExam(),options);
+ 		getQuestionDAO().save(faultAnswer.getQuestion(),options);
  		return faultAnswer;
  		
  	}

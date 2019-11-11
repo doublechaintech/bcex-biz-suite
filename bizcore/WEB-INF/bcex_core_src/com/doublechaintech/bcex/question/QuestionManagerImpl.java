@@ -22,10 +22,12 @@ import com.doublechaintech.bcex.CustomBcexCheckerManager;
 
 import com.doublechaintech.bcex.answer.Answer;
 import com.doublechaintech.bcex.platform.Platform;
+import com.doublechaintech.bcex.faultanswer.FaultAnswer;
 import com.doublechaintech.bcex.useranswer.UserAnswer;
 
 import com.doublechaintech.bcex.platform.CandidatePlatform;
 
+import com.doublechaintech.bcex.wechatuser.WechatUser;
 import com.doublechaintech.bcex.question.Question;
 import com.doublechaintech.bcex.exam.Exam;
 
@@ -161,6 +163,10 @@ public class QuestionManagerImpl extends CustomBcexCheckerManager implements Que
 		addAction(userContext, question, tokens,"question.removeUserAnswer","removeUserAnswer","removeUserAnswer/"+question.getId()+"/","userAnswerList","primary");
 		addAction(userContext, question, tokens,"question.updateUserAnswer","updateUserAnswer","updateUserAnswer/"+question.getId()+"/","userAnswerList","primary");
 		addAction(userContext, question, tokens,"question.copyUserAnswerFrom","copyUserAnswerFrom","copyUserAnswerFrom/"+question.getId()+"/","userAnswerList","primary");
+		addAction(userContext, question, tokens,"question.addFaultAnswer","addFaultAnswer","addFaultAnswer/"+question.getId()+"/","faultAnswerList","primary");
+		addAction(userContext, question, tokens,"question.removeFaultAnswer","removeFaultAnswer","removeFaultAnswer/"+question.getId()+"/","faultAnswerList","primary");
+		addAction(userContext, question, tokens,"question.updateFaultAnswer","updateFaultAnswer","updateFaultAnswer/"+question.getId()+"/","faultAnswerList","primary");
+		addAction(userContext, question, tokens,"question.copyFaultAnswerFrom","copyFaultAnswerFrom","copyFaultAnswerFrom/"+question.getId()+"/","faultAnswerList","primary");
 	
 		
 		
@@ -357,6 +363,7 @@ public class QuestionManagerImpl extends CustomBcexCheckerManager implements Que
 		return tokens().allTokens()
 		.sortAnswerListWith("id","desc")
 		.sortUserAnswerListWith("id","desc")
+		.sortFaultAnswerListWith("id","desc")
 		.analyzeAllLists().done();
 
 	}
@@ -480,6 +487,24 @@ public class QuestionManagerImpl extends CustomBcexCheckerManager implements Que
 				questionDaoOf(userContext).planToRemoveUserAnswerListWithExam(question, examId, this.emptyOptions());
 
 				question = saveQuestion(userContext, question, tokens().withUserAnswerList().done());
+				return question;
+			}
+	}
+	//disconnect Question with user in FaultAnswer
+	protected Question breakWithFaultAnswerByUser(BcexUserContext userContext, String questionId, String userId,  String [] tokensExpr)
+		 throws Exception{
+			
+			//TODO add check code here
+			
+			Question question = loadQuestion(userContext, questionId, allTokens());
+
+			synchronized(question){ 
+				//Will be good when the thread loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				
+				questionDaoOf(userContext).planToRemoveFaultAnswerListWithUser(question, userId, this.emptyOptions());
+
+				question = saveQuestion(userContext, question, tokens().withFaultAnswerList().done());
 				return question;
 			}
 	}
@@ -961,6 +986,269 @@ public class QuestionManagerImpl extends CustomBcexCheckerManager implements Que
 			userAnswer.changeProperty(property, newValueExpr);
 			
 			question = saveQuestion(userContext, question, tokens().withUserAnswerList().done());
+			return present(userContext,question, mergedAllTokens(tokensExpr));
+		}
+
+	}
+	/*
+
+	*/
+	
+
+
+
+	protected void checkParamsForAddingFaultAnswer(BcexUserContext userContext, String questionId, String topic, String yourAnswer, String rightAnswer, String userId, int faultTimes,String [] tokensExpr) throws Exception{
+		
+				checkerOf(userContext).checkIdOfQuestion(questionId);
+
+		
+		checkerOf(userContext).checkTopicOfFaultAnswer(topic);
+		
+		checkerOf(userContext).checkYourAnswerOfFaultAnswer(yourAnswer);
+		
+		checkerOf(userContext).checkRightAnswerOfFaultAnswer(rightAnswer);
+		
+		checkerOf(userContext).checkUserIdOfFaultAnswer(userId);
+		
+		checkerOf(userContext).checkFaultTimesOfFaultAnswer(faultTimes);
+	
+		checkerOf(userContext).throwExceptionIfHasErrors(QuestionManagerException.class);
+
+	
+	}
+	public  Question addFaultAnswer(BcexUserContext userContext, String questionId, String topic, String yourAnswer, String rightAnswer, String userId, int faultTimes, String [] tokensExpr) throws Exception
+	{	
+		
+		checkParamsForAddingFaultAnswer(userContext,questionId,topic, yourAnswer, rightAnswer, userId, faultTimes,tokensExpr);
+		
+		FaultAnswer faultAnswer = createFaultAnswer(userContext,topic, yourAnswer, rightAnswer, userId, faultTimes);
+		
+		Question question = loadQuestion(userContext, questionId, allTokens());
+		synchronized(question){ 
+			//Will be good when the question loaded from this JVM process cache.
+			//Also good when there is a RAM based DAO implementation
+			question.addFaultAnswer( faultAnswer );		
+			question = saveQuestion(userContext, question, tokens().withFaultAnswerList().done());
+			
+			userContext.getManagerGroup().getFaultAnswerManager().onNewInstanceCreated(userContext, faultAnswer);
+			return present(userContext,question, mergedAllTokens(tokensExpr));
+		}
+	}
+	protected void checkParamsForUpdatingFaultAnswerProperties(BcexUserContext userContext, String questionId,String id,String topic,String yourAnswer,String rightAnswer,int faultTimes,String [] tokensExpr) throws Exception {
+		
+		checkerOf(userContext).checkIdOfQuestion(questionId);
+		checkerOf(userContext).checkIdOfFaultAnswer(id);
+		
+		checkerOf(userContext).checkTopicOfFaultAnswer( topic);
+		checkerOf(userContext).checkYourAnswerOfFaultAnswer( yourAnswer);
+		checkerOf(userContext).checkRightAnswerOfFaultAnswer( rightAnswer);
+		checkerOf(userContext).checkFaultTimesOfFaultAnswer( faultTimes);
+
+		checkerOf(userContext).throwExceptionIfHasErrors(QuestionManagerException.class);
+		
+	}
+	public  Question updateFaultAnswerProperties(BcexUserContext userContext, String questionId, String id,String topic,String yourAnswer,String rightAnswer,int faultTimes, String [] tokensExpr) throws Exception
+	{	
+		checkParamsForUpdatingFaultAnswerProperties(userContext,questionId,id,topic,yourAnswer,rightAnswer,faultTimes,tokensExpr);
+
+		Map<String, Object> options = tokens()
+				.allTokens()
+				//.withFaultAnswerListList()
+				.searchFaultAnswerListWith(FaultAnswer.ID_PROPERTY, "is", id).done();
+		
+		Question questionToUpdate = loadQuestion(userContext, questionId, options);
+		
+		if(questionToUpdate.getFaultAnswerList().isEmpty()){
+			throw new QuestionManagerException("FaultAnswer is NOT FOUND with id: '"+id+"'");
+		}
+		
+		FaultAnswer item = questionToUpdate.getFaultAnswerList().first();
+		
+		item.updateTopic( topic );
+		item.updateYourAnswer( yourAnswer );
+		item.updateRightAnswer( rightAnswer );
+		item.updateFaultTimes( faultTimes );
+
+		
+		//checkParamsForAddingFaultAnswer(userContext,questionId,name, code, used,tokensExpr);
+		Question question = saveQuestion(userContext, questionToUpdate, tokens().withFaultAnswerList().done());
+		synchronized(question){ 
+			return present(userContext,question, mergedAllTokens(tokensExpr));
+		}
+	}
+	
+	
+	protected FaultAnswer createFaultAnswer(BcexUserContext userContext, String topic, String yourAnswer, String rightAnswer, String userId, int faultTimes) throws Exception{
+
+		FaultAnswer faultAnswer = new FaultAnswer();
+		
+		
+		faultAnswer.setTopic(topic);		
+		faultAnswer.setYourAnswer(yourAnswer);		
+		faultAnswer.setRightAnswer(rightAnswer);		
+		faultAnswer.setCreateTime(userContext.now());		
+		WechatUser  user = new WechatUser();
+		user.setId(userId);		
+		faultAnswer.setUser(user);		
+		faultAnswer.setFaultTimes(faultTimes);
+	
+		
+		return faultAnswer;
+	
+		
+	}
+	
+	protected FaultAnswer createIndexedFaultAnswer(String id, int version){
+
+		FaultAnswer faultAnswer = new FaultAnswer();
+		faultAnswer.setId(id);
+		faultAnswer.setVersion(version);
+		return faultAnswer;			
+		
+	}
+	
+	protected void checkParamsForRemovingFaultAnswerList(BcexUserContext userContext, String questionId, 
+			String faultAnswerIds[],String [] tokensExpr) throws Exception {
+		
+		checkerOf(userContext).checkIdOfQuestion(questionId);
+		for(String faultAnswerIdItem: faultAnswerIds){
+			checkerOf(userContext).checkIdOfFaultAnswer(faultAnswerIdItem);
+		}
+		
+		checkerOf(userContext).throwExceptionIfHasErrors(QuestionManagerException.class);
+		
+	}
+	public  Question removeFaultAnswerList(BcexUserContext userContext, String questionId, 
+			String faultAnswerIds[],String [] tokensExpr) throws Exception{
+			
+			checkParamsForRemovingFaultAnswerList(userContext, questionId,  faultAnswerIds, tokensExpr);
+			
+			
+			Question question = loadQuestion(userContext, questionId, allTokens());
+			synchronized(question){ 
+				//Will be good when the question loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				questionDaoOf(userContext).planToRemoveFaultAnswerList(question, faultAnswerIds, allTokens());
+				question = saveQuestion(userContext, question, tokens().withFaultAnswerList().done());
+				deleteRelationListInGraph(userContext, question.getFaultAnswerList());
+				return present(userContext,question, mergedAllTokens(tokensExpr));
+			}
+	}
+	
+	protected void checkParamsForRemovingFaultAnswer(BcexUserContext userContext, String questionId, 
+		String faultAnswerId, int faultAnswerVersion,String [] tokensExpr) throws Exception{
+		
+		checkerOf(userContext).checkIdOfQuestion( questionId);
+		checkerOf(userContext).checkIdOfFaultAnswer(faultAnswerId);
+		checkerOf(userContext).checkVersionOfFaultAnswer(faultAnswerVersion);
+		checkerOf(userContext).throwExceptionIfHasErrors(QuestionManagerException.class);
+	
+	}
+	public  Question removeFaultAnswer(BcexUserContext userContext, String questionId, 
+		String faultAnswerId, int faultAnswerVersion,String [] tokensExpr) throws Exception{
+		
+		checkParamsForRemovingFaultAnswer(userContext,questionId, faultAnswerId, faultAnswerVersion,tokensExpr);
+		
+		FaultAnswer faultAnswer = createIndexedFaultAnswer(faultAnswerId, faultAnswerVersion);
+		Question question = loadQuestion(userContext, questionId, allTokens());
+		synchronized(question){ 
+			//Will be good when the question loaded from this JVM process cache.
+			//Also good when there is a RAM based DAO implementation
+			question.removeFaultAnswer( faultAnswer );		
+			question = saveQuestion(userContext, question, tokens().withFaultAnswerList().done());
+			deleteRelationInGraph(userContext, faultAnswer);
+			return present(userContext,question, mergedAllTokens(tokensExpr));
+		}
+		
+		
+	}
+	protected void checkParamsForCopyingFaultAnswer(BcexUserContext userContext, String questionId, 
+		String faultAnswerId, int faultAnswerVersion,String [] tokensExpr) throws Exception{
+		
+		checkerOf(userContext).checkIdOfQuestion( questionId);
+		checkerOf(userContext).checkIdOfFaultAnswer(faultAnswerId);
+		checkerOf(userContext).checkVersionOfFaultAnswer(faultAnswerVersion);
+		checkerOf(userContext).throwExceptionIfHasErrors(QuestionManagerException.class);
+	
+	}
+	public  Question copyFaultAnswerFrom(BcexUserContext userContext, String questionId, 
+		String faultAnswerId, int faultAnswerVersion,String [] tokensExpr) throws Exception{
+		
+		checkParamsForCopyingFaultAnswer(userContext,questionId, faultAnswerId, faultAnswerVersion,tokensExpr);
+		
+		FaultAnswer faultAnswer = createIndexedFaultAnswer(faultAnswerId, faultAnswerVersion);
+		Question question = loadQuestion(userContext, questionId, allTokens());
+		synchronized(question){ 
+			//Will be good when the question loaded from this JVM process cache.
+			//Also good when there is a RAM based DAO implementation
+			
+			
+			
+			question.copyFaultAnswerFrom( faultAnswer );		
+			question = saveQuestion(userContext, question, tokens().withFaultAnswerList().done());
+			
+			userContext.getManagerGroup().getFaultAnswerManager().onNewInstanceCreated(userContext, (FaultAnswer)question.getFlexiableObjects().get(BaseEntity.COPIED_CHILD));
+			return present(userContext,question, mergedAllTokens(tokensExpr));
+		}
+		
+	}
+	
+	protected void checkParamsForUpdatingFaultAnswer(BcexUserContext userContext, String questionId, String faultAnswerId, int faultAnswerVersion, String property, String newValueExpr,String [] tokensExpr) throws Exception{
+		
+
+		
+		checkerOf(userContext).checkIdOfQuestion(questionId);
+		checkerOf(userContext).checkIdOfFaultAnswer(faultAnswerId);
+		checkerOf(userContext).checkVersionOfFaultAnswer(faultAnswerVersion);
+		
+
+		if(FaultAnswer.TOPIC_PROPERTY.equals(property)){
+			checkerOf(userContext).checkTopicOfFaultAnswer(parseString(newValueExpr));
+		}
+		
+		if(FaultAnswer.YOUR_ANSWER_PROPERTY.equals(property)){
+			checkerOf(userContext).checkYourAnswerOfFaultAnswer(parseString(newValueExpr));
+		}
+		
+		if(FaultAnswer.RIGHT_ANSWER_PROPERTY.equals(property)){
+			checkerOf(userContext).checkRightAnswerOfFaultAnswer(parseString(newValueExpr));
+		}
+		
+		if(FaultAnswer.FAULT_TIMES_PROPERTY.equals(property)){
+			checkerOf(userContext).checkFaultTimesOfFaultAnswer(parseInt(newValueExpr));
+		}
+		
+	
+		checkerOf(userContext).throwExceptionIfHasErrors(QuestionManagerException.class);
+	
+	}
+	
+	public  Question updateFaultAnswer(BcexUserContext userContext, String questionId, String faultAnswerId, int faultAnswerVersion, String property, String newValueExpr,String [] tokensExpr)
+			throws Exception{
+		
+		checkParamsForUpdatingFaultAnswer(userContext, questionId, faultAnswerId, faultAnswerVersion, property, newValueExpr,  tokensExpr);
+		
+		Map<String,Object> loadTokens = this.tokens().withFaultAnswerList().searchFaultAnswerListWith(FaultAnswer.ID_PROPERTY, "eq", faultAnswerId).done();
+		
+		
+		
+		Question question = loadQuestion(userContext, questionId, loadTokens);
+		
+		synchronized(question){ 
+			//Will be good when the question loaded from this JVM process cache.
+			//Also good when there is a RAM based DAO implementation
+			//question.removeFaultAnswer( faultAnswer );	
+			//make changes to AcceleraterAccount.
+			FaultAnswer faultAnswerIndex = createIndexedFaultAnswer(faultAnswerId, faultAnswerVersion);
+		
+			FaultAnswer faultAnswer = question.findTheFaultAnswer(faultAnswerIndex);
+			if(faultAnswer == null){
+				throw new QuestionManagerException(faultAnswer+" is NOT FOUND" );
+			}
+			
+			faultAnswer.changeProperty(property, newValueExpr);
+			
+			question = saveQuestion(userContext, question, tokens().withFaultAnswerList().done());
 			return present(userContext,question, mergedAllTokens(tokensExpr));
 		}
 

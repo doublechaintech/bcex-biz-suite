@@ -6,7 +6,7 @@ import java.util.Date;
 import java.math.BigDecimal;
 import com.doublechaintech.bcex.BaseRowMapper;
 import com.doublechaintech.bcex.wechatuser.WechatUser;
-import com.doublechaintech.bcex.exam.Exam;
+import com.doublechaintech.bcex.question.Question;
 
 public class FaultAnswerMapper extends BaseRowMapper<FaultAnswer>{
 	
@@ -19,7 +19,8 @@ public class FaultAnswerMapper extends BaseRowMapper<FaultAnswer>{
  		setRightAnswer(faultAnswer, rs, rowNumber); 		
  		setCreateTime(faultAnswer, rs, rowNumber); 		
  		setUser(faultAnswer, rs, rowNumber); 		
- 		setExam(faultAnswer, rs, rowNumber); 		
+ 		setQuestion(faultAnswer, rs, rowNumber); 		
+ 		setFaultTimes(faultAnswer, rs, rowNumber); 		
  		setVersion(faultAnswer, rs, rowNumber);
 
 		return faultAnswer;
@@ -107,24 +108,36 @@ public class FaultAnswerMapper extends BaseRowMapper<FaultAnswer>{
  		faultAnswer.setUser(createEmptyUser(wechatUserId));
  	}
  	 		
- 	protected void setExam(FaultAnswer faultAnswer, ResultSet rs, int rowNumber) throws SQLException{
- 		String examId = rs.getString(FaultAnswerTable.COLUMN_EXAM);
- 		if( examId == null){
+ 	protected void setQuestion(FaultAnswer faultAnswer, ResultSet rs, int rowNumber) throws SQLException{
+ 		String questionId = rs.getString(FaultAnswerTable.COLUMN_QUESTION);
+ 		if( questionId == null){
  			return;
  		}
- 		if( examId.isEmpty()){
+ 		if( questionId.isEmpty()){
  			return;
  		}
- 		Exam exam = faultAnswer.getExam();
- 		if( exam != null ){
+ 		Question question = faultAnswer.getQuestion();
+ 		if( question != null ){
  			//if the root object 'faultAnswer' already have the property, just set the id for it;
- 			exam.setId(examId);
+ 			question.setId(questionId);
  			
  			return;
  		}
- 		faultAnswer.setExam(createEmptyExam(examId));
+ 		faultAnswer.setQuestion(createEmptyQuestion(questionId));
  	}
  	
+	protected void setFaultTimes(FaultAnswer faultAnswer, ResultSet rs, int rowNumber) throws SQLException{
+	
+		//there will be issue when the type is double/int/long
+		Integer faultTimes = rs.getInt(FaultAnswerTable.COLUMN_FAULT_TIMES);
+		if(faultTimes == null){
+			//do nothing when nothing found in database
+			return;
+		}
+		
+		faultAnswer.setFaultTimes(faultTimes);
+	}
+		
 	protected void setVersion(FaultAnswer faultAnswer, ResultSet rs, int rowNumber) throws SQLException{
 	
 		//there will be issue when the type is double/int/long
@@ -146,11 +159,11 @@ public class FaultAnswerMapper extends BaseRowMapper<FaultAnswer>{
  		return wechatUser;
  	}
  	
- 	protected Exam  createEmptyExam(String examId){
- 		Exam exam = new Exam();
- 		exam.setId(examId);
- 		exam.setVersion(Integer.MAX_VALUE);
- 		return exam;
+ 	protected Question  createEmptyQuestion(String questionId){
+ 		Question question = new Question();
+ 		question.setId(questionId);
+ 		question.setVersion(Integer.MAX_VALUE);
+ 		return question;
  	}
  	
 }

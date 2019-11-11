@@ -151,6 +151,42 @@ public abstract class WxappServiceViewService extends BaseWxappServiceViewServic
 			return ctx.getResultObject();
 		}
 		BaseViewPage page = assemblerScoreboardPage(ctx, "customerViewScore");
+		page.setLinkToUrl(accessUrl);
+		return page.doRender(ctx);
+	}
+	
+	// 查看我的错题(view fault answer)
+	public Object customerViewFaultAnswer(BcexUserContext userContext) throws Exception {
+		String accessUrl = makeUrlF("customerViewFaultAnswer", false);
+		
+		CustomBcexUserContextImpl ctx = (CustomBcexUserContextImpl) userContext;
+		ctx.setAccessUrl(accessUrl);
+		ensureCurrentUserInfo(ctx);
+		ctx.addFootprint(this);
+		commonLog(ctx, "customerViewFaultAnswer", "查看我的错题", ctx.getRemoteIP(), ctx.tokenId(), makeUrlF("", false), null);
+		int resultCode = processRequestCustomerViewFaultAnswer(ctx);
+		if (returnRightNow(resultCode)){
+			return ctx.getResultObject();
+		}
+		BaseViewPage page = assemblerFaultAnswerListPage(ctx, "customerViewFaultAnswer");
+		page.setLinkToUrl(accessUrl);
+		return page.doRender(ctx);
+	}
+	
+	// (view next page fault answer)
+	public Object customerViewNextPageFaultAnswer(BcexUserContext userContext, String lastRecordId) throws Exception {
+		String accessUrl = makeUrlF("customerViewNextPageFaultAnswer", false, lastRecordId);
+		
+		CustomBcexUserContextImpl ctx = (CustomBcexUserContextImpl) userContext;
+		ctx.setAccessUrl(accessUrl);
+		ensureCurrentUserInfo(ctx);
+		ctx.setLastRecordId(lastRecordId);
+		commonLog(ctx, "customerViewNextPageFaultAnswer", "", ctx.getRemoteIP(), ctx.tokenId(), makeUrlF("", false, lastRecordId), null);
+		int resultCode = processRequestCustomerViewNextPageFaultAnswer(ctx);
+		if (returnRightNow(resultCode)){
+			return ctx.getResultObject();
+		}
+		BaseViewPage page = assemblerFaultAnswerListPage(ctx, "customerViewNextPageFaultAnswer");
 		return page.doRender(ctx);
 	}
 	

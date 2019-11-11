@@ -544,17 +544,31 @@ public class WechatUserForm extends BaseForm {
 	}
 
 
-	public WechatUserForm examIdFieldForFaultAnswer(String parameterName, String initValue){
-		FormField field =  examIdFromFaultAnswer(parameterName, initValue);		
+	public WechatUserForm questionIdFieldForFaultAnswer(String parameterName, String initValue){
+		FormField field =  questionIdFromFaultAnswer(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public WechatUserForm examIdFieldForFaultAnswer(String initValue){
-		return examIdFieldForFaultAnswer("examId",initValue);
+	public WechatUserForm questionIdFieldForFaultAnswer(String initValue){
+		return questionIdFieldForFaultAnswer("questionId",initValue);
 	}
-	public WechatUserForm examIdFieldForFaultAnswer(){
-		return examIdFieldForFaultAnswer("examId","");
+	public WechatUserForm questionIdFieldForFaultAnswer(){
+		return questionIdFieldForFaultAnswer("questionId","");
+	}
+
+
+	public WechatUserForm faultTimesFieldForFaultAnswer(String parameterName, String initValue){
+		FormField field =  faultTimesFromFaultAnswer(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public WechatUserForm faultTimesFieldForFaultAnswer(String initValue){
+		return faultTimesFieldForFaultAnswer("faultTimes",initValue);
+	}
+	public WechatUserForm faultTimesFieldForFaultAnswer(){
+		return faultTimesFieldForFaultAnswer("faultTimes","");
 	}
 
 	

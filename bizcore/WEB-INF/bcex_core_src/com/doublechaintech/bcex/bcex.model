@@ -13,7 +13,7 @@
 	
 	
 	<change_request_type
-		name="注册|开始考试|答题"
+		name="注册|开始考试|答题|[1,100]"
 		code="REGISTER|START_EXAM|ANSWER"
 		icon="download|swap|upload|account-book|edit"
 		display_order="1|2|3|4|5|6"
@@ -33,21 +33,21 @@
 	/>
 	
 	<registration
-		nick_name="豆豆鬼|[1,200]"
+		nick_name="豆豆鬼|[0,200]"
 		avatar="share.jpg"
 		change_request="$(change_request)"
 		_features="event"
 	/>
 	
 	<start_exam
-		nick_name="豆豆鬼参与考试|[1,200]"
+		nick_name="豆豆鬼参与考试|[0,200]"
 		user="$(wechat_user)"
 		change_request="$(change_request)"
 		_features="event"
 	/>
 	
 	<answer_question
-		nick_name="豆豆鬼参与考试|[1,200]"
+		nick_name="豆豆鬼参与考试|[0,200]"
 		user="$(wechat_user)"
 		user_answer="$(user_answer)"
 		answer="A|B|C|[0,20]"
@@ -69,13 +69,13 @@
 	
 	
 	<question
-		topic="区块链是什么技术，下面最接近的回答是什么"
+		topic="区块链是什么技术，下面最接近的回答是什么|[1,500]"
 		level="低|中|高"
-		option_a="网络技术"
-		option_b="电子技术"
-		option_c="机械技术"
-		option_d="太空技术"
-		option_e="建筑技术"
+		option_a="网络技术|[1,500]"
+		option_b="电子技术|[1,500]"
+		option_c="机械技术|[0,500]"
+		option_d="太空技术|[0,500]"
+		option_e="建筑技术|[0,500]"
 		right_answer="A|B|C|D|E"
 		platform="$(platform)"
 	/>
@@ -124,7 +124,7 @@
 	/>
 	
 	<user_answer
-		topic="区块链是什么技术，下面最接近的回答是什么"
+		topic="区块链是什么技术，下面最接近的回答是什么|[1,500]"
 		
 		user_select="A"
 		question="$(question)"
@@ -133,12 +133,13 @@
 	/>
 	
 	<fault_answer
-		topic="区块链是什么技术，下面最接近的回答是什么"
-		your_answer="网络技术"
-		right_answer="电子技术"
+		topic="区块链是什么技术，下面最接近的回答是什么|[1,500]"
+		your_answer="A|[1,10]"
+		right_answer="ABCD|[1,10]"
 		create_time="createTime()"
 		user="$(wechat_user)"
-		exam="$(exam)"
+		question="$(question)"
+		fault_times="999"
 	/>
 	
 	

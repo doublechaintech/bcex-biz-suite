@@ -1119,16 +1119,29 @@ public class BaseForm extends GenericForm{
 		return field;
 	}
 
-	protected FormField examIdFromFaultAnswer(String parameterName, String initValue){
+	protected FormField questionIdFromFaultAnswer(String parameterName, String initValue){
 		FormField field = new FormField();
-		field.setLabel("考试");
-		field.setLocaleKey("fault_answer.exam");
+		field.setLabel("检查问题");
+		field.setLocaleKey("fault_answer.question");
 		field.setParameterName(parameterName);
 		field.setDefaultValue(initValue);
 		field.setFieldGroup("基本信息");
-		field.setType("Exam");
+		field.setType("Question");
 		field.setRequired(true);
-		field.setPlaceholder("请填写考试");
+		field.setPlaceholder("请填写检查问题");
+		return field;
+	}
+
+	protected FormField faultTimesFromFaultAnswer(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("故障时间");
+		field.setLocaleKey("fault_answer.fault_times");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("number");
+		field.setRequired(true);
+		field.setPlaceholder("请填写故障时间");
 		return field;
 	}
 

@@ -22,8 +22,10 @@ import com.doublechaintech.bcex.BcexUserContext;
 
 import com.doublechaintech.bcex.answer.Answer;
 import com.doublechaintech.bcex.platform.Platform;
+import com.doublechaintech.bcex.faultanswer.FaultAnswer;
 import com.doublechaintech.bcex.useranswer.UserAnswer;
 
+import com.doublechaintech.bcex.faultanswer.FaultAnswerDAO;
 import com.doublechaintech.bcex.useranswer.UserAnswerDAO;
 import com.doublechaintech.bcex.platform.PlatformDAO;
 import com.doublechaintech.bcex.answer.AnswerDAO;
@@ -87,6 +89,25 @@ public class QuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements Question
  	
 			
 		
+	
+  	private  FaultAnswerDAO  faultAnswerDAO;
+ 	public void setFaultAnswerDAO(FaultAnswerDAO pFaultAnswerDAO){
+ 	
+ 		if(pFaultAnswerDAO == null){
+ 			throw new IllegalStateException("Do not try to set faultAnswerDAO to null.");
+ 		}
+	 	this.faultAnswerDAO = pFaultAnswerDAO;
+ 	}
+ 	public FaultAnswerDAO getFaultAnswerDAO(){
+ 		if(this.faultAnswerDAO == null){
+ 			throw new IllegalStateException("The faultAnswerDAO is not configured yet, please config it some where.");
+ 		}
+ 		
+	 	return this.faultAnswerDAO;
+ 	}	
+ 	
+			
+		
 
 	
 	/*
@@ -146,6 +167,13 @@ public class QuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements Question
  		
  		if(isSaveUserAnswerListEnabled(options)){
  			for(UserAnswer item: newQuestion.getUserAnswerList()){
+ 				item.setVersion(0);
+ 			}
+ 		}
+		
+ 		
+ 		if(isSaveFaultAnswerListEnabled(options)){
+ 			for(FaultAnswer item: newQuestion.getFaultAnswerList()){
  				item.setVersion(0);
  			}
  		}
@@ -283,6 +311,20 @@ public class QuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements Question
  	}
  	
 		
+	
+	protected boolean isExtractFaultAnswerListEnabled(Map<String,Object> options){		
+ 		return checkOptions(options,QuestionTokens.FAULT_ANSWER_LIST);
+ 	}
+ 	protected boolean isAnalyzeFaultAnswerListEnabled(Map<String,Object> options){		 		
+ 		return QuestionTokens.of(options).analyzeFaultAnswerListEnabled();
+ 	}
+	
+	protected boolean isSaveFaultAnswerListEnabled(Map<String,Object> options){
+		return checkOptions(options, QuestionTokens.FAULT_ANSWER_LIST);
+		
+ 	}
+ 	
+		
 
 	
 
@@ -327,6 +369,14 @@ public class QuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements Question
  		}	
  		if(isAnalyzeUserAnswerListEnabled(loadOptions)){
 	 		analyzeUserAnswerList(question, loadOptions);
+ 		}
+ 		
+		
+		if(isExtractFaultAnswerListEnabled(loadOptions)){
+	 		extractFaultAnswerList(question, loadOptions);
+ 		}	
+ 		if(isAnalyzeFaultAnswerListEnabled(loadOptions)){
+	 		analyzeFaultAnswerList(question, loadOptions);
  		}
  		
 		
@@ -448,6 +498,56 @@ public class QuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements Question
 		SmartList<UserAnswer> userAnswerList = question.getUserAnswerList();
 		if(userAnswerList != null){
 			getUserAnswerDAO().analyzeUserAnswerByQuestion(userAnswerList, question.getId(), options);
+			
+		}
+		
+		return question;
+	
+	}	
+	
+		
+	protected void enhanceFaultAnswerList(SmartList<FaultAnswer> faultAnswerList,Map<String,Object> options){
+		//extract multiple list from difference sources
+		//Trying to use a single SQL to extract all data from database and do the work in java side, java is easier to scale to N ndoes;
+	}
+	
+	protected Question extractFaultAnswerList(Question question, Map<String,Object> options){
+		
+		
+		if(question == null){
+			return null;
+		}
+		if(question.getId() == null){
+			return question;
+		}
+
+		
+		
+		SmartList<FaultAnswer> faultAnswerList = getFaultAnswerDAO().findFaultAnswerByQuestion(question.getId(),options);
+		if(faultAnswerList != null){
+			enhanceFaultAnswerList(faultAnswerList,options);
+			question.setFaultAnswerList(faultAnswerList);
+		}
+		
+		return question;
+	
+	}	
+	
+	protected Question analyzeFaultAnswerList(Question question, Map<String,Object> options){
+		
+		
+		if(question == null){
+			return null;
+		}
+		if(question.getId() == null){
+			return question;
+		}
+
+		
+		
+		SmartList<FaultAnswer> faultAnswerList = question.getFaultAnswerList();
+		if(faultAnswerList != null){
+			getFaultAnswerDAO().analyzeFaultAnswerByQuestion(faultAnswerList, question.getId(), options);
 			
 		}
 		
@@ -699,6 +799,13 @@ public class QuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements Question
 	 		
  		}		
 		
+		if(isSaveFaultAnswerListEnabled(options)){
+	 		saveFaultAnswerList(question, options);
+	 		//removeFaultAnswerList(question, options);
+	 		//Not delete the record
+	 		
+ 		}		
+		
 		return question;
 		
 	}
@@ -823,6 +930,78 @@ public class QuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements Question
 		key.put(UserAnswer.EXAM_PROPERTY, examId);
 		
 		int count = getUserAnswerDAO().countUserAnswerWithKey(key, options);
+		return count;
+	}
+	
+	public Question planToRemoveFaultAnswerList(Question question, String faultAnswerIds[], Map<String,Object> options)throws Exception{
+	
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(FaultAnswer.QUESTION_PROPERTY, question.getId());
+		key.put(FaultAnswer.ID_PROPERTY, faultAnswerIds);
+		
+		SmartList<FaultAnswer> externalFaultAnswerList = getFaultAnswerDAO().
+				findFaultAnswerWithKey(key, options);
+		if(externalFaultAnswerList == null){
+			return question;
+		}
+		if(externalFaultAnswerList.isEmpty()){
+			return question;
+		}
+		
+		for(FaultAnswer faultAnswerItem: externalFaultAnswerList){
+
+			faultAnswerItem.clearFromAll();
+		}
+		
+		
+		SmartList<FaultAnswer> faultAnswerList = question.getFaultAnswerList();		
+		faultAnswerList.addAllToRemoveList(externalFaultAnswerList);
+		return question;	
+	
+	}
+
+
+	//disconnect Question with user in FaultAnswer
+	public Question planToRemoveFaultAnswerListWithUser(Question question, String userId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(FaultAnswer.QUESTION_PROPERTY, question.getId());
+		key.put(FaultAnswer.USER_PROPERTY, userId);
+		
+		SmartList<FaultAnswer> externalFaultAnswerList = getFaultAnswerDAO().
+				findFaultAnswerWithKey(key, options);
+		if(externalFaultAnswerList == null){
+			return question;
+		}
+		if(externalFaultAnswerList.isEmpty()){
+			return question;
+		}
+		
+		for(FaultAnswer faultAnswerItem: externalFaultAnswerList){
+			faultAnswerItem.clearUser();
+			faultAnswerItem.clearQuestion();
+			
+		}
+		
+		
+		SmartList<FaultAnswer> faultAnswerList = question.getFaultAnswerList();		
+		faultAnswerList.addAllToRemoveList(externalFaultAnswerList);
+		return question;
+	}
+	
+	public int countFaultAnswerListWithUser(String questionId, String userId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(FaultAnswer.QUESTION_PROPERTY, questionId);
+		key.put(FaultAnswer.USER_PROPERTY, userId);
+		
+		int count = getFaultAnswerDAO().countFaultAnswerWithKey(key, options);
 		return count;
 	}
 	
@@ -960,11 +1139,78 @@ public class QuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements Question
 	
 	
 		
+	protected Question saveFaultAnswerList(Question question, Map<String,Object> options){
+		
+		
+		
+		
+		SmartList<FaultAnswer> faultAnswerList = question.getFaultAnswerList();
+		if(faultAnswerList == null){
+			//null list means nothing
+			return question;
+		}
+		SmartList<FaultAnswer> mergedUpdateFaultAnswerList = new SmartList<FaultAnswer>();
+		
+		
+		mergedUpdateFaultAnswerList.addAll(faultAnswerList); 
+		if(faultAnswerList.getToRemoveList() != null){
+			//ensures the toRemoveList is not null
+			mergedUpdateFaultAnswerList.addAll(faultAnswerList.getToRemoveList());
+			faultAnswerList.removeAll(faultAnswerList.getToRemoveList());
+			//OK for now, need fix later
+		}
+
+		//adding new size can improve performance
+	
+		getFaultAnswerDAO().saveFaultAnswerList(mergedUpdateFaultAnswerList,options);
+		
+		if(faultAnswerList.getToRemoveList() != null){
+			faultAnswerList.removeAll(faultAnswerList.getToRemoveList());
+		}
+		
+		
+		return question;
+	
+	}
+	
+	protected Question removeFaultAnswerList(Question question, Map<String,Object> options){
+	
+	
+		SmartList<FaultAnswer> faultAnswerList = question.getFaultAnswerList();
+		if(faultAnswerList == null){
+			return question;
+		}	
+	
+		SmartList<FaultAnswer> toRemoveFaultAnswerList = faultAnswerList.getToRemoveList();
+		
+		if(toRemoveFaultAnswerList == null){
+			return question;
+		}
+		if(toRemoveFaultAnswerList.isEmpty()){
+			return question;// Does this mean delete all from the parent object?
+		}
+		//Call DAO to remove the list
+		
+		getFaultAnswerDAO().removeFaultAnswerList(toRemoveFaultAnswerList,options);
+		
+		return question;
+	
+	}
+	
+	
+
+ 	
+ 	
+	
+	
+	
+		
 
 	public Question present(Question question,Map<String, Object> options){
 	
 		presentAnswerList(question,options);
 		presentUserAnswerList(question,options);
+		presentFaultAnswerList(question,options);
 
 		return question;
 	
@@ -1010,6 +1256,26 @@ public class QuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements Question
 		return question;
 	}			
 		
+	//Using java8 feature to reduce the code significantly
+ 	protected Question presentFaultAnswerList(
+			Question question,
+			Map<String, Object> options) {
+
+		SmartList<FaultAnswer> faultAnswerList = question.getFaultAnswerList();		
+				SmartList<FaultAnswer> newList= presentSubList(question.getId(),
+				faultAnswerList,
+				options,
+				getFaultAnswerDAO()::countFaultAnswerByQuestion,
+				getFaultAnswerDAO()::findFaultAnswerByQuestion
+				);
+
+		
+		question.setFaultAnswerList(newList);
+		
+
+		return question;
+	}			
+		
 
 	
     public SmartList<Question> requestCandidateQuestionForAnswer(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception {
@@ -1019,6 +1285,12 @@ public class QuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements Question
     }
 		
     public SmartList<Question> requestCandidateQuestionForUserAnswer(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception {
+        // NOTE: by default, ignore owner info, just return all by filter key.
+		// You need override this method if you have different candidate-logic
+		return findAllCandidateByFilter(QuestionTable.COLUMN_TOPIC, filterKey, pageNo, pageSize, getQuestionMapper());
+    }
+		
+    public SmartList<Question> requestCandidateQuestionForFaultAnswer(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception {
         // NOTE: by default, ignore owner info, just return all by filter key.
 		// You need override this method if you have different candidate-logic
 		return findAllCandidateByFilter(QuestionTable.COLUMN_TOPIC, filterKey, pageNo, pageSize, getQuestionMapper());
@@ -1078,6 +1350,29 @@ public class QuestionJDBCTemplateDAO extends BcexBaseDAOImpl implements Question
 			SmartList<UserAnswer> loadedSmartList = new SmartList<>();
 			loadedSmartList.addAll(loadedList);
 			it.setUserAnswerList(loadedSmartList);
+		});
+		return loadedObjs;
+	}
+	
+	// 需要一个加载引用我的对象的enhance方法:FaultAnswer的question的FaultAnswerList
+	public SmartList<FaultAnswer> loadOurFaultAnswerList(BcexUserContext userContext, List<Question> us, Map<String,Object> options) throws Exception{
+		if (us == null || us.isEmpty()){
+			return new SmartList<>();
+		}
+		Set<String> ids = us.stream().map(it->it.getId()).collect(Collectors.toSet());
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(FaultAnswer.QUESTION_PROPERTY, ids.toArray(new String[ids.size()]));
+		SmartList<FaultAnswer> loadedObjs = userContext.getDAOGroup().getFaultAnswerDAO().findFaultAnswerWithKey(key, options);
+		Map<String, List<FaultAnswer>> loadedMap = loadedObjs.stream().collect(Collectors.groupingBy(it->it.getQuestion().getId()));
+		us.forEach(it->{
+			String id = it.getId();
+			List<FaultAnswer> loadedList = loadedMap.get(id);
+			if (loadedList == null || loadedList.isEmpty()) {
+				return;
+			}
+			SmartList<FaultAnswer> loadedSmartList = new SmartList<>();
+			loadedSmartList.addAll(loadedList);
+			it.setFaultAnswerList(loadedSmartList);
 		});
 		return loadedObjs;
 	}

@@ -21,14 +21,12 @@ import com.doublechaintech.bcex.BcexCheckerManager;
 import com.doublechaintech.bcex.CustomBcexCheckerManager;
 
 import com.doublechaintech.bcex.examstatus.ExamStatus;
-import com.doublechaintech.bcex.faultanswer.FaultAnswer;
 import com.doublechaintech.bcex.useranswer.UserAnswer;
 import com.doublechaintech.bcex.wechatuser.WechatUser;
 
 import com.doublechaintech.bcex.examstatus.CandidateExamStatus;
 import com.doublechaintech.bcex.wechatuser.CandidateWechatUser;
 
-import com.doublechaintech.bcex.wechatuser.WechatUser;
 import com.doublechaintech.bcex.question.Question;
 import com.doublechaintech.bcex.exam.Exam;
 
@@ -161,10 +159,6 @@ public class ExamManagerImpl extends CustomBcexCheckerManager implements ExamMan
 		addAction(userContext, exam, tokens,"exam.removeUserAnswer","removeUserAnswer","removeUserAnswer/"+exam.getId()+"/","userAnswerList","primary");
 		addAction(userContext, exam, tokens,"exam.updateUserAnswer","updateUserAnswer","updateUserAnswer/"+exam.getId()+"/","userAnswerList","primary");
 		addAction(userContext, exam, tokens,"exam.copyUserAnswerFrom","copyUserAnswerFrom","copyUserAnswerFrom/"+exam.getId()+"/","userAnswerList","primary");
-		addAction(userContext, exam, tokens,"exam.addFaultAnswer","addFaultAnswer","addFaultAnswer/"+exam.getId()+"/","faultAnswerList","primary");
-		addAction(userContext, exam, tokens,"exam.removeFaultAnswer","removeFaultAnswer","removeFaultAnswer/"+exam.getId()+"/","faultAnswerList","primary");
-		addAction(userContext, exam, tokens,"exam.updateFaultAnswer","updateFaultAnswer","updateFaultAnswer/"+exam.getId()+"/","faultAnswerList","primary");
-		addAction(userContext, exam, tokens,"exam.copyFaultAnswerFrom","copyFaultAnswerFrom","copyFaultAnswerFrom/"+exam.getId()+"/","faultAnswerList","primary");
 	
 		
 		
@@ -338,7 +332,6 @@ public class ExamManagerImpl extends CustomBcexCheckerManager implements ExamMan
 	protected Map<String,Object> viewTokens(){
 		return tokens().allTokens()
 		.sortUserAnswerListWith("id","desc")
-		.sortFaultAnswerListWith("id","desc")
 		.analyzeAllLists().done();
 
 	}
@@ -555,24 +548,6 @@ public class ExamManagerImpl extends CustomBcexCheckerManager implements ExamMan
 				examDaoOf(userContext).planToRemoveUserAnswerListWithQuestion(exam, questionId, this.emptyOptions());
 
 				exam = saveExam(userContext, exam, tokens().withUserAnswerList().done());
-				return exam;
-			}
-	}
-	//disconnect Exam with user in FaultAnswer
-	protected Exam breakWithFaultAnswerByUser(BcexUserContext userContext, String examId, String userId,  String [] tokensExpr)
-		 throws Exception{
-			
-			//TODO add check code here
-			
-			Exam exam = loadExam(userContext, examId, allTokens());
-
-			synchronized(exam){ 
-				//Will be good when the thread loaded from this JVM process cache.
-				//Also good when there is a RAM based DAO implementation
-				
-				examDaoOf(userContext).planToRemoveFaultAnswerListWithUser(exam, userId, this.emptyOptions());
-
-				exam = saveExam(userContext, exam, tokens().withFaultAnswerList().done());
 				return exam;
 			}
 	}
@@ -815,260 +790,6 @@ public class ExamManagerImpl extends CustomBcexCheckerManager implements ExamMan
 			userAnswer.changeProperty(property, newValueExpr);
 			
 			exam = saveExam(userContext, exam, tokens().withUserAnswerList().done());
-			return present(userContext,exam, mergedAllTokens(tokensExpr));
-		}
-
-	}
-	/*
-
-	*/
-	
-
-
-
-	protected void checkParamsForAddingFaultAnswer(BcexUserContext userContext, String examId, String topic, String yourAnswer, String rightAnswer, String userId,String [] tokensExpr) throws Exception{
-		
-				checkerOf(userContext).checkIdOfExam(examId);
-
-		
-		checkerOf(userContext).checkTopicOfFaultAnswer(topic);
-		
-		checkerOf(userContext).checkYourAnswerOfFaultAnswer(yourAnswer);
-		
-		checkerOf(userContext).checkRightAnswerOfFaultAnswer(rightAnswer);
-		
-		checkerOf(userContext).checkUserIdOfFaultAnswer(userId);
-	
-		checkerOf(userContext).throwExceptionIfHasErrors(ExamManagerException.class);
-
-	
-	}
-	public  Exam addFaultAnswer(BcexUserContext userContext, String examId, String topic, String yourAnswer, String rightAnswer, String userId, String [] tokensExpr) throws Exception
-	{	
-		
-		checkParamsForAddingFaultAnswer(userContext,examId,topic, yourAnswer, rightAnswer, userId,tokensExpr);
-		
-		FaultAnswer faultAnswer = createFaultAnswer(userContext,topic, yourAnswer, rightAnswer, userId);
-		
-		Exam exam = loadExam(userContext, examId, allTokens());
-		synchronized(exam){ 
-			//Will be good when the exam loaded from this JVM process cache.
-			//Also good when there is a RAM based DAO implementation
-			exam.addFaultAnswer( faultAnswer );		
-			exam = saveExam(userContext, exam, tokens().withFaultAnswerList().done());
-			
-			userContext.getManagerGroup().getFaultAnswerManager().onNewInstanceCreated(userContext, faultAnswer);
-			return present(userContext,exam, mergedAllTokens(tokensExpr));
-		}
-	}
-	protected void checkParamsForUpdatingFaultAnswerProperties(BcexUserContext userContext, String examId,String id,String topic,String yourAnswer,String rightAnswer,String [] tokensExpr) throws Exception {
-		
-		checkerOf(userContext).checkIdOfExam(examId);
-		checkerOf(userContext).checkIdOfFaultAnswer(id);
-		
-		checkerOf(userContext).checkTopicOfFaultAnswer( topic);
-		checkerOf(userContext).checkYourAnswerOfFaultAnswer( yourAnswer);
-		checkerOf(userContext).checkRightAnswerOfFaultAnswer( rightAnswer);
-
-		checkerOf(userContext).throwExceptionIfHasErrors(ExamManagerException.class);
-		
-	}
-	public  Exam updateFaultAnswerProperties(BcexUserContext userContext, String examId, String id,String topic,String yourAnswer,String rightAnswer, String [] tokensExpr) throws Exception
-	{	
-		checkParamsForUpdatingFaultAnswerProperties(userContext,examId,id,topic,yourAnswer,rightAnswer,tokensExpr);
-
-		Map<String, Object> options = tokens()
-				.allTokens()
-				//.withFaultAnswerListList()
-				.searchFaultAnswerListWith(FaultAnswer.ID_PROPERTY, "is", id).done();
-		
-		Exam examToUpdate = loadExam(userContext, examId, options);
-		
-		if(examToUpdate.getFaultAnswerList().isEmpty()){
-			throw new ExamManagerException("FaultAnswer is NOT FOUND with id: '"+id+"'");
-		}
-		
-		FaultAnswer item = examToUpdate.getFaultAnswerList().first();
-		
-		item.updateTopic( topic );
-		item.updateYourAnswer( yourAnswer );
-		item.updateRightAnswer( rightAnswer );
-
-		
-		//checkParamsForAddingFaultAnswer(userContext,examId,name, code, used,tokensExpr);
-		Exam exam = saveExam(userContext, examToUpdate, tokens().withFaultAnswerList().done());
-		synchronized(exam){ 
-			return present(userContext,exam, mergedAllTokens(tokensExpr));
-		}
-	}
-	
-	
-	protected FaultAnswer createFaultAnswer(BcexUserContext userContext, String topic, String yourAnswer, String rightAnswer, String userId) throws Exception{
-
-		FaultAnswer faultAnswer = new FaultAnswer();
-		
-		
-		faultAnswer.setTopic(topic);		
-		faultAnswer.setYourAnswer(yourAnswer);		
-		faultAnswer.setRightAnswer(rightAnswer);		
-		faultAnswer.setCreateTime(userContext.now());		
-		WechatUser  user = new WechatUser();
-		user.setId(userId);		
-		faultAnswer.setUser(user);
-	
-		
-		return faultAnswer;
-	
-		
-	}
-	
-	protected FaultAnswer createIndexedFaultAnswer(String id, int version){
-
-		FaultAnswer faultAnswer = new FaultAnswer();
-		faultAnswer.setId(id);
-		faultAnswer.setVersion(version);
-		return faultAnswer;			
-		
-	}
-	
-	protected void checkParamsForRemovingFaultAnswerList(BcexUserContext userContext, String examId, 
-			String faultAnswerIds[],String [] tokensExpr) throws Exception {
-		
-		checkerOf(userContext).checkIdOfExam(examId);
-		for(String faultAnswerIdItem: faultAnswerIds){
-			checkerOf(userContext).checkIdOfFaultAnswer(faultAnswerIdItem);
-		}
-		
-		checkerOf(userContext).throwExceptionIfHasErrors(ExamManagerException.class);
-		
-	}
-	public  Exam removeFaultAnswerList(BcexUserContext userContext, String examId, 
-			String faultAnswerIds[],String [] tokensExpr) throws Exception{
-			
-			checkParamsForRemovingFaultAnswerList(userContext, examId,  faultAnswerIds, tokensExpr);
-			
-			
-			Exam exam = loadExam(userContext, examId, allTokens());
-			synchronized(exam){ 
-				//Will be good when the exam loaded from this JVM process cache.
-				//Also good when there is a RAM based DAO implementation
-				examDaoOf(userContext).planToRemoveFaultAnswerList(exam, faultAnswerIds, allTokens());
-				exam = saveExam(userContext, exam, tokens().withFaultAnswerList().done());
-				deleteRelationListInGraph(userContext, exam.getFaultAnswerList());
-				return present(userContext,exam, mergedAllTokens(tokensExpr));
-			}
-	}
-	
-	protected void checkParamsForRemovingFaultAnswer(BcexUserContext userContext, String examId, 
-		String faultAnswerId, int faultAnswerVersion,String [] tokensExpr) throws Exception{
-		
-		checkerOf(userContext).checkIdOfExam( examId);
-		checkerOf(userContext).checkIdOfFaultAnswer(faultAnswerId);
-		checkerOf(userContext).checkVersionOfFaultAnswer(faultAnswerVersion);
-		checkerOf(userContext).throwExceptionIfHasErrors(ExamManagerException.class);
-	
-	}
-	public  Exam removeFaultAnswer(BcexUserContext userContext, String examId, 
-		String faultAnswerId, int faultAnswerVersion,String [] tokensExpr) throws Exception{
-		
-		checkParamsForRemovingFaultAnswer(userContext,examId, faultAnswerId, faultAnswerVersion,tokensExpr);
-		
-		FaultAnswer faultAnswer = createIndexedFaultAnswer(faultAnswerId, faultAnswerVersion);
-		Exam exam = loadExam(userContext, examId, allTokens());
-		synchronized(exam){ 
-			//Will be good when the exam loaded from this JVM process cache.
-			//Also good when there is a RAM based DAO implementation
-			exam.removeFaultAnswer( faultAnswer );		
-			exam = saveExam(userContext, exam, tokens().withFaultAnswerList().done());
-			deleteRelationInGraph(userContext, faultAnswer);
-			return present(userContext,exam, mergedAllTokens(tokensExpr));
-		}
-		
-		
-	}
-	protected void checkParamsForCopyingFaultAnswer(BcexUserContext userContext, String examId, 
-		String faultAnswerId, int faultAnswerVersion,String [] tokensExpr) throws Exception{
-		
-		checkerOf(userContext).checkIdOfExam( examId);
-		checkerOf(userContext).checkIdOfFaultAnswer(faultAnswerId);
-		checkerOf(userContext).checkVersionOfFaultAnswer(faultAnswerVersion);
-		checkerOf(userContext).throwExceptionIfHasErrors(ExamManagerException.class);
-	
-	}
-	public  Exam copyFaultAnswerFrom(BcexUserContext userContext, String examId, 
-		String faultAnswerId, int faultAnswerVersion,String [] tokensExpr) throws Exception{
-		
-		checkParamsForCopyingFaultAnswer(userContext,examId, faultAnswerId, faultAnswerVersion,tokensExpr);
-		
-		FaultAnswer faultAnswer = createIndexedFaultAnswer(faultAnswerId, faultAnswerVersion);
-		Exam exam = loadExam(userContext, examId, allTokens());
-		synchronized(exam){ 
-			//Will be good when the exam loaded from this JVM process cache.
-			//Also good when there is a RAM based DAO implementation
-			
-			
-			
-			exam.copyFaultAnswerFrom( faultAnswer );		
-			exam = saveExam(userContext, exam, tokens().withFaultAnswerList().done());
-			
-			userContext.getManagerGroup().getFaultAnswerManager().onNewInstanceCreated(userContext, (FaultAnswer)exam.getFlexiableObjects().get(BaseEntity.COPIED_CHILD));
-			return present(userContext,exam, mergedAllTokens(tokensExpr));
-		}
-		
-	}
-	
-	protected void checkParamsForUpdatingFaultAnswer(BcexUserContext userContext, String examId, String faultAnswerId, int faultAnswerVersion, String property, String newValueExpr,String [] tokensExpr) throws Exception{
-		
-
-		
-		checkerOf(userContext).checkIdOfExam(examId);
-		checkerOf(userContext).checkIdOfFaultAnswer(faultAnswerId);
-		checkerOf(userContext).checkVersionOfFaultAnswer(faultAnswerVersion);
-		
-
-		if(FaultAnswer.TOPIC_PROPERTY.equals(property)){
-			checkerOf(userContext).checkTopicOfFaultAnswer(parseString(newValueExpr));
-		}
-		
-		if(FaultAnswer.YOUR_ANSWER_PROPERTY.equals(property)){
-			checkerOf(userContext).checkYourAnswerOfFaultAnswer(parseString(newValueExpr));
-		}
-		
-		if(FaultAnswer.RIGHT_ANSWER_PROPERTY.equals(property)){
-			checkerOf(userContext).checkRightAnswerOfFaultAnswer(parseString(newValueExpr));
-		}
-		
-	
-		checkerOf(userContext).throwExceptionIfHasErrors(ExamManagerException.class);
-	
-	}
-	
-	public  Exam updateFaultAnswer(BcexUserContext userContext, String examId, String faultAnswerId, int faultAnswerVersion, String property, String newValueExpr,String [] tokensExpr)
-			throws Exception{
-		
-		checkParamsForUpdatingFaultAnswer(userContext, examId, faultAnswerId, faultAnswerVersion, property, newValueExpr,  tokensExpr);
-		
-		Map<String,Object> loadTokens = this.tokens().withFaultAnswerList().searchFaultAnswerListWith(FaultAnswer.ID_PROPERTY, "eq", faultAnswerId).done();
-		
-		
-		
-		Exam exam = loadExam(userContext, examId, loadTokens);
-		
-		synchronized(exam){ 
-			//Will be good when the exam loaded from this JVM process cache.
-			//Also good when there is a RAM based DAO implementation
-			//exam.removeFaultAnswer( faultAnswer );	
-			//make changes to AcceleraterAccount.
-			FaultAnswer faultAnswerIndex = createIndexedFaultAnswer(faultAnswerId, faultAnswerVersion);
-		
-			FaultAnswer faultAnswer = exam.findTheFaultAnswer(faultAnswerIndex);
-			if(faultAnswer == null){
-				throw new ExamManagerException(faultAnswer+" is NOT FOUND" );
-			}
-			
-			faultAnswer.changeProperty(property, newValueExpr);
-			
-			exam = saveExam(userContext, exam, tokens().withFaultAnswerList().done());
 			return present(userContext,exam, mergedAllTokens(tokensExpr));
 		}
 

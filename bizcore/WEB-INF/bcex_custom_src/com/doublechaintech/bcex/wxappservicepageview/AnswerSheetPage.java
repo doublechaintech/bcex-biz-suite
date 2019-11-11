@@ -55,17 +55,16 @@ public class AnswerSheetPage extends BaseViewPage{
 	public void assemblerContent(BcexUserContext userContext, String requestName)throws Exception {
 		CustomBcexUserContextImpl ctx = (CustomBcexUserContextImpl)userContext;
 		Exam exam = ctx.getExam();
-		UserAnswer userAnswer = ctx.getUserAnswer();
 		List<Object> result = new ArrayList<>();
 		exam.getUserAnswerList().forEach(ans->{
 			try {
-				Question question = ctx.getDAOGroup().getQuestionDAO().load(userAnswer.getQuestion().getId(), EO);
+				Question question = ctx.getDAOGroup().getQuestionDAO().load(ans.getQuestion().getId(), EO);
 				List<Map<String, Object>> selections = new ArrayList<>();
-				addSelection(ctx, selections, userAnswer.getId(), "A", question.getOptionA());
-				addSelection(ctx, selections, userAnswer.getId(), "B", question.getOptionB());
-				addSelection(ctx, selections, userAnswer.getId(), "C", question.getOptionC());
-				addSelection(ctx, selections, userAnswer.getId(), "D", question.getOptionD());
-				addSelection(ctx, selections, userAnswer.getId(), "E", question.getOptionE());
+				addSelection(ctx, selections, ans.getId(), "A", question.getOptionA());
+				addSelection(ctx, selections, ans.getId(), "B", question.getOptionB());
+				addSelection(ctx, selections, ans.getId(), "C", question.getOptionC());
+				addSelection(ctx, selections, ans.getId(), "D", question.getOptionD());
+				addSelection(ctx, selections, ans.getId(), "E", question.getOptionE());
 				Collections.shuffle(selections);
 				
 				Map<String, Object> data = MapUtil.put("id", ans.getId())

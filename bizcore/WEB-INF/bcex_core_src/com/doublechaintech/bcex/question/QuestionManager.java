@@ -48,6 +48,16 @@ public interface QuestionManager{
 
 	*/
 
+	//public  FaultAnswerManager getFaultAnswerManager(BcexUserContext userContext, String questionId, String topic, String yourAnswer, String rightAnswer, String userId, int faultTimes ,String [] tokensExpr)  throws Exception;
+	
+	public  Question addFaultAnswer(BcexUserContext userContext, String questionId, String topic, String yourAnswer, String rightAnswer, String userId, int faultTimes , String [] tokensExpr)  throws Exception;
+	public  Question removeFaultAnswer(BcexUserContext userContext, String questionId, String faultAnswerId, int faultAnswerVersion,String [] tokensExpr)  throws Exception;
+	public  Question updateFaultAnswer(BcexUserContext userContext, String questionId, String faultAnswerId, int faultAnswerVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
+
+	/*
+
+	*/
+
 
 
 }

@@ -1459,15 +1459,15 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
 	}
 
 
-	//disconnect WechatUser with exam in FaultAnswer
-	public WechatUser planToRemoveFaultAnswerListWithExam(WechatUser wechatUser, String examId, Map<String,Object> options)throws Exception{
+	//disconnect WechatUser with question in FaultAnswer
+	public WechatUser planToRemoveFaultAnswerListWithQuestion(WechatUser wechatUser, String questionId, Map<String,Object> options)throws Exception{
 				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
 		//the list will not be null here, empty, maybe
 		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
 		
 		MultipleAccessKey key = new MultipleAccessKey();
 		key.put(FaultAnswer.USER_PROPERTY, wechatUser.getId());
-		key.put(FaultAnswer.EXAM_PROPERTY, examId);
+		key.put(FaultAnswer.QUESTION_PROPERTY, questionId);
 		
 		SmartList<FaultAnswer> externalFaultAnswerList = getFaultAnswerDAO().
 				findFaultAnswerWithKey(key, options);
@@ -1479,7 +1479,7 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
 		}
 		
 		for(FaultAnswer faultAnswerItem: externalFaultAnswerList){
-			faultAnswerItem.clearExam();
+			faultAnswerItem.clearQuestion();
 			faultAnswerItem.clearUser();
 			
 		}
@@ -1490,14 +1490,14 @@ public class WechatUserJDBCTemplateDAO extends BcexBaseDAOImpl implements Wechat
 		return wechatUser;
 	}
 	
-	public int countFaultAnswerListWithExam(String wechatUserId, String examId, Map<String,Object> options)throws Exception{
+	public int countFaultAnswerListWithQuestion(String wechatUserId, String questionId, Map<String,Object> options)throws Exception{
 				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
 		//the list will not be null here, empty, maybe
 		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
 
 		MultipleAccessKey key = new MultipleAccessKey();
 		key.put(FaultAnswer.USER_PROPERTY, wechatUserId);
-		key.put(FaultAnswer.EXAM_PROPERTY, examId);
+		key.put(FaultAnswer.QUESTION_PROPERTY, questionId);
 		
 		int count = getFaultAnswerDAO().countFaultAnswerWithKey(key, options);
 		return count;

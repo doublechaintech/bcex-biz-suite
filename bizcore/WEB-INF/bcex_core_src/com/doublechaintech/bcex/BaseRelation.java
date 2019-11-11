@@ -148,7 +148,7 @@ public class BaseRelation{
 		String [] userAnswerRelatedObjectNames = {"question:Question","exam:Exam"};
 		addRelationIndex("UserAnswer",userAnswerRelatedObjectNames);
 
-		String [] faultAnswerRelatedObjectNames = {"user:WechatUser","exam:Exam"};
+		String [] faultAnswerRelatedObjectNames = {"user:WechatUser","question:Question"};
 		addRelationIndex("FaultAnswer",faultAnswerRelatedObjectNames);
 
 		String [] userWhiteListRelatedObjectNames = {"domain:UserDomain"};
@@ -227,7 +227,7 @@ public class BaseRelation{
 		addGenericRelation("UserAnswer"                            ,TRUST_CHAIN_READ,"question");
 		addGenericRelation("UserAnswer"                            ,TRUST_CHAIN_READ,"exam");
 		addGenericRelation("FaultAnswer"                           ,TRUST_CHAIN_READ,"user");
-		addGenericRelation("FaultAnswer"                           ,TRUST_CHAIN_READ,"exam");
+		addGenericRelation("FaultAnswer"                           ,TRUST_CHAIN_READ,"question");
 		addGenericRelation("UserWhiteList"                         ,TRUST_CHAIN_READ,"domain");
 		addGenericRelation("SecUser"                               ,TRUST_CHAIN_READ,"domain");
 		addGenericRelation("UserApp"                               ,TRUST_CHAIN_READ,"secUser");

@@ -73,14 +73,14 @@ public class FaultAnswerTokens extends CommonTokens{
 		
 		return start()
 			.withUser()
-			.withExam();
+			.withQuestion();
 	
 	}
 	public static FaultAnswerTokens withoutListsTokens(){
 		
 		return start()
 			.withUser()
-			.withExam();
+			.withQuestion();
 	
 	}
 	
@@ -109,12 +109,12 @@ public class FaultAnswerTokens extends CommonTokens{
 	}
 	
 	
-	protected static final String EXAM = "exam";
-	public String getExam(){
-		return EXAM;
+	protected static final String QUESTION = "question";
+	public String getQuestion(){
+		return QUESTION;
 	}
-	public FaultAnswerTokens withExam(){		
-		addSimpleOptions(EXAM);
+	public FaultAnswerTokens withQuestion(){		
+		addSimpleOptions(QUESTION);
 		return this;
 	}
 	

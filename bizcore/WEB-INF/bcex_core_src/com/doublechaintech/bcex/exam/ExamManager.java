@@ -39,16 +39,6 @@ public interface ExamManager{
 
 	*/
 
-	//public  FaultAnswerManager getFaultAnswerManager(BcexUserContext userContext, String examId, String topic, String yourAnswer, String rightAnswer, String userId ,String [] tokensExpr)  throws Exception;
-	
-	public  Exam addFaultAnswer(BcexUserContext userContext, String examId, String topic, String yourAnswer, String rightAnswer, String userId , String [] tokensExpr)  throws Exception;
-	public  Exam removeFaultAnswer(BcexUserContext userContext, String examId, String faultAnswerId, int faultAnswerVersion,String [] tokensExpr)  throws Exception;
-	public  Exam updateFaultAnswer(BcexUserContext userContext, String examId, String faultAnswerId, int faultAnswerVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
-
-	/*
-
-	*/
-
 
 
 }

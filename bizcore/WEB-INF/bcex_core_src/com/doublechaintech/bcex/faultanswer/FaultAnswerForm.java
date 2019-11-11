@@ -104,17 +104,31 @@ public class FaultAnswerForm extends BaseForm {
 	}
 
 
-	public FaultAnswerForm examIdField(String parameterName, String initValue){
-		FormField field = examIdFromFaultAnswer(parameterName, initValue);		
+	public FaultAnswerForm questionIdField(String parameterName, String initValue){
+		FormField field = questionIdFromFaultAnswer(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public FaultAnswerForm examIdField(String initValue){
-		return examIdField("examId",initValue);
+	public FaultAnswerForm questionIdField(String initValue){
+		return questionIdField("questionId",initValue);
 	}
-	public FaultAnswerForm examIdField(){
-		return examIdField("examId","");
+	public FaultAnswerForm questionIdField(){
+		return questionIdField("questionId","");
+	}
+
+
+	public FaultAnswerForm faultTimesField(String parameterName, String initValue){
+		FormField field = faultTimesFromFaultAnswer(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public FaultAnswerForm faultTimesField(String initValue){
+		return faultTimesField("faultTimes",initValue);
+	}
+	public FaultAnswerForm faultTimesField(){
+		return faultTimesField("faultTimes","");
 	}
 
 	
@@ -205,87 +219,143 @@ public class FaultAnswerForm extends BaseForm {
 	}
 
 
-	public FaultAnswerForm examIdFieldOfExam(String parameterName, String initValue){
-		FormField field =  idFromExam(parameterName, initValue);
+	public FaultAnswerForm questionIdFieldOfQuestion(String parameterName, String initValue){
+		FormField field =  idFromQuestion(parameterName, initValue);
 		this.addFormField(field);	
 		return this;
 	}
 	
-	public FaultAnswerForm examIdFieldOfExam(String initValue){
-		return examIdFieldOfExam("examId",initValue);
+	public FaultAnswerForm questionIdFieldOfQuestion(String initValue){
+		return questionIdFieldOfQuestion("questionId",initValue);
 	}
-	public FaultAnswerForm examIdFieldOfExam(){
-		return examIdFieldOfExam("examId","");
+	public FaultAnswerForm questionIdFieldOfQuestion(){
+		return questionIdFieldOfQuestion("questionId","");
 	}
 
 
-	public FaultAnswerForm nameFieldOfExam(String parameterName, String initValue){
-		FormField field =  nameFromExam(parameterName, initValue);
+	public FaultAnswerForm topicFieldOfQuestion(String parameterName, String initValue){
+		FormField field =  topicFromQuestion(parameterName, initValue);
 		this.addFormField(field);	
 		return this;
 	}
 	
-	public FaultAnswerForm nameFieldOfExam(String initValue){
-		return nameFieldOfExam("name",initValue);
+	public FaultAnswerForm topicFieldOfQuestion(String initValue){
+		return topicFieldOfQuestion("topic",initValue);
 	}
-	public FaultAnswerForm nameFieldOfExam(){
-		return nameFieldOfExam("name","");
+	public FaultAnswerForm topicFieldOfQuestion(){
+		return topicFieldOfQuestion("topic","");
 	}
 
 
-	public FaultAnswerForm createTimeFieldOfExam(String parameterName, String initValue){
-		FormField field =  createTimeFromExam(parameterName, initValue);
+	public FaultAnswerForm levelFieldOfQuestion(String parameterName, String initValue){
+		FormField field =  levelFromQuestion(parameterName, initValue);
 		this.addFormField(field);	
 		return this;
 	}
 	
-	public FaultAnswerForm createTimeFieldOfExam(String initValue){
-		return createTimeFieldOfExam("createTime",initValue);
+	public FaultAnswerForm levelFieldOfQuestion(String initValue){
+		return levelFieldOfQuestion("level",initValue);
 	}
-	public FaultAnswerForm createTimeFieldOfExam(){
-		return createTimeFieldOfExam("createTime","");
+	public FaultAnswerForm levelFieldOfQuestion(){
+		return levelFieldOfQuestion("level","");
 	}
 
 
-	public FaultAnswerForm statusIdFieldOfExam(String parameterName, String initValue){
-		FormField field =  statusIdFromExam(parameterName, initValue);
+	public FaultAnswerForm optionAFieldOfQuestion(String parameterName, String initValue){
+		FormField field =  optionAFromQuestion(parameterName, initValue);
 		this.addFormField(field);	
 		return this;
 	}
 	
-	public FaultAnswerForm statusIdFieldOfExam(String initValue){
-		return statusIdFieldOfExam("statusId",initValue);
+	public FaultAnswerForm optionAFieldOfQuestion(String initValue){
+		return optionAFieldOfQuestion("optionA",initValue);
 	}
-	public FaultAnswerForm statusIdFieldOfExam(){
-		return statusIdFieldOfExam("statusId","");
+	public FaultAnswerForm optionAFieldOfQuestion(){
+		return optionAFieldOfQuestion("optionA","");
 	}
 
 
-	public FaultAnswerForm userIdFieldOfExam(String parameterName, String initValue){
-		FormField field =  userIdFromExam(parameterName, initValue);
+	public FaultAnswerForm optionBFieldOfQuestion(String parameterName, String initValue){
+		FormField field =  optionBFromQuestion(parameterName, initValue);
 		this.addFormField(field);	
 		return this;
 	}
 	
-	public FaultAnswerForm userIdFieldOfExam(String initValue){
-		return userIdFieldOfExam("userId",initValue);
+	public FaultAnswerForm optionBFieldOfQuestion(String initValue){
+		return optionBFieldOfQuestion("optionB",initValue);
 	}
-	public FaultAnswerForm userIdFieldOfExam(){
-		return userIdFieldOfExam("userId","");
+	public FaultAnswerForm optionBFieldOfQuestion(){
+		return optionBFieldOfQuestion("optionB","");
 	}
 
 
-	public FaultAnswerForm scoreFieldOfExam(String parameterName, String initValue){
-		FormField field =  scoreFromExam(parameterName, initValue);
+	public FaultAnswerForm optionCFieldOfQuestion(String parameterName, String initValue){
+		FormField field =  optionCFromQuestion(parameterName, initValue);
 		this.addFormField(field);	
 		return this;
 	}
 	
-	public FaultAnswerForm scoreFieldOfExam(String initValue){
-		return scoreFieldOfExam("score",initValue);
+	public FaultAnswerForm optionCFieldOfQuestion(String initValue){
+		return optionCFieldOfQuestion("optionC",initValue);
 	}
-	public FaultAnswerForm scoreFieldOfExam(){
-		return scoreFieldOfExam("score","");
+	public FaultAnswerForm optionCFieldOfQuestion(){
+		return optionCFieldOfQuestion("optionC","");
+	}
+
+
+	public FaultAnswerForm optionDFieldOfQuestion(String parameterName, String initValue){
+		FormField field =  optionDFromQuestion(parameterName, initValue);
+		this.addFormField(field);	
+		return this;
+	}
+	
+	public FaultAnswerForm optionDFieldOfQuestion(String initValue){
+		return optionDFieldOfQuestion("optionD",initValue);
+	}
+	public FaultAnswerForm optionDFieldOfQuestion(){
+		return optionDFieldOfQuestion("optionD","");
+	}
+
+
+	public FaultAnswerForm optionEFieldOfQuestion(String parameterName, String initValue){
+		FormField field =  optionEFromQuestion(parameterName, initValue);
+		this.addFormField(field);	
+		return this;
+	}
+	
+	public FaultAnswerForm optionEFieldOfQuestion(String initValue){
+		return optionEFieldOfQuestion("optionE",initValue);
+	}
+	public FaultAnswerForm optionEFieldOfQuestion(){
+		return optionEFieldOfQuestion("optionE","");
+	}
+
+
+	public FaultAnswerForm rightAnswerFieldOfQuestion(String parameterName, String initValue){
+		FormField field =  rightAnswerFromQuestion(parameterName, initValue);
+		this.addFormField(field);	
+		return this;
+	}
+	
+	public FaultAnswerForm rightAnswerFieldOfQuestion(String initValue){
+		return rightAnswerFieldOfQuestion("rightAnswer",initValue);
+	}
+	public FaultAnswerForm rightAnswerFieldOfQuestion(){
+		return rightAnswerFieldOfQuestion("rightAnswer","");
+	}
+
+
+	public FaultAnswerForm platformIdFieldOfQuestion(String parameterName, String initValue){
+		FormField field =  platformIdFromQuestion(parameterName, initValue);
+		this.addFormField(field);	
+		return this;
+	}
+	
+	public FaultAnswerForm platformIdFieldOfQuestion(String initValue){
+		return platformIdFieldOfQuestion("platformId",initValue);
+	}
+	public FaultAnswerForm platformIdFieldOfQuestion(){
+		return platformIdFieldOfQuestion("platformId","");
 	}
 
 	
@@ -304,11 +374,11 @@ public class FaultAnswerForm extends BaseForm {
 	}
 
  	
- 	public FaultAnswerForm transferToAnotherExamAction(){
+ 	public FaultAnswerForm transferToAnotherQuestionAction(){
 		FormAction action = new FormAction();
 		action.setLabel("显示");
 		action.setLocaleKey("show");
-		action.setUrl("transferToAnotherExam/faultAnswerId/");
+		action.setUrl("transferToAnotherQuestion/faultAnswerId/");
 		this.addFormAction(action);
 		return this;
 	}

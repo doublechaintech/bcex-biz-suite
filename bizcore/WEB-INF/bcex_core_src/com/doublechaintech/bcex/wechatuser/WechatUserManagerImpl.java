@@ -33,7 +33,7 @@ import com.doublechaintech.bcex.examstatus.ExamStatus;
 import com.doublechaintech.bcex.changerequest.ChangeRequest;
 import com.doublechaintech.bcex.useranswer.UserAnswer;
 import com.doublechaintech.bcex.wechatuser.WechatUser;
-import com.doublechaintech.bcex.exam.Exam;
+import com.doublechaintech.bcex.question.Question;
 
 
 
@@ -570,8 +570,8 @@ public class WechatUserManagerImpl extends CustomBcexCheckerManager implements W
 				return wechatUser;
 			}
 	}
-	//disconnect WechatUser with exam in FaultAnswer
-	protected WechatUser breakWithFaultAnswerByExam(BcexUserContext userContext, String wechatUserId, String examId,  String [] tokensExpr)
+	//disconnect WechatUser with question in FaultAnswer
+	protected WechatUser breakWithFaultAnswerByQuestion(BcexUserContext userContext, String wechatUserId, String questionId,  String [] tokensExpr)
 		 throws Exception{
 			
 			//TODO add check code here
@@ -582,7 +582,7 @@ public class WechatUserManagerImpl extends CustomBcexCheckerManager implements W
 				//Will be good when the thread loaded from this JVM process cache.
 				//Also good when there is a RAM based DAO implementation
 				
-				wechatUserDaoOf(userContext).planToRemoveFaultAnswerListWithExam(wechatUser, examId, this.emptyOptions());
+				wechatUserDaoOf(userContext).planToRemoveFaultAnswerListWithQuestion(wechatUser, questionId, this.emptyOptions());
 
 				wechatUser = saveWechatUser(userContext, wechatUser, tokens().withFaultAnswerList().done());
 				return wechatUser;
@@ -1572,7 +1572,7 @@ public class WechatUserManagerImpl extends CustomBcexCheckerManager implements W
 
 
 
-	protected void checkParamsForAddingFaultAnswer(BcexUserContext userContext, String wechatUserId, String topic, String yourAnswer, String rightAnswer, String examId,String [] tokensExpr) throws Exception{
+	protected void checkParamsForAddingFaultAnswer(BcexUserContext userContext, String wechatUserId, String topic, String yourAnswer, String rightAnswer, String questionId, int faultTimes,String [] tokensExpr) throws Exception{
 		
 				checkerOf(userContext).checkIdOfWechatUser(wechatUserId);
 
@@ -1583,18 +1583,20 @@ public class WechatUserManagerImpl extends CustomBcexCheckerManager implements W
 		
 		checkerOf(userContext).checkRightAnswerOfFaultAnswer(rightAnswer);
 		
-		checkerOf(userContext).checkExamIdOfFaultAnswer(examId);
+		checkerOf(userContext).checkQuestionIdOfFaultAnswer(questionId);
+		
+		checkerOf(userContext).checkFaultTimesOfFaultAnswer(faultTimes);
 	
 		checkerOf(userContext).throwExceptionIfHasErrors(WechatUserManagerException.class);
 
 	
 	}
-	public  WechatUser addFaultAnswer(BcexUserContext userContext, String wechatUserId, String topic, String yourAnswer, String rightAnswer, String examId, String [] tokensExpr) throws Exception
+	public  WechatUser addFaultAnswer(BcexUserContext userContext, String wechatUserId, String topic, String yourAnswer, String rightAnswer, String questionId, int faultTimes, String [] tokensExpr) throws Exception
 	{	
 		
-		checkParamsForAddingFaultAnswer(userContext,wechatUserId,topic, yourAnswer, rightAnswer, examId,tokensExpr);
+		checkParamsForAddingFaultAnswer(userContext,wechatUserId,topic, yourAnswer, rightAnswer, questionId, faultTimes,tokensExpr);
 		
-		FaultAnswer faultAnswer = createFaultAnswer(userContext,topic, yourAnswer, rightAnswer, examId);
+		FaultAnswer faultAnswer = createFaultAnswer(userContext,topic, yourAnswer, rightAnswer, questionId, faultTimes);
 		
 		WechatUser wechatUser = loadWechatUser(userContext, wechatUserId, allTokens());
 		synchronized(wechatUser){ 
@@ -1607,7 +1609,7 @@ public class WechatUserManagerImpl extends CustomBcexCheckerManager implements W
 			return present(userContext,wechatUser, mergedAllTokens(tokensExpr));
 		}
 	}
-	protected void checkParamsForUpdatingFaultAnswerProperties(BcexUserContext userContext, String wechatUserId,String id,String topic,String yourAnswer,String rightAnswer,String [] tokensExpr) throws Exception {
+	protected void checkParamsForUpdatingFaultAnswerProperties(BcexUserContext userContext, String wechatUserId,String id,String topic,String yourAnswer,String rightAnswer,int faultTimes,String [] tokensExpr) throws Exception {
 		
 		checkerOf(userContext).checkIdOfWechatUser(wechatUserId);
 		checkerOf(userContext).checkIdOfFaultAnswer(id);
@@ -1615,13 +1617,14 @@ public class WechatUserManagerImpl extends CustomBcexCheckerManager implements W
 		checkerOf(userContext).checkTopicOfFaultAnswer( topic);
 		checkerOf(userContext).checkYourAnswerOfFaultAnswer( yourAnswer);
 		checkerOf(userContext).checkRightAnswerOfFaultAnswer( rightAnswer);
+		checkerOf(userContext).checkFaultTimesOfFaultAnswer( faultTimes);
 
 		checkerOf(userContext).throwExceptionIfHasErrors(WechatUserManagerException.class);
 		
 	}
-	public  WechatUser updateFaultAnswerProperties(BcexUserContext userContext, String wechatUserId, String id,String topic,String yourAnswer,String rightAnswer, String [] tokensExpr) throws Exception
+	public  WechatUser updateFaultAnswerProperties(BcexUserContext userContext, String wechatUserId, String id,String topic,String yourAnswer,String rightAnswer,int faultTimes, String [] tokensExpr) throws Exception
 	{	
-		checkParamsForUpdatingFaultAnswerProperties(userContext,wechatUserId,id,topic,yourAnswer,rightAnswer,tokensExpr);
+		checkParamsForUpdatingFaultAnswerProperties(userContext,wechatUserId,id,topic,yourAnswer,rightAnswer,faultTimes,tokensExpr);
 
 		Map<String, Object> options = tokens()
 				.allTokens()
@@ -1639,6 +1642,7 @@ public class WechatUserManagerImpl extends CustomBcexCheckerManager implements W
 		item.updateTopic( topic );
 		item.updateYourAnswer( yourAnswer );
 		item.updateRightAnswer( rightAnswer );
+		item.updateFaultTimes( faultTimes );
 
 		
 		//checkParamsForAddingFaultAnswer(userContext,wechatUserId,name, code, used,tokensExpr);
@@ -1649,7 +1653,7 @@ public class WechatUserManagerImpl extends CustomBcexCheckerManager implements W
 	}
 	
 	
-	protected FaultAnswer createFaultAnswer(BcexUserContext userContext, String topic, String yourAnswer, String rightAnswer, String examId) throws Exception{
+	protected FaultAnswer createFaultAnswer(BcexUserContext userContext, String topic, String yourAnswer, String rightAnswer, String questionId, int faultTimes) throws Exception{
 
 		FaultAnswer faultAnswer = new FaultAnswer();
 		
@@ -1658,9 +1662,10 @@ public class WechatUserManagerImpl extends CustomBcexCheckerManager implements W
 		faultAnswer.setYourAnswer(yourAnswer);		
 		faultAnswer.setRightAnswer(rightAnswer);		
 		faultAnswer.setCreateTime(userContext.now());		
-		Exam  exam = new Exam();
-		exam.setId(examId);		
-		faultAnswer.setExam(exam);
+		Question  question = new Question();
+		question.setId(questionId);		
+		faultAnswer.setQuestion(question);		
+		faultAnswer.setFaultTimes(faultTimes);
 	
 		
 		return faultAnswer;
@@ -1782,6 +1787,10 @@ public class WechatUserManagerImpl extends CustomBcexCheckerManager implements W
 		
 		if(FaultAnswer.RIGHT_ANSWER_PROPERTY.equals(property)){
 			checkerOf(userContext).checkRightAnswerOfFaultAnswer(parseString(newValueExpr));
+		}
+		
+		if(FaultAnswer.FAULT_TIMES_PROPERTY.equals(property)){
+			checkerOf(userContext).checkFaultTimesOfFaultAnswer(parseInt(newValueExpr));
 		}
 		
 	

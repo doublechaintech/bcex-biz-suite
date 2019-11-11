@@ -13,7 +13,6 @@ import com.doublechaintech.bcex.KeyValuePair;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.doublechaintech.bcex.examstatus.ExamStatus;
-import com.doublechaintech.bcex.faultanswer.FaultAnswer;
 import com.doublechaintech.bcex.useranswer.UserAnswer;
 import com.doublechaintech.bcex.wechatuser.WechatUser;
 
@@ -30,7 +29,6 @@ public class Exam extends BaseEntity implements  java.io.Serializable{
 	public static final String VERSION_PROPERTY               = "version"           ;
 
 	public static final String USER_ANSWER_LIST                         = "userAnswerList"    ;
-	public static final String FAULT_ANSWER_LIST                        = "faultAnswerList"   ;
 
 	public static final String INTERNAL_TYPE="Exam";
 	public String getInternalType(){
@@ -61,7 +59,6 @@ public class Exam extends BaseEntity implements  java.io.Serializable{
 	
 	
 	protected		SmartList<UserAnswer>	mUserAnswerList     ;
-	protected		SmartList<FaultAnswer>	mFaultAnswerList    ;
 	
 		
 	public 	Exam(){
@@ -93,8 +90,7 @@ public class Exam extends BaseEntity implements  java.io.Serializable{
 		setUser(user);
 		setScore(score);
 
-		this.mUserAnswerList = new SmartList<UserAnswer>();
-		this.mFaultAnswerList = new SmartList<FaultAnswer>();	
+		this.mUserAnswerList = new SmartList<UserAnswer>();	
 	}
 	
 	//Support for changing the property
@@ -182,10 +178,6 @@ public class Exam extends BaseEntity implements  java.io.Serializable{
 		}
 		if(USER_ANSWER_LIST.equals(property)){
 			List<BaseEntity> list = getUserAnswerList().stream().map(item->item).collect(Collectors.toList());
-			return list;
-		}
-		if(FAULT_ANSWER_LIST.equals(property)){
-			List<BaseEntity> list = getFaultAnswerList().stream().map(item->item).collect(Collectors.toList());
 			return list;
 		}
 
@@ -429,113 +421,6 @@ public class Exam extends BaseEntity implements  java.io.Serializable{
 	
 
 
-	public  SmartList<FaultAnswer> getFaultAnswerList(){
-		if(this.mFaultAnswerList == null){
-			this.mFaultAnswerList = new SmartList<FaultAnswer>();
-			this.mFaultAnswerList.setListInternalName (FAULT_ANSWER_LIST );
-			//有名字，便于做权限控制
-		}
-		
-		return this.mFaultAnswerList;	
-	}
-	public  void setFaultAnswerList(SmartList<FaultAnswer> faultAnswerList){
-		for( FaultAnswer faultAnswer:faultAnswerList){
-			faultAnswer.setExam(this);
-		}
-
-		this.mFaultAnswerList = faultAnswerList;
-		this.mFaultAnswerList.setListInternalName (FAULT_ANSWER_LIST );
-		
-	}
-	
-	public  void addFaultAnswer(FaultAnswer faultAnswer){
-		faultAnswer.setExam(this);
-		getFaultAnswerList().add(faultAnswer);
-	}
-	public  void addFaultAnswerList(SmartList<FaultAnswer> faultAnswerList){
-		for( FaultAnswer faultAnswer:faultAnswerList){
-			faultAnswer.setExam(this);
-		}
-		getFaultAnswerList().addAll(faultAnswerList);
-	}
-	public  void mergeFaultAnswerList(SmartList<FaultAnswer> faultAnswerList){
-		if(faultAnswerList==null){
-			return;
-		}
-		if(faultAnswerList.isEmpty()){
-			return;
-		}
-		addFaultAnswerList( faultAnswerList );
-		
-	}
-	public  FaultAnswer removeFaultAnswer(FaultAnswer faultAnswerIndex){
-		
-		int index = getFaultAnswerList().indexOf(faultAnswerIndex);
-        if(index < 0){
-        	String message = "FaultAnswer("+faultAnswerIndex.getId()+") with version='"+faultAnswerIndex.getVersion()+"' NOT found!";
-            throw new IllegalStateException(message);
-        }
-        FaultAnswer faultAnswer = getFaultAnswerList().get(index);        
-        // faultAnswer.clearExam(); //disconnect with Exam
-        faultAnswer.clearFromAll(); //disconnect with Exam
-		
-		boolean result = getFaultAnswerList().planToRemove(faultAnswer);
-        if(!result){
-        	String message = "FaultAnswer("+faultAnswerIndex.getId()+") with version='"+faultAnswerIndex.getVersion()+"' NOT found!";
-            throw new IllegalStateException(message);
-        }
-        return faultAnswer;
-        
-	
-	}
-	//断舍离
-	public  void breakWithFaultAnswer(FaultAnswer faultAnswer){
-		
-		if(faultAnswer == null){
-			return;
-		}
-		faultAnswer.setExam(null);
-		//getFaultAnswerList().remove();
-	
-	}
-	
-	public  boolean hasFaultAnswer(FaultAnswer faultAnswer){
-	
-		return getFaultAnswerList().contains(faultAnswer);
-  
-	}
-	
-	public void copyFaultAnswerFrom(FaultAnswer faultAnswer) {
-
-		FaultAnswer faultAnswerInList = findTheFaultAnswer(faultAnswer);
-		FaultAnswer newFaultAnswer = new FaultAnswer();
-		faultAnswerInList.copyTo(newFaultAnswer);
-		newFaultAnswer.setVersion(0);//will trigger copy
-		getFaultAnswerList().add(newFaultAnswer);
-		addItemToFlexiableObject(COPIED_CHILD, newFaultAnswer);
-	}
-	
-	public  FaultAnswer findTheFaultAnswer(FaultAnswer faultAnswer){
-		
-		int index =  getFaultAnswerList().indexOf(faultAnswer);
-		//The input parameter must have the same id and version number.
-		if(index < 0){
- 			String message = "FaultAnswer("+faultAnswer.getId()+") with version='"+faultAnswer.getVersion()+"' NOT found!";
-			throw new IllegalStateException(message);
-		}
-		
-		return  getFaultAnswerList().get(index);
-		//Performance issue when using LinkedList, but it is almost an ArrayList for sure!
-	}
-	
-	public  void cleanUpFaultAnswerList(){
-		getFaultAnswerList().clear();
-	}
-	
-	
-	
-
-
 	public void collectRefercences(BaseEntity owner, List<BaseEntity> entityList, String internalType){
 
 		addToEntityList(this, entityList, getStatus(), internalType);
@@ -548,7 +433,6 @@ public class Exam extends BaseEntity implements  java.io.Serializable{
 		
 		List<BaseEntity> entityList = new ArrayList<BaseEntity>();
 		collectFromList(this, entityList, getUserAnswerList(), internalType);
-		collectFromList(this, entityList, getFaultAnswerList(), internalType);
 
 		return entityList;
 	}
@@ -557,7 +441,6 @@ public class Exam extends BaseEntity implements  java.io.Serializable{
 		List<SmartList<?>> listOfList = new ArrayList<SmartList<?>>();
 		
 		listOfList.add( getUserAnswerList());
-		listOfList.add( getFaultAnswerList());
 			
 
 		return listOfList;
@@ -578,11 +461,6 @@ public class Exam extends BaseEntity implements  java.io.Serializable{
 		if(!getUserAnswerList().isEmpty()){
 			appendKeyValuePair(result, "userAnswerCount", getUserAnswerList().getTotalCount());
 			appendKeyValuePair(result, "userAnswerCurrentPageNumber", getUserAnswerList().getCurrentPageNumber());
-		}
-		appendKeyValuePair(result, FAULT_ANSWER_LIST, getFaultAnswerList());
-		if(!getFaultAnswerList().isEmpty()){
-			appendKeyValuePair(result, "faultAnswerCount", getFaultAnswerList().getTotalCount());
-			appendKeyValuePair(result, "faultAnswerCurrentPageNumber", getFaultAnswerList().getCurrentPageNumber());
 		}
 
 		
@@ -606,7 +484,6 @@ public class Exam extends BaseEntity implements  java.io.Serializable{
 			dest.setScore(getScore());
 			dest.setVersion(getVersion());
 			dest.setUserAnswerList(getUserAnswerList());
-			dest.setFaultAnswerList(getFaultAnswerList());
 
 		}
 		super.copyTo(baseDest);
@@ -628,7 +505,6 @@ public class Exam extends BaseEntity implements  java.io.Serializable{
 			dest.mergeScore(getScore());
 			dest.mergeVersion(getVersion());
 			dest.mergeUserAnswerList(getUserAnswerList());
-			dest.mergeFaultAnswerList(getFaultAnswerList());
 
 		}
 		super.copyTo(baseDest);

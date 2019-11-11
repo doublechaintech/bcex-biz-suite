@@ -112,9 +112,9 @@ public interface WechatUserDAO{
 	public WechatUser planToRemoveFaultAnswerList(WechatUser wechatUser, String faultAnswerIds[], Map<String,Object> options)throws Exception;
 
 
-	//disconnect WechatUser with exam in FaultAnswer
-	public WechatUser planToRemoveFaultAnswerListWithExam(WechatUser wechatUser, String examId, Map<String,Object> options)throws Exception;
-	public int countFaultAnswerListWithExam(String wechatUserId, String examId, Map<String,Object> options)throws Exception;
+	//disconnect WechatUser with question in FaultAnswer
+	public WechatUser planToRemoveFaultAnswerListWithQuestion(WechatUser wechatUser, String questionId, Map<String,Object> options)throws Exception;
+	public int countFaultAnswerListWithQuestion(String wechatUserId, String questionId, Map<String,Object> options)throws Exception;
 	
 	
 	public SmartList<WechatUser> queryList(String sql, Object ... parmeters);

@@ -13,7 +13,7 @@ import com.doublechaintech.bcex.KeyValuePair;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.doublechaintech.bcex.wechatuser.WechatUser;
-import com.doublechaintech.bcex.exam.Exam;
+import com.doublechaintech.bcex.question.Question;
 
 @JsonSerialize(using = FaultAnswerSerializer.class)
 public class FaultAnswer extends BaseEntity implements  java.io.Serializable{
@@ -25,7 +25,8 @@ public class FaultAnswer extends BaseEntity implements  java.io.Serializable{
 	public static final String RIGHT_ANSWER_PROPERTY          = "rightAnswer"       ;
 	public static final String CREATE_TIME_PROPERTY           = "createTime"        ;
 	public static final String USER_PROPERTY                  = "user"              ;
-	public static final String EXAM_PROPERTY                  = "exam"              ;
+	public static final String QUESTION_PROPERTY              = "question"          ;
+	public static final String FAULT_TIMES_PROPERTY           = "faultTimes"        ;
 	public static final String VERSION_PROPERTY               = "version"           ;
 
 
@@ -54,7 +55,8 @@ public class FaultAnswer extends BaseEntity implements  java.io.Serializable{
 	protected		String              	mRightAnswer        ;
 	protected		DateTime            	mCreateTime         ;
 	protected		WechatUser          	mUser               ;
-	protected		Exam                	mExam               ;
+	protected		Question            	mQuestion           ;
+	protected		int                 	mFaultTimes         ;
 	protected		int                 	mVersion            ;
 	
 	
@@ -76,19 +78,20 @@ public class FaultAnswer extends BaseEntity implements  java.io.Serializable{
 	// disconnect from all, 中文就是一了百了，跟所有一切尘世断绝往来藏身于茫茫数据海洋
 	public 	void clearFromAll(){
 		setUser( null );
-		setExam( null );
+		setQuestion( null );
 
 		this.changed = true;
 	}
 	
-	public 	FaultAnswer(String topic, String yourAnswer, String rightAnswer, DateTime createTime, WechatUser user, Exam exam)
+	public 	FaultAnswer(String topic, String yourAnswer, String rightAnswer, DateTime createTime, WechatUser user, Question question, int faultTimes)
 	{
 		setTopic(topic);
 		setYourAnswer(yourAnswer);
 		setRightAnswer(rightAnswer);
 		setCreateTime(createTime);
 		setUser(user);
-		setExam(exam);
+		setQuestion(question);
+		setFaultTimes(faultTimes);
 	
 	}
 	
@@ -107,6 +110,9 @@ public class FaultAnswer extends BaseEntity implements  java.io.Serializable{
 		}
 		if(CREATE_TIME_PROPERTY.equals(property)){
 			changeCreateTimeProperty(newValueExpr);
+		}
+		if(FAULT_TIMES_PROPERTY.equals(property)){
+			changeFaultTimesProperty(newValueExpr);
 		}
 
       
@@ -173,6 +179,21 @@ public class FaultAnswer extends BaseEntity implements  java.io.Serializable{
 			
 			
 			
+	protected void changeFaultTimesProperty(String newValueExpr){
+		int oldValue = getFaultTimes();
+		int newValue = parseInt(newValueExpr);
+		if(equalsInt(oldValue , newValue)){
+			return;//they can be both null, or exact the same object, this is much faster than equals function
+		}
+		//they are surely different each other
+		updateFaultTimes(newValue);
+		this.onChangeProperty(FAULT_TIMES_PROPERTY, oldValue, newValue);
+		return;
+  
+	}
+			
+			
+			
 
 
 	
@@ -193,8 +214,11 @@ public class FaultAnswer extends BaseEntity implements  java.io.Serializable{
 		if(USER_PROPERTY.equals(property)){
 			return getUser();
 		}
-		if(EXAM_PROPERTY.equals(property)){
-			return getExam();
+		if(QUESTION_PROPERTY.equals(property)){
+			return getQuestion();
+		}
+		if(FAULT_TIMES_PROPERTY.equals(property)){
+			return getFaultTimes();
 		}
 
     		//other property not include here
@@ -308,26 +332,42 @@ public class FaultAnswer extends BaseEntity implements  java.io.Serializable{
 		this.changed = true;
 	}
 	
-	public void setExam(Exam exam){
-		this.mExam = exam;;
+	public void setQuestion(Question question){
+		this.mQuestion = question;;
 	}
-	public Exam getExam(){
-		return this.mExam;
+	public Question getQuestion(){
+		return this.mQuestion;
 	}
-	public FaultAnswer updateExam(Exam exam){
-		this.mExam = exam;;
+	public FaultAnswer updateQuestion(Question question){
+		this.mQuestion = question;;
 		this.changed = true;
 		return this;
 	}
-	public void mergeExam(Exam exam){
-		if(exam != null) { setExam(exam);}
+	public void mergeQuestion(Question question){
+		if(question != null) { setQuestion(question);}
 	}
 	
 	
-	public void clearExam(){
-		setExam ( null );
+	public void clearQuestion(){
+		setQuestion ( null );
 		this.changed = true;
 	}
+	
+	public void setFaultTimes(int faultTimes){
+		this.mFaultTimes = faultTimes;;
+	}
+	public int getFaultTimes(){
+		return this.mFaultTimes;
+	}
+	public FaultAnswer updateFaultTimes(int faultTimes){
+		this.mFaultTimes = faultTimes;;
+		this.changed = true;
+		return this;
+	}
+	public void mergeFaultTimes(int faultTimes){
+		setFaultTimes(faultTimes);
+	}
+	
 	
 	public void setVersion(int version){
 		this.mVersion = version;;
@@ -349,7 +389,7 @@ public class FaultAnswer extends BaseEntity implements  java.io.Serializable{
 	public void collectRefercences(BaseEntity owner, List<BaseEntity> entityList, String internalType){
 
 		addToEntityList(this, entityList, getUser(), internalType);
-		addToEntityList(this, entityList, getExam(), internalType);
+		addToEntityList(this, entityList, getQuestion(), internalType);
 
 		
 	}
@@ -379,7 +419,8 @@ public class FaultAnswer extends BaseEntity implements  java.io.Serializable{
 		appendKeyValuePair(result, RIGHT_ANSWER_PROPERTY, getRightAnswer());
 		appendKeyValuePair(result, CREATE_TIME_PROPERTY, getCreateTime());
 		appendKeyValuePair(result, USER_PROPERTY, getUser());
-		appendKeyValuePair(result, EXAM_PROPERTY, getExam());
+		appendKeyValuePair(result, QUESTION_PROPERTY, getQuestion());
+		appendKeyValuePair(result, FAULT_TIMES_PROPERTY, getFaultTimes());
 		appendKeyValuePair(result, VERSION_PROPERTY, getVersion());
 
 		
@@ -401,7 +442,8 @@ public class FaultAnswer extends BaseEntity implements  java.io.Serializable{
 			dest.setRightAnswer(getRightAnswer());
 			dest.setCreateTime(getCreateTime());
 			dest.setUser(getUser());
-			dest.setExam(getExam());
+			dest.setQuestion(getQuestion());
+			dest.setFaultTimes(getFaultTimes());
 			dest.setVersion(getVersion());
 
 		}
@@ -422,7 +464,8 @@ public class FaultAnswer extends BaseEntity implements  java.io.Serializable{
 			dest.mergeRightAnswer(getRightAnswer());
 			dest.mergeCreateTime(getCreateTime());
 			dest.mergeUser(getUser());
-			dest.mergeExam(getExam());
+			dest.mergeQuestion(getQuestion());
+			dest.mergeFaultTimes(getFaultTimes());
 			dest.mergeVersion(getVersion());
 
 		}
@@ -443,6 +486,7 @@ public class FaultAnswer extends BaseEntity implements  java.io.Serializable{
 			dest.mergeYourAnswer(getYourAnswer());
 			dest.mergeRightAnswer(getRightAnswer());
 			dest.mergeCreateTime(getCreateTime());
+			dest.mergeFaultTimes(getFaultTimes());
 			dest.mergeVersion(getVersion());
 
 		}
@@ -461,9 +505,10 @@ public class FaultAnswer extends BaseEntity implements  java.io.Serializable{
 		if(getUser() != null ){
  			stringBuilder.append("\tuser='WechatUser("+getUser().getId()+")';");
  		}
-		if(getExam() != null ){
- 			stringBuilder.append("\texam='Exam("+getExam().getId()+")';");
+		if(getQuestion() != null ){
+ 			stringBuilder.append("\tquestion='Question("+getQuestion().getId()+")';");
  		}
+		stringBuilder.append("\tfaultTimes='"+getFaultTimes()+"';");
 		stringBuilder.append("\tversion='"+getVersion()+"';");
 		stringBuilder.append("}");
 
@@ -471,6 +516,13 @@ public class FaultAnswer extends BaseEntity implements  java.io.Serializable{
 	}
 	
 	//provide number calculation function
+	
+	public void increaseFaultTimes(int incFaultTimes){
+		updateFaultTimes(this.mFaultTimes +  incFaultTimes);
+	}
+	public void decreaseFaultTimes(int decFaultTimes){
+		updateFaultTimes(this.mFaultTimes - decFaultTimes);
+	}
 	
 
 }

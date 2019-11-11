@@ -22,6 +22,7 @@
 <li><span>${userContext.localeMap['fault_answer.your_answer']}</span> ${faultAnswer.yourAnswer}</li>
 <li><span>${userContext.localeMap['fault_answer.right_answer']}</span> ${faultAnswer.rightAnswer}</li>
 <li><span>${userContext.localeMap['fault_answer.create_time']}</span> <fmt:formatDate pattern="yyyy-MM-dd" value="${faultAnswer.createTime}" /></li>
+<li><span>${userContext.localeMap['fault_answer.fault_times']}</span> ${faultAnswer.faultTimes}</li>
 
 	
 	</ul>

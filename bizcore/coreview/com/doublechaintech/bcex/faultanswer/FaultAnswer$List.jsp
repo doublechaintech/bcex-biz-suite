@@ -113,8 +113,11 @@
 <c:if test="${param.referName ne 'user'}">
 	<th>${userContext.localeMap['fault_answer.user']}</th>
 </c:if>
-<c:if test="${param.referName ne 'exam'}">
-	<th>${userContext.localeMap['fault_answer.exam']}</th>
+<c:if test="${param.referName ne 'question'}">
+	<th>${userContext.localeMap['fault_answer.question']}</th>
+</c:if>
+<c:if test="${param.referName ne 'faultTimes'}">
+	<th>${userContext.localeMap['fault_answer.fault_times']}</th>
 </c:if>
 <th>${userContext.localeMap['@action']}</th>
 		</tr></thead>
@@ -145,16 +148,16 @@
 		</div>
 	</td>
 </c:if>
-<c:if test="${param.referName ne 'exam'}">
+<c:if test="${param.referName ne 'question'}">
 	<td class="select_candidate_td"
-			data-candidate-method="./faultAnswerManager/requestCandidateExam/${ownerBeanName}/${item.id}/"
-			data-switch-method="./faultAnswerManager/transferToAnotherExam/${item.id}/"
-			data-link-template="./examManager/view/${'$'}{ID}/">
+			data-candidate-method="./faultAnswerManager/requestCandidateQuestion/${ownerBeanName}/${item.id}/"
+			data-switch-method="./faultAnswerManager/transferToAnotherQuestion/${item.id}/"
+			data-link-template="./questionManager/view/${'$'}{ID}/">
 		<span class="display_span">
-			<c:if test="${not empty  item.exam}">
-			<a href='./examManager/view/${item.exam.id}/'>${item.exam.displayName}</a>
+			<c:if test="${not empty  item.question}">
+			<a href='./questionManager/view/${item.question.id}/'>${item.question.displayName}</a>
 			</c:if>
-			<c:if test="${empty  item.exam}">
+			<c:if test="${empty  item.question}">
 			<a href='#'></a>
 			</c:if>
 			<button class="btn btn-link candidate-action">...</button>
@@ -164,7 +167,8 @@
 		</div>
 	</td>
 </c:if>
-
+<c:if test="${param.referName ne 'faultTimes'}">	<td contenteditable='true' class='edit-value'  propertyToChange='faultTimes' storedCellValue='${item.faultTimes}' prefix='${ownerBeanName}Manager/updateFaultAnswer/${result.id}/${item.id}/'>${item.faultTimes}</td>
+</c:if>
 				<td>
 
 				<a href='#${ownerBeanName}Manager/removeFaultAnswer/${result.id}/${item.id}/' class='delete-action btn btn-danger btn-xs'><i class="fa fa-trash-o fa-lg"></i> ${userContext.localeMap['@delete']}</a>

@@ -507,6 +507,7 @@ public abstract class BaseViewPage extends HashMap<String, Object> {
 		Map<String, Object> resultMap = new HashMap<>();
 		SerializeScope ssWrapper = SerializeScope.INCLUDE().field("data", serializeScope).noListMeta();
 		handleOneData(resultMap, ssWrapper, "/", "data", object);
+		addFieldToOwner(resultMap, null, "dataContainer", this.dataContainer);
 		if (object instanceof Collection) {
 			return resultMap;
 		}

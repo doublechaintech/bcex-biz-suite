@@ -212,6 +212,7 @@ public class BcexBaseViewScope {
 		.field(FaultAnswer.YOUR_ANSWER_PROPERTY)
 		.field(FaultAnswer.RIGHT_ANSWER_PROPERTY)
 		.field(FaultAnswer.CREATE_TIME_PROPERTY)
+		.field(FaultAnswer.FAULT_TIMES_PROPERTY)
 		;
 	/** 用于FaultAnswer的子对象的详情页时需要序列化的属性列表 */
 	public static SerializeScope getFaultAnswerSummaryScope() {
@@ -617,6 +618,7 @@ public class BcexBaseViewScope {
 		.field(FaultAnswer.YOUR_ANSWER_PROPERTY)
 		.field(FaultAnswer.RIGHT_ANSWER_PROPERTY)
 		.field(FaultAnswer.CREATE_TIME_PROPERTY)
+		.field(FaultAnswer.FAULT_TIMES_PROPERTY)
 		;
 	/** 用于FaultAnswer的父对象的列表时需要序列化的属性列表 */
 	public static SerializeScope getFaultAnswerSecondaryListItemScope() {
@@ -962,6 +964,7 @@ public class BcexBaseViewScope {
 		.field(Question.PLATFORM_PROPERTY, getPlatformSummaryScope())
 		.field(Question.ANSWER_LIST, getAnswerSecondaryListItemScope())
 		.field(Question.USER_ANSWER_LIST, getUserAnswerSecondaryListItemScope())
+		.field(Question.FAULT_ANSWER_LIST, getFaultAnswerSecondaryListItemScope())
 		;
 	/** 用于Question对象的列表时需要序列化的属性列表 */
 	public static SerializeScope getQuestionListItemScope() {
@@ -1034,7 +1037,6 @@ public class BcexBaseViewScope {
 		.field(Exam.USER_PROPERTY, getWechatUserSummaryScope())
 		.field(Exam.SCORE_PROPERTY)
 		.field(Exam.USER_ANSWER_LIST, getUserAnswerSecondaryListItemScope())
-		.field(Exam.FAULT_ANSWER_LIST, getFaultAnswerSecondaryListItemScope())
 		;
 	/** 用于Exam对象的列表时需要序列化的属性列表 */
 	public static SerializeScope getExamListItemScope() {
@@ -1063,7 +1065,8 @@ public class BcexBaseViewScope {
 		.field(FaultAnswer.RIGHT_ANSWER_PROPERTY)
 		.field(FaultAnswer.CREATE_TIME_PROPERTY)
 		.field(FaultAnswer.USER_PROPERTY, getWechatUserSummaryScope())
-		.field(FaultAnswer.EXAM_PROPERTY, getExamSummaryScope())
+		.field(FaultAnswer.QUESTION_PROPERTY, getQuestionSummaryScope())
+		.field(FaultAnswer.FAULT_TIMES_PROPERTY)
 		;
 	/** 用于FaultAnswer对象的列表时需要序列化的属性列表 */
 	public static SerializeScope getFaultAnswerListItemScope() {
@@ -1435,6 +1438,7 @@ public class BcexBaseViewScope {
 		.field(Question.PLATFORM_PROPERTY, getPlatformSummaryScope())
 		.field(Question.ANSWER_LIST, getAnswerListItemScope())
 		.field(Question.USER_ANSWER_LIST, getUserAnswerListItemScope())
+		.field(Question.FAULT_ANSWER_LIST, getFaultAnswerListItemScope())
 		;
 	/** 用于Question对象的详情页时需要序列化的属性列表 */
 	public static SerializeScope getQuestionDetailScope() {
@@ -1507,7 +1511,6 @@ public class BcexBaseViewScope {
 		.field(Exam.USER_PROPERTY, getWechatUserSummaryScope())
 		.field(Exam.SCORE_PROPERTY)
 		.field(Exam.USER_ANSWER_LIST, getUserAnswerListItemScope())
-		.field(Exam.FAULT_ANSWER_LIST, getFaultAnswerListItemScope())
 		;
 	/** 用于Exam对象的详情页时需要序列化的属性列表 */
 	public static SerializeScope getExamDetailScope() {
@@ -1536,7 +1539,8 @@ public class BcexBaseViewScope {
 		.field(FaultAnswer.RIGHT_ANSWER_PROPERTY)
 		.field(FaultAnswer.CREATE_TIME_PROPERTY)
 		.field(FaultAnswer.USER_PROPERTY, getWechatUserSummaryScope())
-		.field(FaultAnswer.EXAM_PROPERTY, getExamSummaryScope())
+		.field(FaultAnswer.QUESTION_PROPERTY, getQuestionSummaryScope())
+		.field(FaultAnswer.FAULT_TIMES_PROPERTY)
 		;
 	/** 用于FaultAnswer对象的详情页时需要序列化的属性列表 */
 	public static SerializeScope getFaultAnswerDetailScope() {

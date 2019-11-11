@@ -121,6 +121,8 @@
 		
 		<property name="userAnswerDAO" ref="userAnswerDAO" />
 		
+		<property name="faultAnswerDAO" ref="faultAnswerDAO" />
+		
 	</bean>
 	<bean id="questionDAO" parent="questionDAOBase"></bean>
 	
@@ -163,8 +165,6 @@
 		<property name="dataSource" ref="dataSource" /><property name="wechatUserDAO" ref="wechatUserDAO" /><property name="examStatusDAO" ref="examStatusDAO" />
 		<property name="userAnswerDAO" ref="userAnswerDAO" />
 		
-		<property name="faultAnswerDAO" ref="faultAnswerDAO" />
-		
 	</bean>
 	<bean id="examDAO" parent="examDAOBase"></bean>
 	
@@ -178,7 +178,7 @@
 	
 
 	<bean id="faultAnswerDAOBase" class="com.doublechaintech.bcex.faultanswer.FaultAnswerJDBCTemplateDAO">
-		<property name="dataSource" ref="dataSource" /><property name="wechatUserDAO" ref="wechatUserDAO" /><property name="examDAO" ref="examDAO" />
+		<property name="dataSource" ref="dataSource" /><property name="wechatUserDAO" ref="wechatUserDAO" /><property name="questionDAO" ref="questionDAO" />
 	</bean>
 	<bean id="faultAnswerDAO" parent="faultAnswerDAOBase"></bean>
 	

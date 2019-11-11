@@ -10,8 +10,10 @@ import com.doublechaintech.bcex.BcexUserContext;
 
 import com.doublechaintech.bcex.answer.Answer;
 import com.doublechaintech.bcex.platform.Platform;
+import com.doublechaintech.bcex.faultanswer.FaultAnswer;
 import com.doublechaintech.bcex.useranswer.UserAnswer;
 
+import com.doublechaintech.bcex.faultanswer.FaultAnswerDAO;
 import com.doublechaintech.bcex.useranswer.UserAnswerDAO;
 import com.doublechaintech.bcex.platform.PlatformDAO;
 import com.doublechaintech.bcex.answer.AnswerDAO;
@@ -49,10 +51,14 @@ public interface QuestionDAO{
 		
 	public UserAnswerDAO getUserAnswerDAO();
 		
+	public FaultAnswerDAO getFaultAnswerDAO();
+		
 	
  	public SmartList<Question> requestCandidateQuestionForAnswer(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception;
 		
  	public SmartList<Question> requestCandidateQuestionForUserAnswer(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception;
+		
+ 	public SmartList<Question> requestCandidateQuestionForFaultAnswer(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception;
 		
 	
 	public Question planToRemoveAnswerList(Question question, String answerIds[], Map<String,Object> options)throws Exception;
@@ -64,6 +70,13 @@ public interface QuestionDAO{
 	//disconnect Question with exam in UserAnswer
 	public Question planToRemoveUserAnswerListWithExam(Question question, String examId, Map<String,Object> options)throws Exception;
 	public int countUserAnswerListWithExam(String questionId, String examId, Map<String,Object> options)throws Exception;
+	
+	public Question planToRemoveFaultAnswerList(Question question, String faultAnswerIds[], Map<String,Object> options)throws Exception;
+
+
+	//disconnect Question with user in FaultAnswer
+	public Question planToRemoveFaultAnswerListWithUser(Question question, String userId, Map<String,Object> options)throws Exception;
+	public int countFaultAnswerListWithUser(String questionId, String userId, Map<String,Object> options)throws Exception;
 	
 	
 	public SmartList<Question> queryList(String sql, Object ... parmeters);
@@ -82,6 +95,9 @@ public interface QuestionDAO{
 	
 	// 需要一个加载引用我的对象的enhance方法:UserAnswer的question的UserAnswerList
 	public SmartList<UserAnswer> loadOurUserAnswerList(BcexUserContext userContext, List<Question> us, Map<String,Object> options) throws Exception;
+	
+	// 需要一个加载引用我的对象的enhance方法:FaultAnswer的question的FaultAnswerList
+	public SmartList<FaultAnswer> loadOurFaultAnswerList(BcexUserContext userContext, List<Question> us, Map<String,Object> options) throws Exception;
 	
 }
 

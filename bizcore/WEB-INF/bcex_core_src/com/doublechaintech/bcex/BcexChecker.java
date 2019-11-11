@@ -63,7 +63,7 @@ public class BcexChecker extends BaseChecker{
 	public BcexChecker checkNameOfChangeRequestType(String name)
 	{
 		
-	 	checkStringLengthRange(name,1, 16,NAME_OF_CHANGE_REQUEST_TYPE ); 		
+	 	checkStringLengthRange(name,1, 100,NAME_OF_CHANGE_REQUEST_TYPE ); 		
 		
 		return this;
 	}	
@@ -171,7 +171,7 @@ public class BcexChecker extends BaseChecker{
 	public BcexChecker checkNickNameOfRegistration(String nickName)
 	{
 		
-	 	checkStringLengthRange(nickName,1, 200,NICK_NAME_OF_REGISTRATION ); 		
+	 	checkStringLengthRange(nickName,0, 200,NICK_NAME_OF_REGISTRATION ); 		
 		
 		return this;
 	}	
@@ -216,7 +216,7 @@ public class BcexChecker extends BaseChecker{
 	public BcexChecker checkNickNameOfStartExam(String nickName)
 	{
 		
-	 	checkStringLengthRange(nickName,1, 200,NICK_NAME_OF_START_EXAM ); 		
+	 	checkStringLengthRange(nickName,0, 200,NICK_NAME_OF_START_EXAM ); 		
 		
 		return this;
 	}	
@@ -261,7 +261,7 @@ public class BcexChecker extends BaseChecker{
 	public BcexChecker checkNickNameOfAnswerQuestion(String nickName)
 	{
 		
-	 	checkStringLengthRange(nickName,1, 200,NICK_NAME_OF_ANSWER_QUESTION ); 		
+	 	checkStringLengthRange(nickName,0, 200,NICK_NAME_OF_ANSWER_QUESTION ); 		
 		
 		return this;
 	}	
@@ -369,7 +369,7 @@ public class BcexChecker extends BaseChecker{
 	public BcexChecker checkTopicOfQuestion(String topic)
 	{
 		
-	 	checkStringLengthRange(topic,6, 80,TOPIC_OF_QUESTION ); 		
+	 	checkStringLengthRange(topic,1, 500,TOPIC_OF_QUESTION ); 		
 		
 		return this;
 	}	
@@ -387,7 +387,7 @@ public class BcexChecker extends BaseChecker{
 	public BcexChecker checkOptionAOfQuestion(String optionA)
 	{
 		
-	 	checkStringLengthRange(optionA,2, 16,OPTION_A_OF_QUESTION ); 		
+	 	checkStringLengthRange(optionA,1, 500,OPTION_A_OF_QUESTION ); 		
 		
 		return this;
 	}	
@@ -396,7 +396,7 @@ public class BcexChecker extends BaseChecker{
 	public BcexChecker checkOptionBOfQuestion(String optionB)
 	{
 		
-	 	checkStringLengthRange(optionB,2, 16,OPTION_B_OF_QUESTION ); 		
+	 	checkStringLengthRange(optionB,1, 500,OPTION_B_OF_QUESTION ); 		
 		
 		return this;
 	}	
@@ -405,7 +405,7 @@ public class BcexChecker extends BaseChecker{
 	public BcexChecker checkOptionCOfQuestion(String optionC)
 	{
 		
-	 	checkStringLengthRange(optionC,2, 16,OPTION_C_OF_QUESTION ); 		
+	 	checkStringLengthRange(optionC,0, 500,OPTION_C_OF_QUESTION ); 		
 		
 		return this;
 	}	
@@ -414,7 +414,7 @@ public class BcexChecker extends BaseChecker{
 	public BcexChecker checkOptionDOfQuestion(String optionD)
 	{
 		
-	 	checkStringLengthRange(optionD,2, 16,OPTION_D_OF_QUESTION ); 		
+	 	checkStringLengthRange(optionD,0, 500,OPTION_D_OF_QUESTION ); 		
 		
 		return this;
 	}	
@@ -423,7 +423,7 @@ public class BcexChecker extends BaseChecker{
 	public BcexChecker checkOptionEOfQuestion(String optionE)
 	{
 		
-	 	checkStringLengthRange(optionE,2, 16,OPTION_E_OF_QUESTION ); 		
+	 	checkStringLengthRange(optionE,0, 500,OPTION_E_OF_QUESTION ); 		
 		
 		return this;
 	}	
@@ -720,7 +720,7 @@ public class BcexChecker extends BaseChecker{
 	public BcexChecker checkTopicOfUserAnswer(String topic)
 	{
 		
-	 	checkStringLengthRange(topic,6, 80,TOPIC_OF_USER_ANSWER ); 		
+	 	checkStringLengthRange(topic,1, 500,TOPIC_OF_USER_ANSWER ); 		
 		
 		return this;
 	}	
@@ -774,7 +774,7 @@ public class BcexChecker extends BaseChecker{
 	public BcexChecker checkTopicOfFaultAnswer(String topic)
 	{
 		
-	 	checkStringLengthRange(topic,6, 80,TOPIC_OF_FAULT_ANSWER ); 		
+	 	checkStringLengthRange(topic,1, 500,TOPIC_OF_FAULT_ANSWER ); 		
 		
 		return this;
 	}	
@@ -783,7 +783,7 @@ public class BcexChecker extends BaseChecker{
 	public BcexChecker checkYourAnswerOfFaultAnswer(String yourAnswer)
 	{
 		
-	 	checkStringLengthRange(yourAnswer,2, 16,YOUR_ANSWER_OF_FAULT_ANSWER ); 		
+	 	checkStringLengthRange(yourAnswer,1, 10,YOUR_ANSWER_OF_FAULT_ANSWER ); 		
 		
 		return this;
 	}	
@@ -792,7 +792,7 @@ public class BcexChecker extends BaseChecker{
 	public BcexChecker checkRightAnswerOfFaultAnswer(String rightAnswer)
 	{
 		
-	 	checkStringLengthRange(rightAnswer,2, 16,RIGHT_ANSWER_OF_FAULT_ANSWER ); 		
+	 	checkStringLengthRange(rightAnswer,1, 10,RIGHT_ANSWER_OF_FAULT_ANSWER ); 		
 		
 		return this;
 	}	
@@ -806,11 +806,20 @@ public class BcexChecker extends BaseChecker{
 		return this;
 	}	
 
-	public static final String  EXAM_OF_FAULT_ANSWER ="fault_answer.exam";
-	public BcexChecker checkExamIdOfFaultAnswer(String examId)
+	public static final String  QUESTION_OF_FAULT_ANSWER ="fault_answer.question";
+	public BcexChecker checkQuestionIdOfFaultAnswer(String questionId)
 	{
 		
-	 	checkIdOfFaultAnswer(examId ); 		
+	 	checkIdOfFaultAnswer(questionId ); 		
+		
+		return this;
+	}	
+
+	public static final String  FAULT_TIMES_OF_FAULT_ANSWER ="fault_answer.fault_times";
+	public BcexChecker checkFaultTimesOfFaultAnswer(int faultTimes)
+	{
+		
+	 	checkIntegerRange(faultTimes,0, 999,FAULT_TIMES_OF_FAULT_ANSWER ); 		
 		
 		return this;
 	}	

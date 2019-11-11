@@ -9,11 +9,9 @@ import com.doublechaintech.bcex.MultipleAccessKey;
 import com.doublechaintech.bcex.BcexUserContext;
 
 import com.doublechaintech.bcex.examstatus.ExamStatus;
-import com.doublechaintech.bcex.faultanswer.FaultAnswer;
 import com.doublechaintech.bcex.useranswer.UserAnswer;
 import com.doublechaintech.bcex.wechatuser.WechatUser;
 
-import com.doublechaintech.bcex.faultanswer.FaultAnswerDAO;
 import com.doublechaintech.bcex.useranswer.UserAnswerDAO;
 import com.doublechaintech.bcex.wechatuser.WechatUserDAO;
 import com.doublechaintech.bcex.examstatus.ExamStatusDAO;
@@ -49,12 +47,8 @@ public interface ExamDAO{
 
 	public UserAnswerDAO getUserAnswerDAO();
 		
-	public FaultAnswerDAO getFaultAnswerDAO();
-		
 	
  	public SmartList<Exam> requestCandidateExamForUserAnswer(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception;
-		
- 	public SmartList<Exam> requestCandidateExamForFaultAnswer(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception;
 		
 	
 	public Exam planToRemoveUserAnswerList(Exam exam, String userAnswerIds[], Map<String,Object> options)throws Exception;
@@ -63,13 +57,6 @@ public interface ExamDAO{
 	//disconnect Exam with question in UserAnswer
 	public Exam planToRemoveUserAnswerListWithQuestion(Exam exam, String questionId, Map<String,Object> options)throws Exception;
 	public int countUserAnswerListWithQuestion(String examId, String questionId, Map<String,Object> options)throws Exception;
-	
-	public Exam planToRemoveFaultAnswerList(Exam exam, String faultAnswerIds[], Map<String,Object> options)throws Exception;
-
-
-	//disconnect Exam with user in FaultAnswer
-	public Exam planToRemoveFaultAnswerListWithUser(Exam exam, String userId, Map<String,Object> options)throws Exception;
-	public int countFaultAnswerListWithUser(String examId, String userId, Map<String,Object> options)throws Exception;
 	
 	
 	public SmartList<Exam> queryList(String sql, Object ... parmeters);
@@ -93,9 +80,6 @@ public interface ExamDAO{
  
 	// 需要一个加载引用我的对象的enhance方法:UserAnswer的exam的UserAnswerList
 	public SmartList<UserAnswer> loadOurUserAnswerList(BcexUserContext userContext, List<Exam> us, Map<String,Object> options) throws Exception;
-	
-	// 需要一个加载引用我的对象的enhance方法:FaultAnswer的exam的FaultAnswerList
-	public SmartList<FaultAnswer> loadOurFaultAnswerList(BcexUserContext userContext, List<Exam> us, Map<String,Object> options) throws Exception;
 	
 }
 

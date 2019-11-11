@@ -21,11 +21,9 @@ import com.doublechaintech.bcex.BcexUserContext;
 
 
 import com.doublechaintech.bcex.examstatus.ExamStatus;
-import com.doublechaintech.bcex.faultanswer.FaultAnswer;
 import com.doublechaintech.bcex.useranswer.UserAnswer;
 import com.doublechaintech.bcex.wechatuser.WechatUser;
 
-import com.doublechaintech.bcex.faultanswer.FaultAnswerDAO;
 import com.doublechaintech.bcex.useranswer.UserAnswerDAO;
 import com.doublechaintech.bcex.wechatuser.WechatUserDAO;
 import com.doublechaintech.bcex.examstatus.ExamStatusDAO;
@@ -75,25 +73,6 @@ public class ExamJDBCTemplateDAO extends BcexBaseDAOImpl implements ExamDAO{
  		}
  		
 	 	return this.userAnswerDAO;
- 	}	
- 	
-			
-		
-	
-  	private  FaultAnswerDAO  faultAnswerDAO;
- 	public void setFaultAnswerDAO(FaultAnswerDAO pFaultAnswerDAO){
- 	
- 		if(pFaultAnswerDAO == null){
- 			throw new IllegalStateException("Do not try to set faultAnswerDAO to null.");
- 		}
-	 	this.faultAnswerDAO = pFaultAnswerDAO;
- 	}
- 	public FaultAnswerDAO getFaultAnswerDAO(){
- 		if(this.faultAnswerDAO == null){
- 			throw new IllegalStateException("The faultAnswerDAO is not configured yet, please config it some where.");
- 		}
- 		
-	 	return this.faultAnswerDAO;
  	}	
  	
 			
@@ -150,13 +129,6 @@ public class ExamJDBCTemplateDAO extends BcexBaseDAOImpl implements ExamDAO{
  		
  		if(isSaveUserAnswerListEnabled(options)){
  			for(UserAnswer item: newExam.getUserAnswerList()){
- 				item.setVersion(0);
- 			}
- 		}
-		
- 		
- 		if(isSaveFaultAnswerListEnabled(options)){
- 			for(FaultAnswer item: newExam.getFaultAnswerList()){
  				item.setVersion(0);
  			}
  		}
@@ -294,20 +266,6 @@ public class ExamJDBCTemplateDAO extends BcexBaseDAOImpl implements ExamDAO{
  	}
  	
 		
-	
-	protected boolean isExtractFaultAnswerListEnabled(Map<String,Object> options){		
- 		return checkOptions(options,ExamTokens.FAULT_ANSWER_LIST);
- 	}
- 	protected boolean isAnalyzeFaultAnswerListEnabled(Map<String,Object> options){		 		
- 		return ExamTokens.of(options).analyzeFaultAnswerListEnabled();
- 	}
-	
-	protected boolean isSaveFaultAnswerListEnabled(Map<String,Object> options){
-		return checkOptions(options, ExamTokens.FAULT_ANSWER_LIST);
-		
- 	}
- 	
-		
 
 	
 
@@ -348,14 +306,6 @@ public class ExamJDBCTemplateDAO extends BcexBaseDAOImpl implements ExamDAO{
  		}	
  		if(isAnalyzeUserAnswerListEnabled(loadOptions)){
 	 		analyzeUserAnswerList(exam, loadOptions);
- 		}
- 		
-		
-		if(isExtractFaultAnswerListEnabled(loadOptions)){
-	 		extractFaultAnswerList(exam, loadOptions);
- 		}	
- 		if(isAnalyzeFaultAnswerListEnabled(loadOptions)){
-	 		analyzeFaultAnswerList(exam, loadOptions);
  		}
  		
 		
@@ -447,56 +397,6 @@ public class ExamJDBCTemplateDAO extends BcexBaseDAOImpl implements ExamDAO{
 		SmartList<UserAnswer> userAnswerList = exam.getUserAnswerList();
 		if(userAnswerList != null){
 			getUserAnswerDAO().analyzeUserAnswerByExam(userAnswerList, exam.getId(), options);
-			
-		}
-		
-		return exam;
-	
-	}	
-	
-		
-	protected void enhanceFaultAnswerList(SmartList<FaultAnswer> faultAnswerList,Map<String,Object> options){
-		//extract multiple list from difference sources
-		//Trying to use a single SQL to extract all data from database and do the work in java side, java is easier to scale to N ndoes;
-	}
-	
-	protected Exam extractFaultAnswerList(Exam exam, Map<String,Object> options){
-		
-		
-		if(exam == null){
-			return null;
-		}
-		if(exam.getId() == null){
-			return exam;
-		}
-
-		
-		
-		SmartList<FaultAnswer> faultAnswerList = getFaultAnswerDAO().findFaultAnswerByExam(exam.getId(),options);
-		if(faultAnswerList != null){
-			enhanceFaultAnswerList(faultAnswerList,options);
-			exam.setFaultAnswerList(faultAnswerList);
-		}
-		
-		return exam;
-	
-	}	
-	
-	protected Exam analyzeFaultAnswerList(Exam exam, Map<String,Object> options){
-		
-		
-		if(exam == null){
-			return null;
-		}
-		if(exam.getId() == null){
-			return exam;
-		}
-
-		
-		
-		SmartList<FaultAnswer> faultAnswerList = exam.getFaultAnswerList();
-		if(faultAnswerList != null){
-			getFaultAnswerDAO().analyzeFaultAnswerByExam(faultAnswerList, exam.getId(), options);
 			
 		}
 		
@@ -810,13 +710,6 @@ public class ExamJDBCTemplateDAO extends BcexBaseDAOImpl implements ExamDAO{
 	 		
  		}		
 		
-		if(isSaveFaultAnswerListEnabled(options)){
-	 		saveFaultAnswerList(exam, options);
-	 		//removeFaultAnswerList(exam, options);
-	 		//Not delete the record
-	 		
- 		}		
-		
 		return exam;
 		
 	}
@@ -933,78 +826,6 @@ public class ExamJDBCTemplateDAO extends BcexBaseDAOImpl implements ExamDAO{
 		return count;
 	}
 	
-	public Exam planToRemoveFaultAnswerList(Exam exam, String faultAnswerIds[], Map<String,Object> options)throws Exception{
-	
-		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(FaultAnswer.EXAM_PROPERTY, exam.getId());
-		key.put(FaultAnswer.ID_PROPERTY, faultAnswerIds);
-		
-		SmartList<FaultAnswer> externalFaultAnswerList = getFaultAnswerDAO().
-				findFaultAnswerWithKey(key, options);
-		if(externalFaultAnswerList == null){
-			return exam;
-		}
-		if(externalFaultAnswerList.isEmpty()){
-			return exam;
-		}
-		
-		for(FaultAnswer faultAnswerItem: externalFaultAnswerList){
-
-			faultAnswerItem.clearFromAll();
-		}
-		
-		
-		SmartList<FaultAnswer> faultAnswerList = exam.getFaultAnswerList();		
-		faultAnswerList.addAllToRemoveList(externalFaultAnswerList);
-		return exam;	
-	
-	}
-
-
-	//disconnect Exam with user in FaultAnswer
-	public Exam planToRemoveFaultAnswerListWithUser(Exam exam, String userId, Map<String,Object> options)throws Exception{
-				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
-		//the list will not be null here, empty, maybe
-		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
-		
-		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(FaultAnswer.EXAM_PROPERTY, exam.getId());
-		key.put(FaultAnswer.USER_PROPERTY, userId);
-		
-		SmartList<FaultAnswer> externalFaultAnswerList = getFaultAnswerDAO().
-				findFaultAnswerWithKey(key, options);
-		if(externalFaultAnswerList == null){
-			return exam;
-		}
-		if(externalFaultAnswerList.isEmpty()){
-			return exam;
-		}
-		
-		for(FaultAnswer faultAnswerItem: externalFaultAnswerList){
-			faultAnswerItem.clearUser();
-			faultAnswerItem.clearExam();
-			
-		}
-		
-		
-		SmartList<FaultAnswer> faultAnswerList = exam.getFaultAnswerList();		
-		faultAnswerList.addAllToRemoveList(externalFaultAnswerList);
-		return exam;
-	}
-	
-	public int countFaultAnswerListWithUser(String examId, String userId, Map<String,Object> options)throws Exception{
-				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
-		//the list will not be null here, empty, maybe
-		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
-
-		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(FaultAnswer.EXAM_PROPERTY, examId);
-		key.put(FaultAnswer.USER_PROPERTY, userId);
-		
-		int count = getFaultAnswerDAO().countFaultAnswerWithKey(key, options);
-		return count;
-	}
-	
 
 		
 	protected Exam saveUserAnswerList(Exam exam, Map<String,Object> options){
@@ -1073,77 +894,10 @@ public class ExamJDBCTemplateDAO extends BcexBaseDAOImpl implements ExamDAO{
 	
 	
 		
-	protected Exam saveFaultAnswerList(Exam exam, Map<String,Object> options){
-		
-		
-		
-		
-		SmartList<FaultAnswer> faultAnswerList = exam.getFaultAnswerList();
-		if(faultAnswerList == null){
-			//null list means nothing
-			return exam;
-		}
-		SmartList<FaultAnswer> mergedUpdateFaultAnswerList = new SmartList<FaultAnswer>();
-		
-		
-		mergedUpdateFaultAnswerList.addAll(faultAnswerList); 
-		if(faultAnswerList.getToRemoveList() != null){
-			//ensures the toRemoveList is not null
-			mergedUpdateFaultAnswerList.addAll(faultAnswerList.getToRemoveList());
-			faultAnswerList.removeAll(faultAnswerList.getToRemoveList());
-			//OK for now, need fix later
-		}
-
-		//adding new size can improve performance
-	
-		getFaultAnswerDAO().saveFaultAnswerList(mergedUpdateFaultAnswerList,options);
-		
-		if(faultAnswerList.getToRemoveList() != null){
-			faultAnswerList.removeAll(faultAnswerList.getToRemoveList());
-		}
-		
-		
-		return exam;
-	
-	}
-	
-	protected Exam removeFaultAnswerList(Exam exam, Map<String,Object> options){
-	
-	
-		SmartList<FaultAnswer> faultAnswerList = exam.getFaultAnswerList();
-		if(faultAnswerList == null){
-			return exam;
-		}	
-	
-		SmartList<FaultAnswer> toRemoveFaultAnswerList = faultAnswerList.getToRemoveList();
-		
-		if(toRemoveFaultAnswerList == null){
-			return exam;
-		}
-		if(toRemoveFaultAnswerList.isEmpty()){
-			return exam;// Does this mean delete all from the parent object?
-		}
-		//Call DAO to remove the list
-		
-		getFaultAnswerDAO().removeFaultAnswerList(toRemoveFaultAnswerList,options);
-		
-		return exam;
-	
-	}
-	
-	
-
- 	
- 	
-	
-	
-	
-		
 
 	public Exam present(Exam exam,Map<String, Object> options){
 	
 		presentUserAnswerList(exam,options);
-		presentFaultAnswerList(exam,options);
 
 		return exam;
 	
@@ -1169,35 +923,9 @@ public class ExamJDBCTemplateDAO extends BcexBaseDAOImpl implements ExamDAO{
 		return exam;
 	}			
 		
-	//Using java8 feature to reduce the code significantly
- 	protected Exam presentFaultAnswerList(
-			Exam exam,
-			Map<String, Object> options) {
-
-		SmartList<FaultAnswer> faultAnswerList = exam.getFaultAnswerList();		
-				SmartList<FaultAnswer> newList= presentSubList(exam.getId(),
-				faultAnswerList,
-				options,
-				getFaultAnswerDAO()::countFaultAnswerByExam,
-				getFaultAnswerDAO()::findFaultAnswerByExam
-				);
-
-		
-		exam.setFaultAnswerList(newList);
-		
-
-		return exam;
-	}			
-		
 
 	
     public SmartList<Exam> requestCandidateExamForUserAnswer(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception {
-        // NOTE: by default, ignore owner info, just return all by filter key.
-		// You need override this method if you have different candidate-logic
-		return findAllCandidateByFilter(ExamTable.COLUMN_NAME, filterKey, pageNo, pageSize, getExamMapper());
-    }
-		
-    public SmartList<Exam> requestCandidateExamForFaultAnswer(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception {
         // NOTE: by default, ignore owner info, just return all by filter key.
 		// You need override this method if you have different candidate-logic
 		return findAllCandidateByFilter(ExamTable.COLUMN_NAME, filterKey, pageNo, pageSize, getExamMapper());
@@ -1234,29 +962,6 @@ public class ExamJDBCTemplateDAO extends BcexBaseDAOImpl implements ExamDAO{
 			SmartList<UserAnswer> loadedSmartList = new SmartList<>();
 			loadedSmartList.addAll(loadedList);
 			it.setUserAnswerList(loadedSmartList);
-		});
-		return loadedObjs;
-	}
-	
-	// 需要一个加载引用我的对象的enhance方法:FaultAnswer的exam的FaultAnswerList
-	public SmartList<FaultAnswer> loadOurFaultAnswerList(BcexUserContext userContext, List<Exam> us, Map<String,Object> options) throws Exception{
-		if (us == null || us.isEmpty()){
-			return new SmartList<>();
-		}
-		Set<String> ids = us.stream().map(it->it.getId()).collect(Collectors.toSet());
-		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(FaultAnswer.EXAM_PROPERTY, ids.toArray(new String[ids.size()]));
-		SmartList<FaultAnswer> loadedObjs = userContext.getDAOGroup().getFaultAnswerDAO().findFaultAnswerWithKey(key, options);
-		Map<String, List<FaultAnswer>> loadedMap = loadedObjs.stream().collect(Collectors.groupingBy(it->it.getExam().getId()));
-		us.forEach(it->{
-			String id = it.getId();
-			List<FaultAnswer> loadedList = loadedMap.get(id);
-			if (loadedList == null || loadedList.isEmpty()) {
-				return;
-			}
-			SmartList<FaultAnswer> loadedSmartList = new SmartList<>();
-			loadedSmartList.addAll(loadedList);
-			it.setFaultAnswerList(loadedSmartList);
 		});
 		return loadedObjs;
 	}

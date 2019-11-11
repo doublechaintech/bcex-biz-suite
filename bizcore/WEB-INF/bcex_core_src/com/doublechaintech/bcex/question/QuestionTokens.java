@@ -74,7 +74,8 @@ public class QuestionTokens extends CommonTokens{
 		return start()
 			.withPlatform()
 			.withAnswerList()
-			.withUserAnswerList();
+			.withUserAnswerList()
+			.withFaultAnswerList();
 	
 	}
 	public static QuestionTokens withoutListsTokens(){
@@ -241,11 +242,78 @@ public class QuestionTokens extends CommonTokens{
 	
 	
 		
+	protected static final String FAULT_ANSWER_LIST = "faultAnswerList";
+	public String getFaultAnswerList(){
+		return FAULT_ANSWER_LIST;
+	}
+	public QuestionTokens withFaultAnswerList(){		
+		addSimpleOptions(FAULT_ANSWER_LIST);
+		return this;
+	}
+	public QuestionTokens analyzeFaultAnswerList(){		
+		addSimpleOptions(FAULT_ANSWER_LIST+".anaylze");
+		return this;
+	}
+	public boolean analyzeFaultAnswerListEnabled(){		
+		
+		if(checkOptions(this.options(), FAULT_ANSWER_LIST+".anaylze")){
+			return true; //most of the case, should call here
+		}
+		//if not true, then query for global setting
+		return checkOptions(this.options(), ALL_LISTS_ANALYZE);
+	}
+	public QuestionTokens extractMoreFromFaultAnswerList(String idsSeperatedWithComma){		
+		addSimpleOptions(FAULT_ANSWER_LIST+".extractIds", idsSeperatedWithComma);
+		return this;
+	}
+	
+	
+	
+	
+	private int faultAnswerListSortCounter = 0;
+	public QuestionTokens sortFaultAnswerListWith(String field, String descOrAsc){		
+		addSortMoreOptions(FAULT_ANSWER_LIST,faultAnswerListSortCounter++, field, descOrAsc);
+		return this;
+	}
+	private int faultAnswerListSearchCounter = 0;
+	public QuestionTokens searchFaultAnswerListWith(String field, String verb, String value){		
+		addSearchMoreOptions(FAULT_ANSWER_LIST,faultAnswerListSearchCounter++, field, verb, value);
+		return this;
+	}
+	
+	public QuestionTokens searchAllTextOfFaultAnswerList(String verb, String value){	
+		String field = "id|topic|yourAnswer|rightAnswer";
+		addSearchMoreOptions(FAULT_ANSWER_LIST,faultAnswerListSearchCounter++, field, verb, value);
+		return this;
+	}
+	
+	
+	
+	public QuestionTokens rowsPerPageOfFaultAnswerList(int rowsPerPage){		
+		addSimpleOptions(FAULT_ANSWER_LIST+"RowsPerPage",rowsPerPage);
+		return this;
+	}
+	public QuestionTokens currentPageNumberOfFaultAnswerList(int currentPageNumber){		
+		addSimpleOptions(FAULT_ANSWER_LIST+"CurrentPage",currentPageNumber);
+		return this;
+	}
+	public QuestionTokens retainColumnsOfFaultAnswerList(String[] columns){		
+		addSimpleOptions(FAULT_ANSWER_LIST+"RetainColumns",columns);
+		return this;
+	}
+	public QuestionTokens excludeColumnsOfFaultAnswerList(String[] columns){		
+		addSimpleOptions(FAULT_ANSWER_LIST+"ExcludeColumns",columns);
+		return this;
+	}
+	
+	
+		
 	
 	public  QuestionTokens searchEntireObjectText(String verb, String value){
 		
 		searchAllTextOfAnswerList(verb, value);	
 		searchAllTextOfUserAnswerList(verb, value);	
+		searchAllTextOfFaultAnswerList(verb, value);	
 		return this;
 	}
 }

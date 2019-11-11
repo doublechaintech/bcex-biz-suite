@@ -468,6 +468,7 @@ public abstract class BaseWxappServiceViewService extends ChangeRequestCustomMan
 		}
 		return null;
 	}
+	
 
 	// 处理请求：默认的客户端登录接口
 	public static String makeClientLoginUrl(CustomBcexUserContextImpl ctx, com.terapico.caf.baseelement.LoginParam loginParam){
@@ -497,6 +498,14 @@ public abstract class BaseWxappServiceViewService extends ChangeRequestCustomMan
 	public static String makeViewScoreUrl(CustomBcexUserContextImpl ctx, String quizId){
 		return makeUrl("customerViewScore", quizId);
 	}
+	// 处理请求：查看我的错题
+	public static String makeViewFaultAnswerUrl(CustomBcexUserContextImpl ctx){
+		return makeUrl("customerViewFaultAnswer");
+	}
+	// 处理请求：
+	public static String makeViewNextPageFaultAnswerUrl(CustomBcexUserContextImpl ctx, String lastRecordId){
+		return makeUrl("customerViewNextPageFaultAnswer", lastRecordId);
+	}
 
 	/** 处理请求：默认的客户端登录接口. 返回值：PRC_BY_DEFAULT: ;  */
 	protected abstract int processRequestClientLogin(CustomBcexUserContextImpl ctx) throws Exception;
@@ -512,9 +521,18 @@ public abstract class BaseWxappServiceViewService extends ChangeRequestCustomMan
 	protected abstract int processRequestCustomerAnswerQuestion(CustomBcexUserContextImpl ctx) throws Exception;
 	/** 处理请求：查看成绩. 返回值：PRC_BY_DEFAULT: ;  */
 	protected abstract int processRequestCustomerViewScore(CustomBcexUserContextImpl ctx) throws Exception;
+	/** 处理请求：查看我的错题. 返回值：PRC_BY_DEFAULT: ;  */
+	protected abstract int processRequestCustomerViewFaultAnswer(CustomBcexUserContextImpl ctx) throws Exception;
+	/** 处理请求：. 返回值：PRC_BY_DEFAULT: ;  */
+	protected abstract int processRequestCustomerViewNextPageFaultAnswer(CustomBcexUserContextImpl ctx) throws Exception;
 
 	protected SimplePopupPage assemblerSimplePopupPage(CustomBcexUserContextImpl ctx, String requestName)throws Exception {
 		SimplePopupPage page = new SimplePopupPage();
+		page.assemblerContent(ctx, requestName);
+		return page;
+	}
+	protected FaultAnswerListPage assemblerFaultAnswerListPage(CustomBcexUserContextImpl ctx, String requestName)throws Exception {
+		FaultAnswerListPage page = new FaultAnswerListPage();
 		page.assemblerContent(ctx, requestName);
 		return page;
 	}

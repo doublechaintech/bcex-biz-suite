@@ -263,6 +263,7 @@ public class BcexObjectChecker extends BcexChecker{
 		commonObjectPropertyCheck(questionAsBaseEntity,"version",this::checkVersionOfQuestion);
 		commonObjectPropertyCheck(questionAsBaseEntity,"answerList",this::checkAnswerListOfQuestion);
 		commonObjectPropertyCheck(questionAsBaseEntity,"userAnswerList",this::checkUserAnswerListOfQuestion);
+		commonObjectPropertyCheck(questionAsBaseEntity,"faultAnswerList",this::checkFaultAnswerListOfQuestion);
 		return this;
 
 	}
@@ -350,7 +351,6 @@ public class BcexObjectChecker extends BcexChecker{
 		commonObjectPropertyCheck(examAsBaseEntity,"score",this::checkScoreOfExam);
 		commonObjectPropertyCheck(examAsBaseEntity,"version",this::checkVersionOfExam);
 		commonObjectPropertyCheck(examAsBaseEntity,"userAnswerList",this::checkUserAnswerListOfExam);
-		commonObjectPropertyCheck(examAsBaseEntity,"faultAnswerList",this::checkFaultAnswerListOfExam);
 		return this;
 
 	}
@@ -384,7 +384,8 @@ public class BcexObjectChecker extends BcexChecker{
 		commonObjectPropertyCheck(faultAnswerAsBaseEntity,"rightAnswer",this::checkRightAnswerOfFaultAnswer);
 		commonObjectPropertyAssign(faultAnswerAsBaseEntity,"createTime",this::assignCreateTimeOfFaultAnswer);
 		commonObjectPropertyCheck(faultAnswerAsBaseEntity,"user",this::checkUserOfFaultAnswer);
-		commonObjectPropertyCheck(faultAnswerAsBaseEntity,"exam",this::checkExamOfFaultAnswer);
+		commonObjectPropertyCheck(faultAnswerAsBaseEntity,"question",this::checkQuestionOfFaultAnswer);
+		commonObjectPropertyCheck(faultAnswerAsBaseEntity,"faultTimes",this::checkFaultTimesOfFaultAnswer);
 		commonObjectPropertyCheck(faultAnswerAsBaseEntity,"version",this::checkVersionOfFaultAnswer);
 		return this;
 
@@ -920,6 +921,13 @@ public class BcexObjectChecker extends BcexChecker{
 		return this;
 	}
 
+	public BcexObjectChecker checkFaultAnswerListOfQuestion(List<BaseEntity> faultAnswerList){
+		AtomicInteger index = new AtomicInteger();
+		faultAnswerList.stream().forEach(faultAnswer->
+			commonObjectElementCheck(faultAnswer,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixFaultAnswer));
+		return this;
+	}
+
 	public static final String PLATFORM_OF_QUESTION = "question.platform";
 
 
@@ -1032,13 +1040,6 @@ public class BcexObjectChecker extends BcexChecker{
 		return this;
 	}
 
-	public BcexObjectChecker checkFaultAnswerListOfExam(List<BaseEntity> faultAnswerList){
-		AtomicInteger index = new AtomicInteger();
-		faultAnswerList.stream().forEach(faultAnswer->
-			commonObjectElementCheck(faultAnswer,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixFaultAnswer));
-		return this;
-	}
-
 	public static final String STATUS_OF_EXAM = "exam.status";
 
 
@@ -1116,16 +1117,16 @@ public class BcexObjectChecker extends BcexChecker{
 	}
 
 
-	public static final String EXAM_OF_FAULT_ANSWER = "fault_answer.exam";
+	public static final String QUESTION_OF_FAULT_ANSWER = "fault_answer.question";
 
 
-	public BcexObjectChecker checkExamOfFaultAnswer(BaseEntity examAsBaseEntity){
+	public BcexObjectChecker checkQuestionOfFaultAnswer(BaseEntity questionAsBaseEntity){
 
-		if(examAsBaseEntity == null){
-			checkBaseEntityReference(examAsBaseEntity,true,EXAM_OF_FAULT_ANSWER);
+		if(questionAsBaseEntity == null){
+			checkBaseEntityReference(questionAsBaseEntity,true,QUESTION_OF_FAULT_ANSWER);
 			return this;
 		}
-		checkAndFixExam(examAsBaseEntity);
+		checkAndFixQuestion(questionAsBaseEntity);
 		return this;
 	}
 

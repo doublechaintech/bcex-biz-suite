@@ -45,7 +45,7 @@
 	<bean id="wechatLoginInfoManager" class="com.doublechaintech.bcex.wechatlogininfo.WechatLoginInfoManagerImpl" parent="wechatLoginInfoManagerBase" ></bean>
 	
 	<bean id="examManagerBase" class="com.doublechaintech.bcex.exam.ExamManagerImpl"/>
-	<bean id="examManager" class="com.doublechaintech.bcex.exam.ExamCustomManagerImpl" parent="examManagerBase" ></bean>
+	<bean id="examManager" class="com.doublechaintech.bcex.exam.ExamManagerImpl" parent="examManagerBase" ></bean>
 	
 	<bean id="userAnswerManagerBase" class="com.doublechaintech.bcex.useranswer.UserAnswerManagerImpl"/>
 	<bean id="userAnswerManager" class="com.doublechaintech.bcex.useranswer.UserAnswerManagerImpl" parent="userAnswerManagerBase" ></bean>

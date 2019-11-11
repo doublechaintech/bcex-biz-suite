@@ -9,10 +9,10 @@ import com.doublechaintech.bcex.MultipleAccessKey;
 import com.doublechaintech.bcex.BcexUserContext;
 
 import com.doublechaintech.bcex.wechatuser.WechatUser;
-import com.doublechaintech.bcex.exam.Exam;
+import com.doublechaintech.bcex.question.Question;
 
-import com.doublechaintech.bcex.exam.ExamDAO;
 import com.doublechaintech.bcex.wechatuser.WechatUserDAO;
+import com.doublechaintech.bcex.question.QuestionDAO;
 
 
 public interface FaultAnswerDAO{
@@ -57,11 +57,11 @@ public interface FaultAnswerDAO{
 
  
   
- 	public SmartList<FaultAnswer> findFaultAnswerByExam(String examId, Map<String,Object> options);
- 	public int countFaultAnswerByExam(String examId, Map<String,Object> options);
- 	public Map<String, Integer> countFaultAnswerByExamIds(String[] ids, Map<String,Object> options);
- 	public SmartList<FaultAnswer> findFaultAnswerByExam(String examId, int start, int count, Map<String,Object> options);
- 	public void analyzeFaultAnswerByExam(SmartList<FaultAnswer> resultList, String examId, Map<String,Object> options);
+ 	public SmartList<FaultAnswer> findFaultAnswerByQuestion(String questionId, Map<String,Object> options);
+ 	public int countFaultAnswerByQuestion(String questionId, Map<String,Object> options);
+ 	public Map<String, Integer> countFaultAnswerByQuestionIds(String[] ids, Map<String,Object> options);
+ 	public SmartList<FaultAnswer> findFaultAnswerByQuestion(String questionId, int start, int count, Map<String,Object> options);
+ 	public void analyzeFaultAnswerByQuestion(SmartList<FaultAnswer> resultList, String questionId, Map<String,Object> options);
 
  
  

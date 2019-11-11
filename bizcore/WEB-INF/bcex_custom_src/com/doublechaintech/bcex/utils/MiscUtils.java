@@ -56,7 +56,7 @@ public class MiscUtils extends BcexBaseUtils {
 		rst.addAnswerQuestion(evt);
 		
 		rst.updatePlatform(Platform.refById(BcexConstants.ROOT_PLATFORM_ID))
-			.updateRequestType(ChangeRequestType.refById(ChangeRequestType.START_EXAM))
+			.updateRequestType(ChangeRequestType.refById(ChangeRequestType.ANSWER))
 			.updateName("CR"+System.currentTimeMillis());
 		
 		ctx.getChecker().checkAndFixChangeRequest(rst);
@@ -111,7 +111,8 @@ public class MiscUtils extends BcexBaseUtils {
 	}
 
 	public static int calcUserTotalExam(CustomBcexUserContextImpl ctx, WechatUser user) {
-		String sql = "select count(*) from exam_data where user=?";
+		String sql = "select count(*) from exam_data E where E.user=? "
+				+ " and exists (select * from user_answer_data UA where UA.exam = E.id and LENGTH(trim(UA.user_select)) > 0)";
 		Integer rst = ctx.dao().queryForObject(sql, new Object[] {user.getId()}, Integer.class);
 		return rst == null ? 0 : rst;
 	}

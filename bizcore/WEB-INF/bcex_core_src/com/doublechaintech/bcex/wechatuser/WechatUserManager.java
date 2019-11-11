@@ -68,9 +68,9 @@ public interface WechatUserManager{
 
 	*/
 
-	//public  FaultAnswerManager getFaultAnswerManager(BcexUserContext userContext, String wechatUserId, String topic, String yourAnswer, String rightAnswer, String examId ,String [] tokensExpr)  throws Exception;
+	//public  FaultAnswerManager getFaultAnswerManager(BcexUserContext userContext, String wechatUserId, String topic, String yourAnswer, String rightAnswer, String questionId, int faultTimes ,String [] tokensExpr)  throws Exception;
 	
-	public  WechatUser addFaultAnswer(BcexUserContext userContext, String wechatUserId, String topic, String yourAnswer, String rightAnswer, String examId , String [] tokensExpr)  throws Exception;
+	public  WechatUser addFaultAnswer(BcexUserContext userContext, String wechatUserId, String topic, String yourAnswer, String rightAnswer, String questionId, int faultTimes , String [] tokensExpr)  throws Exception;
 	public  WechatUser removeFaultAnswer(BcexUserContext userContext, String wechatUserId, String faultAnswerId, int faultAnswerVersion,String [] tokensExpr)  throws Exception;
 	public  WechatUser updateFaultAnswer(BcexUserContext userContext, String wechatUserId, String faultAnswerId, int faultAnswerVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
 

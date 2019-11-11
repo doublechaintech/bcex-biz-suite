@@ -21,10 +21,10 @@ import com.doublechaintech.bcex.BcexCheckerManager;
 import com.doublechaintech.bcex.CustomBcexCheckerManager;
 
 import com.doublechaintech.bcex.wechatuser.WechatUser;
-import com.doublechaintech.bcex.exam.Exam;
+import com.doublechaintech.bcex.question.Question;
 
 import com.doublechaintech.bcex.wechatuser.CandidateWechatUser;
-import com.doublechaintech.bcex.exam.CandidateExam;
+import com.doublechaintech.bcex.question.CandidateQuestion;
 
 
 
@@ -151,7 +151,7 @@ public class FaultAnswerManagerImpl extends CustomBcexCheckerManager implements 
 		addAction(userContext, faultAnswer, tokens,"@copy","cloneFaultAnswer","cloneFaultAnswer/"+faultAnswer.getId()+"/","main","primary");
 		
 		addAction(userContext, faultAnswer, tokens,"fault_answer.transfer_to_user","transferToAnotherUser","transferToAnotherUser/"+faultAnswer.getId()+"/","main","primary");
-		addAction(userContext, faultAnswer, tokens,"fault_answer.transfer_to_exam","transferToAnotherExam","transferToAnotherExam/"+faultAnswer.getId()+"/","main","primary");
+		addAction(userContext, faultAnswer, tokens,"fault_answer.transfer_to_question","transferToAnotherQuestion","transferToAnotherQuestion/"+faultAnswer.getId()+"/","main","primary");
 	
 		
 		
@@ -164,7 +164,7 @@ public class FaultAnswerManagerImpl extends CustomBcexCheckerManager implements 
  	
 
 
-	public FaultAnswer createFaultAnswer(BcexUserContext userContext,String topic, String yourAnswer, String rightAnswer, String userId, String examId) throws Exception
+	public FaultAnswer createFaultAnswer(BcexUserContext userContext,String topic, String yourAnswer, String rightAnswer, String userId, String questionId, int faultTimes) throws Exception
 	{
 		
 		
@@ -174,6 +174,7 @@ public class FaultAnswerManagerImpl extends CustomBcexCheckerManager implements 
 		checkerOf(userContext).checkTopicOfFaultAnswer(topic);
 		checkerOf(userContext).checkYourAnswerOfFaultAnswer(yourAnswer);
 		checkerOf(userContext).checkRightAnswerOfFaultAnswer(rightAnswer);
+		checkerOf(userContext).checkFaultTimesOfFaultAnswer(faultTimes);
 	
 		checkerOf(userContext).throwExceptionIfHasErrors(FaultAnswerManagerException.class);
 
@@ -190,10 +191,11 @@ public class FaultAnswerManagerImpl extends CustomBcexCheckerManager implements 
 		
 		
 			
-		Exam exam = loadExam(userContext, examId,emptyOptions());
-		faultAnswer.setExam(exam);
+		Question question = loadQuestion(userContext, questionId,emptyOptions());
+		faultAnswer.setQuestion(question);
 		
 		
+		faultAnswer.setFaultTimes(faultTimes);
 
 		faultAnswer = saveFaultAnswer(userContext, faultAnswer, emptyOptions());
 		
@@ -231,6 +233,9 @@ public class FaultAnswerManagerImpl extends CustomBcexCheckerManager implements 
 				
 
 		
+		if(FaultAnswer.FAULT_TIMES_PROPERTY.equals(property)){
+			checkerOf(userContext).checkFaultTimesOfFaultAnswer(parseInt(newValueExpr));
+		}
 	
 		checkerOf(userContext).throwExceptionIfHasErrors(FaultAnswerManagerException.class);
 	
@@ -385,24 +390,24 @@ public class FaultAnswerManagerImpl extends CustomBcexCheckerManager implements 
 		return result;
 	}
  	
- 	protected void checkParamsForTransferingAnotherExam(BcexUserContext userContext, String faultAnswerId, String anotherExamId) throws Exception
+ 	protected void checkParamsForTransferingAnotherQuestion(BcexUserContext userContext, String faultAnswerId, String anotherQuestionId) throws Exception
  	{
  		
  		checkerOf(userContext).checkIdOfFaultAnswer(faultAnswerId);
- 		checkerOf(userContext).checkIdOfExam(anotherExamId);//check for optional reference
+ 		checkerOf(userContext).checkIdOfQuestion(anotherQuestionId);//check for optional reference
  		checkerOf(userContext).throwExceptionIfHasErrors(FaultAnswerManagerException.class);
  		
  	}
- 	public FaultAnswer transferToAnotherExam(BcexUserContext userContext, String faultAnswerId, String anotherExamId) throws Exception
+ 	public FaultAnswer transferToAnotherQuestion(BcexUserContext userContext, String faultAnswerId, String anotherQuestionId) throws Exception
  	{
- 		checkParamsForTransferingAnotherExam(userContext, faultAnswerId,anotherExamId);
+ 		checkParamsForTransferingAnotherQuestion(userContext, faultAnswerId,anotherQuestionId);
  
 		FaultAnswer faultAnswer = loadFaultAnswer(userContext, faultAnswerId, allTokens());	
 		synchronized(faultAnswer){
 			//will be good when the faultAnswer loaded from this JVM process cache.
 			//also good when there is a ram based DAO implementation
-			Exam exam = loadExam(userContext, anotherExamId, emptyOptions());		
-			faultAnswer.updateExam(exam);		
+			Question question = loadQuestion(userContext, anotherQuestionId, emptyOptions());		
+			faultAnswer.updateQuestion(question);		
 			faultAnswer = saveFaultAnswer(userContext, faultAnswer, emptyOptions());
 			
 			return present(userContext,faultAnswer, allTokens());
@@ -414,20 +419,20 @@ public class FaultAnswerManagerImpl extends CustomBcexCheckerManager implements 
 	 	
  	
  	
-	public CandidateExam requestCandidateExam(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo) throws Exception {
+	public CandidateQuestion requestCandidateQuestion(BcexUserContext userContext, String ownerClass, String id, String filterKey, int pageNo) throws Exception {
 
-		CandidateExam result = new CandidateExam();
+		CandidateQuestion result = new CandidateQuestion();
 		result.setOwnerClass(ownerClass);
 		result.setOwnerId(id);
 		result.setFilterKey(filterKey==null?"":filterKey.trim());
 		result.setPageNo(pageNo);
 		result.setValueFieldName("id");
-		result.setDisplayFieldName("name");
+		result.setDisplayFieldName("topic");
 		
 		pageNo = Math.max(1, pageNo);
 		int pageSize = 20;
 		//requestCandidateProductForSkuAsOwner
-		SmartList<Exam> candidateList = examDaoOf(userContext).requestCandidateExamForFaultAnswer(userContext,ownerClass, id, filterKey, pageNo, pageSize);
+		SmartList<Question> candidateList = questionDaoOf(userContext).requestCandidateQuestionForFaultAnswer(userContext,ownerClass, id, filterKey, pageNo, pageSize);
 		result.setCandidates(candidateList);
 		int totalCount = candidateList.getTotalCount();
 		result.setTotalPage(Math.max(1, (totalCount + pageSize -1)/pageSize ));
@@ -447,10 +452,10 @@ public class FaultAnswerManagerImpl extends CustomBcexCheckerManager implements 
  	
 	
 	 	
- 	protected Exam loadExam(BcexUserContext userContext, String newExamId, Map<String,Object> options) throws Exception
+ 	protected Question loadQuestion(BcexUserContext userContext, String newQuestionId, Map<String,Object> options) throws Exception
  	{
 		
- 		return examDaoOf(userContext).load(newExamId, options);
+ 		return questionDaoOf(userContext).load(newQuestionId, options);
  	}
  	
  	

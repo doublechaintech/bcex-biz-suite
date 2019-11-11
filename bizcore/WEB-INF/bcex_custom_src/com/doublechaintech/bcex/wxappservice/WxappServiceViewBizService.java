@@ -155,5 +155,15 @@ public class WxappServiceViewBizService extends BasicWxappServiceViewBizService{
 	protected int processRequestCustomerViewScore(CustomBcexUserContextImpl ctx) throws Exception {
 		return PRC_BY_DEFAULT;
 	}
+	@Override
+	protected int processRequestCustomerViewFaultAnswer(CustomBcexUserContextImpl ctx) throws Exception {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	protected int processRequestCustomerViewNextPageFaultAnswer(CustomBcexUserContextImpl ctx) throws Exception {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 }

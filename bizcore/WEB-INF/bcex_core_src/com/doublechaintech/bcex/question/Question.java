@@ -14,6 +14,7 @@ import com.doublechaintech.bcex.KeyValuePair;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.doublechaintech.bcex.answer.Answer;
 import com.doublechaintech.bcex.platform.Platform;
+import com.doublechaintech.bcex.faultanswer.FaultAnswer;
 import com.doublechaintech.bcex.useranswer.UserAnswer;
 
 @JsonSerialize(using = QuestionSerializer.class)
@@ -34,6 +35,7 @@ public class Question extends BaseEntity implements  java.io.Serializable{
 
 	public static final String ANSWER_LIST                              = "answerList"        ;
 	public static final String USER_ANSWER_LIST                         = "userAnswerList"    ;
+	public static final String FAULT_ANSWER_LIST                        = "faultAnswerList"   ;
 
 	public static final String INTERNAL_TYPE="Question";
 	public String getInternalType(){
@@ -69,6 +71,7 @@ public class Question extends BaseEntity implements  java.io.Serializable{
 	
 	protected		SmartList<Answer>   	mAnswerList         ;
 	protected		SmartList<UserAnswer>	mUserAnswerList     ;
+	protected		SmartList<FaultAnswer>	mFaultAnswerList    ;
 	
 		
 	public 	Question(){
@@ -104,7 +107,8 @@ public class Question extends BaseEntity implements  java.io.Serializable{
 		setPlatform(platform);
 
 		this.mAnswerList = new SmartList<Answer>();
-		this.mUserAnswerList = new SmartList<UserAnswer>();	
+		this.mUserAnswerList = new SmartList<UserAnswer>();
+		this.mFaultAnswerList = new SmartList<FaultAnswer>();	
 	}
 	
 	//Support for changing the property
@@ -298,6 +302,10 @@ public class Question extends BaseEntity implements  java.io.Serializable{
 		}
 		if(USER_ANSWER_LIST.equals(property)){
 			List<BaseEntity> list = getUserAnswerList().stream().map(item->item).collect(Collectors.toList());
+			return list;
+		}
+		if(FAULT_ANSWER_LIST.equals(property)){
+			List<BaseEntity> list = getFaultAnswerList().stream().map(item->item).collect(Collectors.toList());
 			return list;
 		}
 
@@ -707,6 +715,113 @@ public class Question extends BaseEntity implements  java.io.Serializable{
 	
 
 
+	public  SmartList<FaultAnswer> getFaultAnswerList(){
+		if(this.mFaultAnswerList == null){
+			this.mFaultAnswerList = new SmartList<FaultAnswer>();
+			this.mFaultAnswerList.setListInternalName (FAULT_ANSWER_LIST );
+			//有名字，便于做权限控制
+		}
+		
+		return this.mFaultAnswerList;	
+	}
+	public  void setFaultAnswerList(SmartList<FaultAnswer> faultAnswerList){
+		for( FaultAnswer faultAnswer:faultAnswerList){
+			faultAnswer.setQuestion(this);
+		}
+
+		this.mFaultAnswerList = faultAnswerList;
+		this.mFaultAnswerList.setListInternalName (FAULT_ANSWER_LIST );
+		
+	}
+	
+	public  void addFaultAnswer(FaultAnswer faultAnswer){
+		faultAnswer.setQuestion(this);
+		getFaultAnswerList().add(faultAnswer);
+	}
+	public  void addFaultAnswerList(SmartList<FaultAnswer> faultAnswerList){
+		for( FaultAnswer faultAnswer:faultAnswerList){
+			faultAnswer.setQuestion(this);
+		}
+		getFaultAnswerList().addAll(faultAnswerList);
+	}
+	public  void mergeFaultAnswerList(SmartList<FaultAnswer> faultAnswerList){
+		if(faultAnswerList==null){
+			return;
+		}
+		if(faultAnswerList.isEmpty()){
+			return;
+		}
+		addFaultAnswerList( faultAnswerList );
+		
+	}
+	public  FaultAnswer removeFaultAnswer(FaultAnswer faultAnswerIndex){
+		
+		int index = getFaultAnswerList().indexOf(faultAnswerIndex);
+        if(index < 0){
+        	String message = "FaultAnswer("+faultAnswerIndex.getId()+") with version='"+faultAnswerIndex.getVersion()+"' NOT found!";
+            throw new IllegalStateException(message);
+        }
+        FaultAnswer faultAnswer = getFaultAnswerList().get(index);        
+        // faultAnswer.clearQuestion(); //disconnect with Question
+        faultAnswer.clearFromAll(); //disconnect with Question
+		
+		boolean result = getFaultAnswerList().planToRemove(faultAnswer);
+        if(!result){
+        	String message = "FaultAnswer("+faultAnswerIndex.getId()+") with version='"+faultAnswerIndex.getVersion()+"' NOT found!";
+            throw new IllegalStateException(message);
+        }
+        return faultAnswer;
+        
+	
+	}
+	//断舍离
+	public  void breakWithFaultAnswer(FaultAnswer faultAnswer){
+		
+		if(faultAnswer == null){
+			return;
+		}
+		faultAnswer.setQuestion(null);
+		//getFaultAnswerList().remove();
+	
+	}
+	
+	public  boolean hasFaultAnswer(FaultAnswer faultAnswer){
+	
+		return getFaultAnswerList().contains(faultAnswer);
+  
+	}
+	
+	public void copyFaultAnswerFrom(FaultAnswer faultAnswer) {
+
+		FaultAnswer faultAnswerInList = findTheFaultAnswer(faultAnswer);
+		FaultAnswer newFaultAnswer = new FaultAnswer();
+		faultAnswerInList.copyTo(newFaultAnswer);
+		newFaultAnswer.setVersion(0);//will trigger copy
+		getFaultAnswerList().add(newFaultAnswer);
+		addItemToFlexiableObject(COPIED_CHILD, newFaultAnswer);
+	}
+	
+	public  FaultAnswer findTheFaultAnswer(FaultAnswer faultAnswer){
+		
+		int index =  getFaultAnswerList().indexOf(faultAnswer);
+		//The input parameter must have the same id and version number.
+		if(index < 0){
+ 			String message = "FaultAnswer("+faultAnswer.getId()+") with version='"+faultAnswer.getVersion()+"' NOT found!";
+			throw new IllegalStateException(message);
+		}
+		
+		return  getFaultAnswerList().get(index);
+		//Performance issue when using LinkedList, but it is almost an ArrayList for sure!
+	}
+	
+	public  void cleanUpFaultAnswerList(){
+		getFaultAnswerList().clear();
+	}
+	
+	
+	
+
+
 	public void collectRefercences(BaseEntity owner, List<BaseEntity> entityList, String internalType){
 
 		addToEntityList(this, entityList, getPlatform(), internalType);
@@ -719,6 +834,7 @@ public class Question extends BaseEntity implements  java.io.Serializable{
 		List<BaseEntity> entityList = new ArrayList<BaseEntity>();
 		collectFromList(this, entityList, getAnswerList(), internalType);
 		collectFromList(this, entityList, getUserAnswerList(), internalType);
+		collectFromList(this, entityList, getFaultAnswerList(), internalType);
 
 		return entityList;
 	}
@@ -728,6 +844,7 @@ public class Question extends BaseEntity implements  java.io.Serializable{
 		
 		listOfList.add( getAnswerList());
 		listOfList.add( getUserAnswerList());
+		listOfList.add( getFaultAnswerList());
 			
 
 		return listOfList;
@@ -758,6 +875,11 @@ public class Question extends BaseEntity implements  java.io.Serializable{
 			appendKeyValuePair(result, "userAnswerCount", getUserAnswerList().getTotalCount());
 			appendKeyValuePair(result, "userAnswerCurrentPageNumber", getUserAnswerList().getCurrentPageNumber());
 		}
+		appendKeyValuePair(result, FAULT_ANSWER_LIST, getFaultAnswerList());
+		if(!getFaultAnswerList().isEmpty()){
+			appendKeyValuePair(result, "faultAnswerCount", getFaultAnswerList().getTotalCount());
+			appendKeyValuePair(result, "faultAnswerCurrentPageNumber", getFaultAnswerList().getCurrentPageNumber());
+		}
 
 		
 		return result;
@@ -785,6 +907,7 @@ public class Question extends BaseEntity implements  java.io.Serializable{
 			dest.setVersion(getVersion());
 			dest.setAnswerList(getAnswerList());
 			dest.setUserAnswerList(getUserAnswerList());
+			dest.setFaultAnswerList(getFaultAnswerList());
 
 		}
 		super.copyTo(baseDest);
@@ -811,6 +934,7 @@ public class Question extends BaseEntity implements  java.io.Serializable{
 			dest.mergeVersion(getVersion());
 			dest.mergeAnswerList(getAnswerList());
 			dest.mergeUserAnswerList(getUserAnswerList());
+			dest.mergeFaultAnswerList(getFaultAnswerList());
 
 		}
 		super.copyTo(baseDest);

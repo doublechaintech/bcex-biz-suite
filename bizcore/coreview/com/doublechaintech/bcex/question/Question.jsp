@@ -103,6 +103,7 @@
 	<% Question result = (Question)request.getAttribute("result");  %>
 			<li><a data-toggle="tab" href="#answerList" class="disabled"> ${userContext.localeMap['answer']}</a></li>
 			<li><a data-toggle="tab" href="#userAnswerList" class="disabled"> ${userContext.localeMap['user_answer']}</a></li>
+			<li><a data-toggle="tab" href="#faultAnswerList" class="disabled"> ${userContext.localeMap['fault_answer']}</a></li>
  
 	</ul>
 	</div>
@@ -165,6 +166,14 @@
 		<c:set var="userAnswerListName" value="userAnswerList" scope="request"/>
 		<div id="userAnswerList" class="tab-pane fade sublist" refer-name="question">
 			<sky:include page="com/doublechaintech/bcex/useranswer/UserAnswer$List.jsp"
+					referName="question"/>
+		</div>
+	</c:if>
+	<c:if test='${not empty userContext.accessTokens["faultAnswerList"] or ignoreListAccessControl}'>
+		<c:set var="faultAnswerList" value="${result.faultAnswerList}" scope="request"/>
+		<c:set var="faultAnswerListName" value="faultAnswerList" scope="request"/>
+		<div id="faultAnswerList" class="tab-pane fade sublist" refer-name="question">
+			<sky:include page="com/doublechaintech/bcex/faultanswer/FaultAnswer$List.jsp"
 					referName="question"/>
 		</div>
 	</c:if>

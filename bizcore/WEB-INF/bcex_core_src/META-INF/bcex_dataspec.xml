@@ -13,7 +13,7 @@
 	<table name="change_request_type_data">
 		<fields>
 			<field name="id" nullable="false" type="string" checkType="StringLengthRange" min="2" max="64" description="ID" />
-			<field name="name" type="string" checkType="StringLengthRange" min="1" max="16" description="名称" />
+			<field name="name" type="string" checkType="StringLengthRange" min="1" max="100" description="名称" />
 			<field name="code" type="string" checkType="StringLengthRange" min="3" max="40" description="代码" />
 			<field name="icon" type="string" checkType="StringLengthRange" min="2" max="48" description="图标" />
 			<field name="display_order" type="int" checkType="IntegerRange" min="0" max="6" description="显示顺序" />
@@ -79,13 +79,13 @@
 	<table name="question_data">
 		<fields>
 			<field name="id" nullable="false" type="string" checkType="StringLengthRange" min="2" max="64" description="ID" />
-			<field name="topic" type="string" checkType="StringLengthRange" min="6" max="80" description="主题" />
+			<field name="topic" type="string" checkType="StringLengthRange" min="1" max="500" description="主题" />
 			<field name="level" type="string" checkType="StringLengthRange" min="0" max="4" description="水平" />
-			<field name="option_a" type="string" checkType="StringLengthRange" min="2" max="16" description="A选项" />
-			<field name="option_b" type="string" checkType="StringLengthRange" min="2" max="16" description="B选项" />
-			<field name="option_c" type="string" checkType="StringLengthRange" min="2" max="16" description="C选项" />
-			<field name="option_d" type="string" checkType="StringLengthRange" min="2" max="16" description="D选项" />
-			<field name="option_e" type="string" checkType="StringLengthRange" min="2" max="16" description="E选项" />
+			<field name="option_a" type="string" checkType="StringLengthRange" min="1" max="500" description="A选项" />
+			<field name="option_b" type="string" checkType="StringLengthRange" min="1" max="500" description="B选项" />
+			<field name="option_c" type="string" checkType="StringLengthRange" min="0" max="500" description="C选项" />
+			<field name="option_d" type="string" checkType="StringLengthRange" min="0" max="500" description="D选项" />
+			<field name="option_e" type="string" checkType="StringLengthRange" min="0" max="500" description="E选项" />
 			<field name="right_answer" type="string" checkType="StringLengthRange" min="0" max="4" description="正确的答案" />
 			<field name="platform" type="reference" checkType="exist(platform)" description="平台" />
 			<field name="version" type="int" checkType="IntegerRange" min="0" max="Integer.MAX_VALUE" description="版本" />
@@ -151,7 +151,7 @@
 	<table name="user_answer_data">
 		<fields>
 			<field name="id" nullable="false" type="string" checkType="StringLengthRange" min="2" max="64" description="ID" />
-			<field name="topic" type="string" checkType="StringLengthRange" min="6" max="80" description="主题" />
+			<field name="topic" type="string" checkType="StringLengthRange" min="1" max="500" description="主题" />
 			<field name="user_select" type="string" checkType="StringLengthRange" min="1" max="4" description="用户选择" />
 			<field name="question" type="reference" checkType="exist(question)" description="检查问题" />
 			<field name="exam" type="reference" checkType="exist(exam)" description="考试" />
@@ -162,12 +162,13 @@
 	<table name="fault_answer_data">
 		<fields>
 			<field name="id" nullable="false" type="string" checkType="StringLengthRange" min="2" max="64" description="ID" />
-			<field name="topic" type="string" checkType="StringLengthRange" min="6" max="80" description="主题" />
-			<field name="your_answer" type="string" checkType="StringLengthRange" min="2" max="16" description="你的答案" />
+			<field name="topic" type="string" checkType="StringLengthRange" min="1" max="500" description="主题" />
+			<field name="your_answer" type="string" checkType="StringLengthRange" min="1" max="4" description="你的答案" />
 			<field name="right_answer" type="string" checkType="StringLengthRange" min="2" max="16" description="正确的答案" />
 			<field name="create_time" type="date_time_create" checkType="DateTimeCreate" min="1900-01-01T00:00:00" max="createTime()" description="创建时间" />
 			<field name="user" type="reference" checkType="exist(wechat_user)" description="用户" />
-			<field name="exam" type="reference" checkType="exist(exam)" description="考试" />
+			<field name="question" type="reference" checkType="exist(question)" description="检查问题" />
+			<field name="fault_times" type="int" checkType="IntegerRange" min="0" max="999" description="故障时间" />
 			<field name="version" type="int" checkType="IntegerRange" min="0" max="Integer.MAX_VALUE" description="版本" />
 		</fields>
 	</table>
