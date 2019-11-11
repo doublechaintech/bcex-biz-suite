@@ -23,6 +23,7 @@ public class MiscUtils extends BcexBaseUtils {
 			dbUser = ctx.getDAOGroup().getWechatUserDAO().load(user.getId(), EO);
 			dbUser.updateName(user.getName());
 			dbUser.updateAvarta(user.getAvarta());
+			dbUser.updateUserType(user.getUserType());
 			dbUser.updateCreateTime(ctx.now());
 			ctx.getDAOGroup().getWechatUserDAO().save(dbUser, EO);
 		}
@@ -107,6 +108,12 @@ public class MiscUtils extends BcexBaseUtils {
 				"	where UA.exam = ?" + 
 				"		and UA.user_select = Q.right_answer";
 		return ctx.dao().queryForObject(sql, new Object[] {examId}, Integer.class);
+	}
+
+	public static int calcUserTotalExam(CustomBcexUserContextImpl ctx, WechatUser user) {
+		String sql = "select count(*) from exam_data where user=?";
+		Integer rst = ctx.dao().queryForObject(sql, new Object[] {user.getId()}, Integer.class);
+		return rst == null ? 0 : rst;
 	}
 
 }

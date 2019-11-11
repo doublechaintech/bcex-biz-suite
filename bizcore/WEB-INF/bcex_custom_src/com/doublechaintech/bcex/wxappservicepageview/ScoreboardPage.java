@@ -69,25 +69,34 @@ public class ScoreboardPage extends BaseViewPage{
 		set("question", qlist.first().getTopic());
 		set("imageUrl", ctx.getCurrentUserInfo().getAvarta());
 		set("name", ctx.getCurrentUserInfo().getName());
-		set("brief", "共进行了8场考试");
+		int totalExam = MiscUtils.calcUserTotalExam(ctx, ctx.getCurrentUserInfo());
+		set("brief", "共进行了"+totalExam+"场考试");
 		
 		set("list", scoreList);
 	}
 
 	private void assemblerWorldRankScore(CustomBcexUserContextImpl ctx, List<Object> scoreList) {
-		String sql = "select WU.name, WU.avarta as imageUrl, sum(E.score)  as totalScore from exam_data E\n" + 
+		String sql = "select WU.id as uid, WU.name, WU.avarta as imageUrl, sum(E.score)  as totalScore from exam_data E\n" + 
 				"	left join wechat_user_data WU on E.user = WU.id " + 
 				"	group by WU.id" + 
 				"    order by totalScore desc " + 
 				"    limit ?";
-		List<Map<String, Object>> list = ctx.dao().queryAsMapList(sql, new Object[] {4});
+		List<Map<String, Object>> list = ctx.dao().queryAsMapList(sql, new Object[] {5});
 		for(int i = 0;i < list.size();i++) {
 			
 			Map<String, Object> data = list.get(i);
 			data.put("worldRanking", i+1+"");
 			data.put("id", i+1);
 			data.put("totalScore", String.valueOf(data.get("totalScore")));
-			scoreList.add(data);
+			String uid = (String) data.get("uid");
+			if (uid.equalsIgnoreCase(ctx.getCurrentUserInfo().getId())) {
+				// 自己不加
+			}else {
+				scoreList.add(data);
+			}
+			if (scoreList.size() >= 5) {
+				break;
+			}
 		}
 		
 	}
