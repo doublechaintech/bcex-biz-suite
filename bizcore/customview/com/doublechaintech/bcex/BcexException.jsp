@@ -18,6 +18,9 @@
     	</c:forEach>
     	</ul>
     </c:if>
+    <c:if test="${empty result.errorMessageList}" >
+    	${result.message}
+    </c:if>
 
 
 

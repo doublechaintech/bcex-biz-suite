@@ -80,8 +80,8 @@ public class ScoreboardPage extends BaseViewPage{
 				"	group by WU.id" + 
 				"    order by totalScore desc " + 
 				"    limit ?";
-		List<Map<String, Object>> list = ctx.dao().queryAsMapList(sql, new Object[] {5});
-		for(int i = 0;i < 5;i++) {
+		List<Map<String, Object>> list = ctx.dao().queryAsMapList(sql, new Object[] {4});
+		for(int i = 0;i < list.size();i++) {
 			
 			Map<String, Object> data = list.get(i);
 			data.put("worldRanking", i+1+"");
@@ -99,7 +99,7 @@ public class ScoreboardPage extends BaseViewPage{
 		}
 		int totalScore = MiscUtils.calcUserTotalScore(ctx, ctx.getCurrentUserInfo());
 		int wordRanking = MiscUtils.findUserWorldRank(ctx, totalScore);
-		Map<String, Object> data = MapUtil.put("id", scoreList.size()+1)
+		Map<String, Object> data = MapUtil.put("id", ctx.getCurrentUserInfo().getId())
 				.put("worldRanking", wordRanking+"")
 				.put("imageUrl", ctx.getCurrentUserInfo().getAvarta())
 				.put("name", ctx.getCurrentUserInfo().getName())

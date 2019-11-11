@@ -58,6 +58,11 @@ public abstract class BaseWxappServiceViewService extends ChangeRequestCustomMan
 		 * 获取处理后的登录相关信息
 		 */
 		public Map<String, Object> getProcessedLoginInfo(CustomBcexUserContextImpl ctx);
+		
+		/**
+		 * 新用户登录后,创建与之关联的登录信息
+		 */
+		public void createLoginInfoForNewTarget(CustomBcexUserContextImpl ctx, WechatUser loginTarget);
 	}
 	public static final int $PRC_RESULT_OBJECT_WAS_SET = -1;
 	public static final int PRC_BY_DEFAULT = 0;
@@ -141,11 +146,15 @@ public abstract class BaseWxappServiceViewService extends ChangeRequestCustomMan
     protected WechatUser processClientLogin(CustomBcexUserContextImpl ctx, LoginParam loginParam) throws Exception {
         // 先根据输入参数，判断应该用哪个 loginHandler
         BaseLoginHandler loginHandler = findLoginHandler(ctx, loginParam);
+        if (loginHandler == null) {
+        	throwsExceptionWithMessage(ctx, "不支持"+loginParam.getLoginMethod()+"方式的登录");
+        }
         // loginHandler 首先找到登录的目标用户。 如果登录失败，会抛出异常。 如果允许登录，
         WechatUser loginTarget = loginHandler.doLogin(ctx, loginParam);
         if (loginTarget == null) {
             // 如果没有抛异常，返回null，说明是个 '新建用户'。 触发'onNewLogin'方法
             loginTarget = onNewLogin(ctx, loginParam, loginHandler);
+            loginHandler.createLoginInfoForNewTarget(ctx, loginTarget);
         }
         // 找到登录目标对应的 secUser 和 userApp
         SecUser secUser = findSecUserByLoginTarget(ctx, loginTarget);
@@ -236,17 +245,16 @@ public abstract class BaseWxappServiceViewService extends ChangeRequestCustomMan
                     		throw new Exception("不能在生产环境使用此方式登录");
                     	}
                     	String id = loginParam.getId();
-                    	try{
-							return wechatUserDaoOf(ctx).load(id, EO);
-						}catch(Exception e){
-							// 找不到不要紧 后面会处理
-							return null;
-						}
+						return wechatUserDaoOf(ctx).load(id, EO);
                     }
                     @Override
 					public Map<String, Object> getProcessedLoginInfo(CustomBcexUserContextImpl ctx) {
 						return MapUtil.put("loginMethod", BaseLoginHandler.DEBUG)
 								.put("id", did).into_map();
+					}
+					@Override
+					public void createLoginInfoForNewTarget(CustomBcexUserContextImpl ctx, WechatUser loginTarget) {
+						// 调试登录直接使用ID,无需额外操作
 					}
 				};
 			}
@@ -284,6 +292,16 @@ public abstract class BaseWxappServiceViewService extends ChangeRequestCustomMan
 						return MapUtil.put("loginMethod", BaseLoginHandler.WECHAT_APP)
 								.put("openId", wxOpenId)
 								.put("sessionKey", wxSessionKey).into_map();
+					}
+					@Override
+					public void createLoginInfoForNewTarget(CustomBcexUserContextImpl ctx, WechatUser loginTarget) {
+						try {
+							WxMaService wxService = getWxMaService();
+							wechatLoginInfoManagerOf(ctx).createWechatLoginInfo(ctx, loginTarget.getId(),
+									wxService.getWxMaConfig().getAppid(), wxOpenId, wxSessionKey);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
                 };
             }
@@ -326,6 +344,7 @@ public abstract class BaseWxappServiceViewService extends ChangeRequestCustomMan
 			}
 			// 没有登录
 			if (needLogin) {
+				ctx.forceResponseXClassHeader("com.terapico.appview.LoginForm");
 				return accessFail("请登录后再继续使用。");
 			}
 			// 无需登录，那就生成一个临时的token

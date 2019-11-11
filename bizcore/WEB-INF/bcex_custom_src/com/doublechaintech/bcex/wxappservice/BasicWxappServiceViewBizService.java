@@ -4,6 +4,7 @@ import com.doublechaintech.bcex.BcexUserContext;
 import com.doublechaintech.bcex.CustomBcexUserContextImpl;
 import com.doublechaintech.bcex.Footprint;
 import com.doublechaintech.bcex.FootprintProducer;
+import com.doublechaintech.bcex.LoginForm;
 
 /**
  * 此类负责：所有的基础设施服务。 例如重复提交的基础方法，权限认证，异常包装，本服务内的通用工具方法等。
@@ -37,4 +38,9 @@ public abstract class BasicWxappServiceViewBizService extends WxappServiceViewSe
 		ctx.setResultObject(data);
 		return $PRC_RESULT_OBJECT_WAS_SET;
 	}
+//	protected Object accessFail(String message){
+//		com.terapico.appview.LoginForm form = new com.terapico.appview.LoginForm();
+//		form.addErrorMessage(message, null);
+//		return form;
+//	}
 }
