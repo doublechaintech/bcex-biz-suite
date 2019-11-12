@@ -506,6 +506,10 @@ public abstract class BaseWxappServiceViewService extends ChangeRequestCustomMan
 	public static String makeViewNextPageFaultAnswerUrl(CustomBcexUserContextImpl ctx, String lastRecordId){
 		return makeUrl("customerViewNextPageFaultAnswer", lastRecordId);
 	}
+	// 处理请求：错题测验
+	public static String makeExamFaultAnswerUrl(CustomBcexUserContextImpl ctx, String quizId){
+		return makeUrl("customerExamFaultAnswer", quizId);
+	}
 
 	/** 处理请求：默认的客户端登录接口. 返回值：PRC_BY_DEFAULT: ;  */
 	protected abstract int processRequestClientLogin(CustomBcexUserContextImpl ctx) throws Exception;
@@ -525,6 +529,8 @@ public abstract class BaseWxappServiceViewService extends ChangeRequestCustomMan
 	protected abstract int processRequestCustomerViewFaultAnswer(CustomBcexUserContextImpl ctx) throws Exception;
 	/** 处理请求：. 返回值：PRC_BY_DEFAULT: ;  */
 	protected abstract int processRequestCustomerViewNextPageFaultAnswer(CustomBcexUserContextImpl ctx) throws Exception;
+	/** 处理请求：错题测验. 返回值：PRC_BY_DEFAULT: ;  */
+	protected abstract int processRequestCustomerExamFaultAnswer(CustomBcexUserContextImpl ctx) throws Exception;
 
 	protected SimplePopupPage assemblerSimplePopupPage(CustomBcexUserContextImpl ctx, String requestName)throws Exception {
 		SimplePopupPage page = new SimplePopupPage();
@@ -553,6 +559,11 @@ public abstract class BaseWxappServiceViewService extends ChangeRequestCustomMan
 	}
 	protected ScoreboardPage assemblerScoreboardPage(CustomBcexUserContextImpl ctx, String requestName)throws Exception {
 		ScoreboardPage page = new ScoreboardPage();
+		page.assemblerContent(ctx, requestName);
+		return page;
+	}
+	protected FaultExamPage assemblerFaultExamPage(CustomBcexUserContextImpl ctx, String requestName)throws Exception {
+		FaultExamPage page = new FaultExamPage();
 		page.assemblerContent(ctx, requestName);
 		return page;
 	}

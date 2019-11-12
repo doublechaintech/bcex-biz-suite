@@ -1,5 +1,6 @@
 package com.terapico.utils;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -75,6 +76,33 @@ public class DateTimeBuilder {
 		workingDate = workingDate.plusMonths(months);
 		return this;
 	}
+	// 一周内的时间
+	public DateTimeBuilder dayOfWeek(DayOfWeek dayOfWeek) {
+		workingDate = workingDate.with(dayOfWeek);
+		return this;
+	}
+	public DateTimeBuilder monday() {
+		return dayOfWeek(DayOfWeek.MONDAY);
+	}
+	public DateTimeBuilder tuesday() {
+		return dayOfWeek(DayOfWeek.TUESDAY);
+	}
+	public DateTimeBuilder wednesday() {
+		return dayOfWeek(DayOfWeek.WEDNESDAY);
+	}
+	public DateTimeBuilder thursday() {
+		return dayOfWeek(DayOfWeek.THURSDAY);
+	}
+	public DateTimeBuilder friday() {
+		return dayOfWeek(DayOfWeek.FRIDAY);
+	}
+	public DateTimeBuilder saturday() {
+		return dayOfWeek(DayOfWeek.SATURDAY);
+	}
+	public DateTimeBuilder sunday() {
+		return dayOfWeek(DayOfWeek.SUNDAY);
+	}
+	
 	// 天级别的调整
 	public DateTimeBuilder startOfDay() {
 		workingDate = workingDate.toLocalDate().atStartOfDay();

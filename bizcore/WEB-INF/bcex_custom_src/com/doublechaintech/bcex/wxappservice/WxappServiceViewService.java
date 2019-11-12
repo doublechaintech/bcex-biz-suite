@@ -190,5 +190,23 @@ public abstract class WxappServiceViewService extends BaseWxappServiceViewServic
 		return page.doRender(ctx);
 	}
 	
+	// 错题测验(exam fault answer)
+	public Object customerExamFaultAnswer(BcexUserContext userContext, String quizId) throws Exception {
+		String accessUrl = makeUrlF("customerExamFaultAnswer", false, quizId);
+		
+		CustomBcexUserContextImpl ctx = (CustomBcexUserContextImpl) userContext;
+		ctx.setAccessUrl(accessUrl);
+		ensureCurrentUserInfo(ctx);
+		ctx.addFootprint(this);
+		ctx.setQuizId(quizId);
+		commonLog(ctx, "customerExamFaultAnswer", "错题测验", ctx.getRemoteIP(), ctx.tokenId(), makeUrlF("", false, quizId), null);
+		int resultCode = processRequestCustomerExamFaultAnswer(ctx);
+		if (returnRightNow(resultCode)){
+			return ctx.getResultObject();
+		}
+		BaseViewPage page = assemblerFaultExamPage(ctx, "customerExamFaultAnswer");
+		return page.doRender(ctx);
+	}
+	
 }
 

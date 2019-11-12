@@ -11,6 +11,8 @@ import com.doublechaintech.bcex.CustomBcexUserContextImpl;
 import com.doublechaintech.bcex.SmartList;
 import com.doublechaintech.bcex.faultanswer.FaultAnswer;
 import com.doublechaintech.bcex.question.Question;
+import com.doublechaintech.bcex.utils.BcexConstants;
+import com.doublechaintech.bcex.utils.MiscUtils;
 import com.doublechaintech.bcex.wechatuser.WechatUser;
 import com.doublechaintech.bcex.wxappservice.DBQuery;
 import com.doublechaintech.bcex.wxappservice.WxappServiceViewService;
@@ -32,6 +34,7 @@ public class FaultAnswerListPage extends BaseViewPage{
 			.field("list", SerializeScope.INCLUDE()
 					.field(FaultAnswer.QUESTION_PROPERTY, SerializeScope.INCLUDE()
 							.field(Question.TOPIC_PROPERTY).as("title")
+							.field(BcexConstants.X_LINK_TO_URL)
 						).move_up()
 				  ).in_data_container()
 			.field("tabs")
@@ -65,6 +68,7 @@ public class FaultAnswerListPage extends BaseViewPage{
 		String lastRecordId = ctx.getLastRecordId();
 		SmartList<FaultAnswer> list = Q.queryFaultAnswerListOfUser(ctx, user.getId(), lastRecordId);
 		list.addItemToValueMap(BaseViewPage.X_NEXT_PAGE_URL, WxappServiceViewService.makeViewNextPageFaultAnswerUrl(ctx, ctx.getLastRecordId()));
+		MiscUtils.appendLinkToUrl(ctx, list, it->WxappServiceViewService.makeExamFaultAnswerUrl(ctx, it.getQuestion().getId()));
 		set("list", list);
 		set("emptyMessage", "您太厉害了,没有任何错误!");
 	}

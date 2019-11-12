@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import redis.clients.jedis.Jedis;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -148,13 +149,15 @@ public class RedisCacheService implements CacheService {
             }
             // ticker.tick("jedis.set(key, json);jedis.expire(key, ttlInSeconds);");
 
-        } catch (JsonProcessingException e) {
+        }catch (JsonProcessingException e) {
             // is fine
+        }catch(Exception e) {
+        	String errorMessage = String.format("Redis Connection Error to server @ %s:%d -> %s", this.host,this.port,e.getMessage());
+        	throw new IllegalStateException(errorMessage);
         } finally {
-
             closeConnection(jedis);
         }
-
+        
     }
 
 
@@ -166,12 +169,15 @@ public class RedisCacheService implements CacheService {
     	jedis.close();
     }
 
-    public void remove(String key) {
+    public void remove(String key)  {
 
         Jedis jedis = null;
         try {
             jedis = getJedis();
             jedis.del(key);
+        }catch(Exception e) {
+        	String errorMessage = String.format("Redis Connection Error to server @ %s:%d -> %s", this.host,this.port,e.getMessage());
+        	throw new IllegalStateException(errorMessage);
         } finally {
 
             closeConnection(jedis);

@@ -76,8 +76,9 @@ public class ScoreboardPage extends BaseViewPage{
 	}
 
 	private void assemblerWorldRankScore(CustomBcexUserContextImpl ctx, List<Object> scoreList) {
-		String sql = "select WU.id as uid, WU.name, WU.avarta as imageUrl, sum(E.score)  as totalScore from exam_data E\n" + 
-				"	left join wechat_user_data WU on E.user = WU.id " + 
+		String sql = "select WU.id as uid, WU.name, WU.avarta as imageUrl, sum(E.score)  as totalScore from exam_data E " + 
+				"	left join wechat_user_data WU on E.user = WU.id " +
+				"   where WU.id is not null" + 
 				"	group by WU.id" + 
 				"    order by totalScore desc " + 
 				"    limit ?";

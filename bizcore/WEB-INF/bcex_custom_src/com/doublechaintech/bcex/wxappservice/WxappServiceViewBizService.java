@@ -16,6 +16,7 @@ import com.terapico.caf.DateTime;
 import com.terapico.caf.baseelement.LoginParam;
 import com.terapico.caf.viewcomponent.PopupViewComponent;
 import com.terapico.utils.DebugUtil;
+import com.terapico.utils.ImageUtil;
 import com.terapico.utils.RandomUtil;
 
 
@@ -64,8 +65,8 @@ public class WxappServiceViewBizService extends BasicWxappServiceViewBizService{
 		String sessionKey = (String) loginInfo.get("sessionKey");
 		
 		// 创建对象
-		String name = "微信用户"+RandomUtil.randomChars(6);
-		String avarta = BcexConstants.ANONYMUSE_AVANTA;
+		String name = "点击更新头像";// "微信用户"+RandomUtil.randomChars(6);
+		String avarta = ImageUtil.animal(); // 随机取个动物
 		String platformId = BcexConstants.ROOT_PLATFORM_ID;
 		String userType = "未填写";
 		WechatUser newUser = wechatUserManagerOf(ctx).createWechatUser(ctx, name, avarta, userType, platformId);
@@ -157,13 +158,15 @@ public class WxappServiceViewBizService extends BasicWxappServiceViewBizService{
 	}
 	@Override
 	protected int processRequestCustomerViewFaultAnswer(CustomBcexUserContextImpl ctx) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		return PRC_BY_DEFAULT;
 	}
 	@Override
 	protected int processRequestCustomerViewNextPageFaultAnswer(CustomBcexUserContextImpl ctx) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		return PRC_BY_DEFAULT;
+	}
+	@Override
+	protected int processRequestCustomerExamFaultAnswer(CustomBcexUserContextImpl ctx) throws Exception {
+		return PRC_BY_DEFAULT;
 	}
 	
 }

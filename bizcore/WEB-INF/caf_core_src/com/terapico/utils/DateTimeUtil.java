@@ -10,8 +10,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DateTimeUtil {
+	/**
+	 * 
+	 * <ul>
+	 * <li>EarlierThan: 时间段1开始了,时间段2还没开始.</li>
+	 * <li>EndIn: 时间段1早于时间段2开始, 在时间段2期间结束. </li>
+	 * <li>Inside: 时间段1的开始和结束都在时间段2内.</li>
+	 * <li>StartIn: 时间段1在时间段2内开始,在时间段2结束后才结束.</li>
+	 * <li>After: 时间段1在时间段2结束后才开始.</li>
+	 * <li>Contains: 时间段1包含整个时间段2.</li>
+	 * 
+	 * @author clariones
+	 *
+	 */
 	public static enum DateRangeRelation  {
-		EarlierThan, EndIn, Inside, StartIn, After, Contains
+		EarlierThan, // 时间段1开始了,时间段2还没开始
+		EndIn, // 时间段1早于时间段2开始, 在时间段2期间结束
+		Inside, // 时间段1的开始和结束都在时间段2内
+		StartIn, // 时间段1在时间段2内开始,在时间段2结束后才结束
+		After, // 时间段1在时间段2结束后才开始
+		Contains	// 时间段1包含整个时间段2
 	}
 
 	public static long SECOND_IN_MS = 1000L;
@@ -126,17 +144,23 @@ public class DateTimeUtil {
 	}
 
 	public static Date addDays(Date date, int days, boolean byEndOfBoundary) {
-		Date result = toDate(toLocalDateTime(date).plusDays(days));
 		if (!byEndOfBoundary) {
-			return result;
+			return standOn(date).addDays(days).getDate();
 		}
-		if (days >= 0) {
-			return SetTimeInADay(result, 23, 59, 59);
+		if (days > 0) {
+			// 如果是向后, 那么到 日尾
+			return standOn(date).addDays(days).endOfDay().getDate();
 		}
-		return SetTimeInADay(result, 0, 0, 0);
+		return standOn(date).addDays(days).startOfDay().getDate();
 	}
 	public static Date addHours(Date date, int hours) {
-		return toDate(toLocalDateTime(date).plusHours(hours));
+		return standOn(date).addHours(hours).getDate();
+	}
+	public static Date addMinutes(Date date, int minutes) {
+		return standOn(date).addMinutes(minutes).getDate();
+	}
+	public static Date addSeconds(Date date, int seconds) {
+		return standOn(date).addSeconds(seconds).getDate();
 	}
 	public static Date addMS(Date date, long ms) {
 		return new Date(date.getTime() + ms);
@@ -328,6 +352,9 @@ public class DateTimeUtil {
 	
 	public static DateTimeBuilder standOn(Date date) {
 		return new DateTimeBuilder(date);
+	}
+	public static DateTimeBuilder standOn(Date date, ZoneId zoneId) {
+		return new DateTimeBuilder(date, zoneId);
 	}
 
 	public static DateRangeRelation compareDateRange(Date start1, Date end1, Date start2, Date end2) {
